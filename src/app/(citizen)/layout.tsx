@@ -1,6 +1,6 @@
 "use client";
 
-import { CirclePlus, ListChecks, LogOut } from "lucide-react";
+import { CirclePlus, ListChecks, LogOut, MapIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -30,8 +30,8 @@ export default function CitizenLayout({
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="flex items-center justify-between border-b px-4 py-3">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <header className="flex shrink-0 items-center justify-between border-b px-4 py-3">
         <span className="font-semibold">FloodTrace</span>
         <Button
           variant="ghost"
@@ -43,7 +43,9 @@ export default function CitizenLayout({
         </Button>
       </header>
 
-      <main className="flex flex-1 flex-col pb-16">{children}</main>
+      <main className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-16">
+        {children}
+      </main>
 
       <nav className="fixed inset-x-0 bottom-0 flex border-t bg-background">
         <Link
@@ -52,6 +54,13 @@ export default function CitizenLayout({
         >
           <ListChecks className="size-5" />
           My Reports
+        </Link>
+        <Link
+          href="/map"
+          className="flex flex-1 flex-col items-center gap-1 py-3 text-xs text-muted-foreground"
+        >
+          <MapIcon className="size-5" />
+          Map
         </Link>
         <Link
           href="/report/new"

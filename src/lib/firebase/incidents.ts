@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   serverTimestamp,
@@ -83,6 +84,16 @@ export async function getUserIncidents(uid: string): Promise<IncidentReport[]> {
     collection(db, "incidents"),
     where("reporterId", "==", uid),
     orderBy("createdAt", "desc"),
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => toIncident(d.id, d.data()));
+}
+
+export async function getIncidents(): Promise<IncidentReport[]> {
+  const q = query(
+    collection(db, "incidents"),
+    orderBy("createdAt", "desc"),
+    limit(500),
   );
   const snap = await getDocs(q);
   return snap.docs.map((d) => toIncident(d.id, d.data()));
