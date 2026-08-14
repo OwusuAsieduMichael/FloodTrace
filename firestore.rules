@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.role == "citizen";
+      allow update: if isOwner(uid)
+        && request.resource.data.role == resource.data.role;
+    }
+
+    match /incidents/{incidentId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.reporterId == request.auth.uid
+        && request.resource.data.status == "SUBMITTED";
+      // The owner may only attach photos to their own still-pending report
+      // (the initial upload happens right after create). Status transitions
+      // (VERIFIED, ASSIGNED, RESOLVED, REJECTED) and duplicate-grouping are
+      // performed by trusted backend logic only.
+      allow update: if isSignedIn()
+        && resource.data.reporterId == request.auth.uid
+        && resource.data.status == "SUBMITTED"
+        && request.resource.data.status == "SUBMITTED"
+        && request.resource.data.reporterId == resource.data.reporterId
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(["photoUrls", "updatedAt"]);
+      allow delete: if false;
+    }
+  }
+}
