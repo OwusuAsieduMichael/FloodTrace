@@ -20,12 +20,30 @@ import { createIncidentReport } from "@/lib/firebase/incidents";
 import { reportSchema, type ReportInput } from "@/lib/validations/report";
 import { useAuth } from "@/providers/auth-provider";
 
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
+
 export default function NewReportPage() {
   const router = useRouter();
   const { user } = useAuth();
   const { location, loading: locating, error: locationError, capture } =
     useGeolocation();
   const [photo, setPhoto] = useState<File | null>(null);
+
+  function onPhotoChange(file: File | null) {
+    if (!file) {
+      setPhoto(null);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("Photo must be an image file.");
+      return;
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      toast.error("Photo must be smaller than 10MB.");
+      return;
+    }
+    setPhoto(file);
+  }
   const {
     register,
     handleSubmit,
@@ -77,7 +95,7 @@ export default function NewReportPage() {
                 type="file"
                 accept="image/*"
                 capture="environment"
-                onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
+                onChange={(e) => onPhotoChange(e.target.files?.[0] ?? null)}
                 className="text-sm"
               />
             </div>

@@ -6,7 +6,8 @@ Camera-verified flood & drainage reporting platform for Ghanaian municipalities 
 
 - Next.js App Router + React + strict TypeScript
 - Tailwind CSS + shadcn/ui + Radix + Framer Motion
-- Firebase Authentication + Firestore + Storage (role-based: citizen/authority/admin)
+- Firebase Authentication + Firestore (role-based: citizen/authority/admin)
+- Supabase Storage for report photos (Cloud Storage for Firebase requires the paid Blaze plan)
 - MapLibre GL JS for maps
 - OpenWeather API for weather context
 - Firebase Cloud Messaging for notifications

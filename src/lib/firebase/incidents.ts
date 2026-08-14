@@ -12,8 +12,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { db, storage } from "@/lib/firebase/client";
+import { db } from "@/lib/firebase/client";
+import { INCIDENT_PHOTOS_BUCKET, supabase } from "@/lib/supabase/client";
 import type { GeoPoint, IncidentReport, IncidentStatus } from "@/types/domain";
 
 interface NewIncidentInput {
@@ -67,9 +67,15 @@ export async function createIncidentReport(
     resolvedAt: null,
   });
 
-  const photoRef = ref(storage, `incidents/${docRef.id}/${input.photo.name}`);
-  await uploadBytes(photoRef, input.photo);
-  const photoUrl = await getDownloadURL(photoRef);
+  const photoPath = `${docRef.id}/${Date.now()}-${input.photo.name}`;
+  const { error: uploadError } = await supabase.storage
+    .from(INCIDENT_PHOTOS_BUCKET)
+    .upload(photoPath, input.photo, { contentType: input.photo.type });
+  if (uploadError) throw uploadError;
+
+  const {
+    data: { publicUrl: photoUrl },
+  } = supabase.storage.from(INCIDENT_PHOTOS_BUCKET).getPublicUrl(photoPath);
 
   await updateDoc(docRef, {
     photoUrls: arrayUnion(photoUrl),
