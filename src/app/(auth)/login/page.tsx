@@ -30,49 +30,52 @@ export default function LoginPage() {
   async function onSubmit(data: LoginInput) {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
-      router.push("/reports");
+      router.push("/home");
     } catch {
       toast.error("Couldn't sign in. Check your email and password.");
     }
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Sign in to FloodTrace</CardTitle>
-          <CardDescription>
-            Report and track flooding in your area.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" {...register("email")} />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" {...register("password")} />
-              {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message}</p>
-              )}
-            </div>
-            <Button type="submit" disabled={isSubmitting} className="mt-2">
-              {isSubmitting ? "Signing in…" : "Sign in"}
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            No account?{" "}
-            <Link href="/signup" className="font-medium text-foreground underline">
-              Sign up
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Sign in to FloodTrace</CardTitle>
+        <CardDescription>
+          Report and track flooding in your area.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" {...register("email")} />
+            {errors.email && (
+              <p className="text-sm text-destructive">{errors.email.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Input id="password" type="password" {...register("password")} />
+            {errors.password && (
+              <p className="text-sm text-destructive">{errors.password.message}</p>
+            )}
+          </div>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            size="lg"
+            className="mt-2 bg-gradient-to-r from-brand-from to-brand-to text-primary-foreground shadow-sm hover:opacity-90"
+          >
+            {isSubmitting ? "Signing in…" : "Sign in"}
+          </Button>
+        </form>
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          No account?{" "}
+          <Link href="/signup" className="font-medium text-primary underline underline-offset-4">
+            Sign up
+          </Link>
+        </p>
+      </CardContent>
+    </Card>
   );
 }

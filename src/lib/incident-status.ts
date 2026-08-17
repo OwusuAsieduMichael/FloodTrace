@@ -20,3 +20,12 @@ export const STATUS_VARIANT: Record<
   RESOLVED: "secondary",
   REJECTED: "destructive",
 };
+
+/** Non-terminal statuses in the order an incident normally progresses through. */
+export const STATUS_LADDER = [
+  "SUBMITTED",
+  "PENDING_REVIEW",
+  "VERIFIED",
+  "ASSIGNED",
+  "RESOLVED",
+] as const satisfies readonly IncidentStatus[];

@@ -13,7 +13,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import type { IncidentReport, IncidentStatus } from "@/types/domain";
 
-const STATUS_COLOR: Record<IncidentStatus, string> = {
+export const STATUS_COLOR: Record<IncidentStatus, string> = {
   SUBMITTED: "#eab308",
   PENDING_REVIEW: "#f97316",
   VERIFIED: "#22c55e",
