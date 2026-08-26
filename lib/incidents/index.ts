@@ -11,9 +11,14 @@ export {
   type CitizenIncidentStats,
 } from "./citizen";
 export {
+  getPublicMapIncidents,
+  type PublicMapIncident,
+} from "./public";
+export {
   INCIDENT_TYPE_LABELS,
   IN_PROGRESS_STATUSES,
   PENDING_STATUSES,
+  PUBLIC_MAP_STATUSES,
   TIMELINE_LABELS,
   TIMELINE_STATUSES,
 } from "./constants";

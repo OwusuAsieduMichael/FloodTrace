@@ -64,11 +64,33 @@ export function getServerEnv(): ServerEnv {
 
 /** Supabase project URL and anon key for client construction. */
 export function getSupabasePublicConfig() {
-  const { NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY } =
-    getPublicEnv();
+  const config = getSupabasePublicConfigSafe();
+
+  if (!config) {
+    throw new Error(
+      "Missing or invalid public environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are required."
+    );
+  }
+
+  return config;
+}
+
+/** Like getSupabasePublicConfig but returns null instead of throwing (edge/middleware). */
+export function getSupabasePublicConfigSafe():
+  | { url: string; anonKey: string }
+  | null {
+  const result = publicEnvSchema.safeParse({
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  });
+
+  if (!result.success) {
+    return null;
+  }
 
   return {
-    url: NEXT_PUBLIC_SUPABASE_URL,
-    anonKey: NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    url: result.data.NEXT_PUBLIC_SUPABASE_URL,
+    anonKey: result.data.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   };
 }

@@ -25,3 +25,6 @@ export const TIMELINE_LABELS: Record<IncidentStatus, string> = {
   resolved: "Resolved",
   rejected: "Rejected",
 };
+
+/** Statuses visible on the anonymous public map. */
+export const PUBLIC_MAP_STATUSES: IncidentStatus[] = ["verified", "assigned", "resolved"];
