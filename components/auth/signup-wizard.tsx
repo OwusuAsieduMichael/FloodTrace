@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -167,9 +168,8 @@ export function SignupWizard() {
 
               <div className="space-y-2">
                 <Label htmlFor="signup-password">Password</Label>
-                <Input
+                <PasswordInput
                   id="signup-password"
-                  type="password"
                   autoComplete="new-password"
                   required
                   minLength={8}
@@ -180,9 +180,8 @@ export function SignupWizard() {
 
               <div className="space-y-2">
                 <Label htmlFor="signup-confirm-password">Confirm password</Label>
-                <Input
+                <PasswordInput
                   id="signup-confirm-password"
-                  type="password"
                   autoComplete="new-password"
                   required
                   minLength={8}
@@ -200,8 +199,9 @@ export function SignupWizard() {
           {step === "role" ? (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Choose how you will use FloodTrace. Authority accounts require
-                admin approval before operational access.
+                Choose how you will use FloodTrace. Authority accounts can
+                verify incidents, assign teams, and record resolutions right
+                after signup.
               </p>
 
               <div className="grid gap-3">

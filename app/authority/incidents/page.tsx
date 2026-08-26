@@ -38,6 +38,8 @@ export default async function AuthorityIncidentsPage({
       <PageHeader
         title="Incidents"
         description="Search and filter submitted reports. Open an incident to inspect evidence, GPS, and supporting reports."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
       <IncidentFilters
         filters={filters}

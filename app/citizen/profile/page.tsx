@@ -17,6 +17,8 @@ export default async function CitizenProfilePage() {
       <PageHeader
         title="Profile"
         description="Your FloodTrace citizen account details."
+        backFallbackHref="/citizen/dashboard"
+        backLabel="Back to dashboard"
       />
 
       <Card className="max-w-lg">

@@ -1,10 +1,15 @@
 import { cn } from "@/lib/utils";
 
+import { BackToInterface } from "@/components/layout/back-to-interface";
+
 interface PageHeaderProps {
   title: string;
   description?: string;
   actions?: React.ReactNode;
   className?: string;
+  /** Restore the previous screen, or this href when there is no in-app history. */
+  backFallbackHref?: string;
+  backLabel?: string;
 }
 
 export function PageHeader({
@@ -12,6 +17,8 @@ export function PageHeader({
   description,
   actions,
   className,
+  backFallbackHref,
+  backLabel = "Back",
 }: PageHeaderProps) {
   return (
     <div
@@ -20,13 +27,24 @@ export function PageHeader({
         className
       )}
     >
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-        {description ? (
-          <p className="max-w-2xl text-sm text-muted-foreground">{description}</p>
+      <div className="min-w-0 space-y-2">
+        {backFallbackHref ? (
+          <BackToInterface fallbackHref={backFallbackHref} label={backLabel} />
         ) : null}
+        <div className="space-y-1">
+          <h1 className="text-xl font-semibold tracking-tight break-words sm:text-2xl">
+            {title}
+          </h1>
+          {description ? (
+            <p className="max-w-2xl text-sm text-muted-foreground">{description}</p>
+          ) : null}
+        </div>
       </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+      {actions ? (
+        <div className="flex w-full min-w-0 flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+          {actions}
+        </div>
+      ) : null}
     </div>
   );
 }

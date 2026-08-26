@@ -13,7 +13,7 @@ interface MapIncidentPopupProps {
 
 export function MapIncidentPopup({ incident, href }: MapIncidentPopupProps) {
   return (
-    <div className="min-w-[220px] space-y-2 p-1">
+    <div className="min-w-[180px] max-w-[min(16rem,calc(100vw-3rem))] space-y-2 p-1">
       <div className="flex flex-wrap items-center gap-1.5">
         <span className="text-xs font-semibold text-foreground">
           #{formatShortId(incident.id)}

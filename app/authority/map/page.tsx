@@ -15,6 +15,8 @@ export default async function AuthorityMapPage() {
       <PageHeader
         title="Operations map"
         description="All primary flood and drainage reports, including those still awaiting verification. Marker color is severity."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
       <OperationalIncidentMap incidents={incidents} />
     </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronDown, LogOut, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { signOutAction } from "@/lib/auth/actions";
+import { signOutToLanding } from "@/lib/auth/sign-out-client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +22,7 @@ export function UserMenu({
   roleLabel,
 }: UserMenuProps) {
   const [open, setOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,13 +60,13 @@ export function UserMenu({
           {initials}
         </span>
         <span className="hidden max-w-28 truncate sm:inline">{fullName ?? "Account"}</span>
-        <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
+        <ChevronDown className={cn("size-4 shrink-0 transition-transform", open && "rotate-180")} />
       </Button>
 
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-border bg-popover p-1 shadow-lg"
+          className="absolute right-0 z-50 mt-2 w-[min(14rem,calc(100vw-1.5rem))] rounded-xl border border-border bg-popover p-1 shadow-lg"
         >
           <div className="border-b border-border px-3 py-2.5">
             <p className="truncate text-sm font-medium">{fullName ?? "Account"}</p>
@@ -83,16 +84,19 @@ export function UserMenu({
             Dashboard
           </Link>
 
-          <form action={signOutAction}>
-            <button
-              type="submit"
-              role="menuitem"
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
-            >
-              <LogOut className="size-4" />
-              Sign out
-            </button>
-          </form>
+          <button
+            type="button"
+            role="menuitem"
+            disabled={isSigningOut}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-60"
+            onClick={async () => {
+              setIsSigningOut(true);
+              await signOutToLanding();
+            }}
+          >
+            <LogOut className="size-4" />
+            {isSigningOut ? "Signing out…" : "Sign out"}
+          </button>
         </div>
       ) : null}
     </div>

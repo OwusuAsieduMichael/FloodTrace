@@ -1,6 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import type { DuplicateDetectionConfig, EmergencyContact } from "@/types";
 
+import {
+  configuredEmergencyContacts,
+  GHANA_EMERGENCY_CONTACTS,
+} from "./emergency-contacts";
+
 export async function getEmergencyContacts(): Promise<EmergencyContact[]> {
   const supabase = await createClient();
 
@@ -11,10 +16,13 @@ export async function getEmergencyContacts(): Promise<EmergencyContact[]> {
     .maybeSingle();
 
   if (error || !data?.value) {
-    return [];
+    return GHANA_EMERGENCY_CONTACTS;
   }
 
-  return data.value as EmergencyContact[];
+  const stored = data.value as EmergencyContact[];
+  const configured = configuredEmergencyContacts(stored);
+
+  return configured.length > 0 ? stored : GHANA_EMERGENCY_CONTACTS;
 }
 
 export async function getDuplicateDetectionConfig(): Promise<DuplicateDetectionConfig | null> {

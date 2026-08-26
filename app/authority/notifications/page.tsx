@@ -22,6 +22,8 @@ export default async function AuthorityNotificationsPage() {
       <PageHeader
         title="Notifications"
         description="Operational alerts for new reports, duplicates, and high-priority incidents."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
       <NotificationInbox notifications={notifications} role="authority" />
     </div>

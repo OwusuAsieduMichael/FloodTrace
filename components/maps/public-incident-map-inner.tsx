@@ -71,7 +71,7 @@ export function PublicIncidentMapInner({
             fillOpacity: 0.9,
           }}
         >
-          <Popup maxWidth={280} minWidth={220}>
+          <Popup maxWidth={260} minWidth={180}>
             <MapIncidentPopup
               incident={incident}
               href={detailHrefBase ? `${detailHrefBase}/${incident.id}` : undefined}

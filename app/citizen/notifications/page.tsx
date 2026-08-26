@@ -22,6 +22,8 @@ export default async function CitizenNotificationsPage() {
       <PageHeader
         title="Notifications"
         description="Updates on your reports, rainfall warnings, and incident activity."
+        backFallbackHref="/citizen/dashboard"
+        backLabel="Back to dashboard"
       />
       <NotificationInbox notifications={notifications} role="citizen" />
     </div>

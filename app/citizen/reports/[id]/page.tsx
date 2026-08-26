@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { IncidentStatusTimeline } from "@/components/citizen/incident-status-timeline";
@@ -7,7 +6,6 @@ import { EvidenceGallery } from "@/components/media/evidence-gallery";
 import { ResolutionRecordCard } from "@/components/media/resolution-record-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentProfile } from "@/lib/auth/session";
 import {
@@ -58,11 +56,8 @@ export default async function CitizenReportDetailPage({
       <PageHeader
         title={`Report #${formatShortId(incident.id)}`}
         description={formatIncidentType(incident.incident_type)}
-        actions={
-          <Button variant="outline" render={<Link href="/citizen/reports" />}>
-            Back to reports
-          </Button>
-        }
+        backFallbackHref="/citizen/reports"
+        backLabel="Back to reports"
       />
 
       <div className="flex flex-wrap gap-2">

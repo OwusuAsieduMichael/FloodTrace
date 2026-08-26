@@ -34,7 +34,7 @@ export function AuthShell({
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-4 py-10 sm:px-6">
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-4 py-8 sm:px-6 sm:py-10">
         <div className={cn("space-y-6", className)}>
           <div className="space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>

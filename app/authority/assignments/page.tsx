@@ -71,6 +71,8 @@ export default async function AuthorityAssignmentsPage({
       <PageHeader
         title="Assignments"
         description="Assign verified incidents to an approved officer. Reassign if ownership needs to change."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
 
       <div className="grid gap-6 xl:grid-cols-5">

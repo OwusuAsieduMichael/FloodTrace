@@ -66,6 +66,8 @@ export default async function AuthorityResolutionPage({
       <PageHeader
         title="Resolution"
         description="Capture an after photograph, record what was done, and close assigned incidents with public before/after evidence."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
 
       <div className="grid gap-6 xl:grid-cols-5">

@@ -19,12 +19,12 @@ export function AnalyticsMetricGrid({ metrics, className }: AnalyticsMetricGridP
   return (
     <div
       className={cn(
-        "grid gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
+        "grid min-w-0 gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
         className
       )}
     >
       {metrics.map(({ label, value, hint, icon: Icon }) => (
-        <Card key={label}>
+        <Card key={label} className="min-w-0">
           <CardHeader className="pb-2">
             <div className="flex items-start justify-between gap-2">
               <CardTitle className="text-xs font-medium leading-tight text-muted-foreground">

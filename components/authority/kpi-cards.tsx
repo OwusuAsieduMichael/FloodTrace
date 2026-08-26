@@ -63,10 +63,10 @@ const kpis = [
 
 export function AuthorityKpiCards({ stats }: AuthorityKpiCardsProps) {
   return (
-    <div className="grid gap-3 grid-cols-2 md:grid-cols-4 xl:grid-cols-7">
+    <div className="grid min-w-0 grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
       {kpis.map(({ key, label, href, icon: Icon }) => (
         <Link key={key} href={href} className="group block">
-          <Card className="h-full transition-shadow group-hover:shadow-md">
+          <Card className="h-full min-w-0 transition-shadow group-hover:shadow-md">
             <CardHeader className="pb-2">
               <div className="flex items-start justify-between gap-2">
                 <CardTitle className="text-xs font-medium leading-tight text-muted-foreground">

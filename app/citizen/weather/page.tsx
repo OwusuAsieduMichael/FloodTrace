@@ -24,6 +24,8 @@ export default async function CitizenWeatherPage() {
       <PageHeader
         title="Weather"
         description="Current conditions and rainfall context for the Accra map area. You can switch to your device location."
+        backFallbackHref="/citizen/dashboard"
+        backLabel="Back to dashboard"
       />
       <WeatherPanel initial={weather} />
     </div>

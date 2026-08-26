@@ -37,7 +37,7 @@ const statConfig = [
 
 export function ReportStatCards({ stats }: ReportStatCardsProps) {
   return (
-    <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+    <div className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4">
       {statConfig.map(({ key, label, icon: Icon, href }) => (
         <Link key={key} href={href} className="group block">
           <Card className="transition-shadow group-hover:shadow-md">

@@ -36,6 +36,7 @@ export const citizenNavItems: NavItem[] = [
     href: "/citizen/reports",
     icon: FileText,
     mobilePrimary: true,
+    mobileTitle: "Reports",
   },
   {
     title: "Notifications",

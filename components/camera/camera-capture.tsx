@@ -153,7 +153,7 @@ export function CameraCapture({
         <img
           src={photo.previewUrl}
           alt={previewAlt}
-          className="aspect-[4/3] w-full rounded-xl border border-border object-cover"
+          className="aspect-[4/3] max-h-[min(50dvh,28rem)] w-full rounded-xl border border-border object-cover"
         />
         <div className="flex gap-2">
           <Button type="button" variant="outline" className="flex-1" onClick={handleRetake}>
@@ -179,7 +179,7 @@ export function CameraCapture({
 
       <div
         className={cn(
-          "relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-muted",
+          "relative aspect-[4/3] max-h-[min(50dvh,28rem)] overflow-hidden rounded-xl border border-border bg-muted",
           isStarting && "animate-pulse"
         )}
       >

@@ -89,12 +89,18 @@ export function WeatherPanel({ initial }: WeatherPanelProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <p className="text-sm text-muted-foreground">
           Conditions are from OpenWeatherMap. Rainfall is shown only when the
           provider reports it — values are never estimated.
         </p>
-        <Button variant="outline" size="sm" onClick={useMyLocation} disabled={isPending}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full shrink-0 sm:w-auto"
+          onClick={useMyLocation}
+          disabled={isPending}
+        >
           <LocateFixed className="size-4" />
           {isPending ? "Updating…" : "Use my location"}
         </Button>

@@ -5,6 +5,7 @@ export {
   citizenNavItems,
   citizenSecondaryItems,
 } from "./citizen";
+export { previousInterfacePath } from "./previous-interface";
 export type { NavItem } from "./types";
 
 export function isNavItemActive(pathname: string, href: string): boolean {

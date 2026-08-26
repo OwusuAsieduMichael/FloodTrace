@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { IncidentActions } from "@/components/authority/incident-actions";
 import { IncidentInspection } from "@/components/authority/incident-inspection";
 import { PageHeader } from "@/components/layout/page-header";
-import { Button } from "@/components/ui/button";
 import {
   getAuthorityIncidentById,
   getAuthorityIncidentMedia,
@@ -45,14 +43,9 @@ export default async function AuthorityIncidentDetailPage({
       <PageHeader
         title={`Incident #${formatShortId(incident.id)}`}
         description={formatIncidentType(incident.incident_type)}
-        actions={
-          <div className="flex flex-wrap gap-2">
-            <IncidentActions incidentId={incident.id} status={incident.status} />
-            <Button variant="outline" render={<Link href="/authority/incidents" />}>
-              Back to incidents
-            </Button>
-          </div>
-        }
+        backFallbackHref="/authority/incidents"
+        backLabel="Back to incidents"
+        actions={<IncidentActions incidentId={incident.id} status={incident.status} />}
       />
 
       <IncidentInspection

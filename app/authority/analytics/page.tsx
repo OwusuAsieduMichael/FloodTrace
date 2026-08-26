@@ -23,6 +23,8 @@ export default async function AuthorityAnalyticsPage({
       <PageHeader
         title="Analytics"
         description="Operational metrics from camera-verified incident records. Empty values mean no matching reports, not estimates."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
       <AnalyticsDashboard
         snapshot={snapshot}

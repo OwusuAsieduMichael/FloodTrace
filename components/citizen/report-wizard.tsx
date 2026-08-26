@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { CloudRain, Droplets, Loader2, Send } from "lucide-react";
 
+import { BackToInterface } from "@/components/layout/back-to-interface";
 import {
   CameraCapture,
   type CapturedPhoto,
@@ -217,9 +218,15 @@ export function ReportWizard() {
                 onCapture={setPhoto}
                 onClear={handleClearPhoto}
               />
-              <Button type="button" className="w-full" disabled={!photo} onClick={goNext}>
-                Continue
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button type="button" className="w-full" disabled={!photo} onClick={goNext}>
+                  Continue
+                </Button>
+                <BackToInterface
+                  fallbackHref="/citizen/dashboard"
+                  label="Back to dashboard"
+                />
+              </div>
             </div>
           ) : null}
 
@@ -340,7 +347,7 @@ export function ReportWizard() {
                 <img
                   src={photo.previewUrl}
                   alt="Report evidence preview"
-                  className="aspect-[4/3] w-full rounded-xl border border-border object-cover"
+                  className="aspect-[4/3] max-h-[min(40dvh,24rem)] w-full rounded-xl border border-border object-cover"
                 />
               ) : null}
 

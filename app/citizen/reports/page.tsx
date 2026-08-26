@@ -68,6 +68,8 @@ export default async function CitizenReportsPage({
       <PageHeader
         title="My reports"
         description="Track submitted incidents, authority feedback, and resolution progress."
+        backFallbackHref="/citizen/dashboard"
+        backLabel="Back to dashboard"
         actions={
           <Button render={<Link href="/citizen/report" />}>New report</Button>
         }

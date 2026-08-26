@@ -13,11 +13,16 @@ export async function HeaderAuthActions() {
 
   if (!user || !profile) {
     return (
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" render={<Link href="/auth/login" />}>
+      <div className="flex items-center gap-1 sm:gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hidden px-2 sm:inline-flex"
+          render={<Link href="/auth/login" />}
+        >
           Sign in
         </Button>
-        <Button size="sm" render={<Link href="/auth/signup" />}>
+        <Button size="sm" className="px-2.5" render={<Link href="/auth/signup" />}>
           Get started
         </Button>
       </div>

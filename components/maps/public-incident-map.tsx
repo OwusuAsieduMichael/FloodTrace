@@ -57,14 +57,14 @@ export function PublicIncidentMap({ incidents, weather }: PublicIncidentMapProps
         totalCount={incidents.length}
       />
 
-      <div className="relative min-h-[420px] flex-1 overflow-hidden rounded-xl border border-border">
+      <div className="relative h-[min(70dvh,560px)] min-h-[280px] overflow-hidden rounded-xl border border-border">
         <PublicIncidentMapInner incidents={filteredIncidents} />
         {weather ? (
-          <div className="pointer-events-none absolute right-3 top-3 z-[1000]">
+          <div className="pointer-events-none absolute right-2 top-2 z-[1000] max-w-[calc(100%-1rem)] sm:right-3 sm:top-3">
             <MapWeatherChip weather={weather} />
           </div>
         ) : null}
-        <div className="pointer-events-none absolute bottom-3 left-3 z-[1000]">
+        <div className="pointer-events-none absolute bottom-2 left-2 z-[1000] sm:bottom-3 sm:left-3">
           <MapLegend />
         </div>
       </div>

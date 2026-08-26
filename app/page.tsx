@@ -59,27 +59,28 @@ export default function HomePage() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,oklch(0.45_0.12_230/0.12),transparent)]"
             aria-hidden
           />
-          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-28 lg:py-32">
             <div className="mx-auto max-w-3xl text-center">
               <Badge variant="secondary" className="mb-6">
                 Disaster Management Information System
               </Badge>
-              <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+              <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
                 Report Floods. Verify Reality. Protect Communities.
               </h1>
-              <p className="mt-6 text-lg text-muted-foreground text-pretty sm:text-xl">
+              <p className="mt-5 text-base text-muted-foreground text-pretty sm:mt-6 sm:text-xl">
                 FloodTrace enables citizens to report floods and blocked drainage
                 with live camera evidence while authorities verify, assign, and
                 resolve incidents with full transparency.
               </p>
-              <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Button size="lg" render={<Link href="/auth/signup" />}>
+              <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-10 sm:flex-row sm:items-center">
+                <Button size="lg" className="w-full sm:w-auto" render={<Link href="/auth/signup" />}>
                   Report an Incident
                   <ArrowRight className="size-4" aria-hidden />
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
+                  className="w-full sm:w-auto"
                   render={<Link href="/map" />}
                 >
                   <Radio className="size-4" aria-hidden />
@@ -91,10 +92,10 @@ export default function HomePage() {
         </section>
 
         {/* Features */}
-        <section id="features" className="border-b border-border py-20 sm:py-24">
+        <section id="features" className="border-b border-border py-14 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-semibold tracking-tight">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 Built for citizens and authorities
               </h2>
               <p className="mt-4 text-muted-foreground">
@@ -122,10 +123,10 @@ export default function HomePage() {
         </section>
 
         {/* Workflow */}
-        <section id="how-it-works" className="py-20 sm:py-24">
+        <section id="how-it-works" className="py-14 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-semibold tracking-tight">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 Transparent incident lifecycle
               </h2>
               <p className="mt-4 text-muted-foreground">
@@ -162,13 +163,14 @@ export default function HomePage() {
               Join as a citizen to report incidents, or register as an authority
               to verify and manage flood response operations.
             </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button size="lg" render={<Link href="/auth/signup" />}>
+            <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+              <Button size="lg" className="w-full sm:w-auto" render={<Link href="/auth/signup" />}>
                 Get started free
               </Button>
               <Button
                 size="lg"
                 variant="outline"
+                className="w-full sm:w-auto"
                 render={<Link href="/map" />}
               >
                 Explore the map

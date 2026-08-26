@@ -92,8 +92,8 @@ export function AuthorityAppShell({
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur-md">
-          <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
-            <div className="flex items-center gap-3">
+          <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               {!limited ? (
                 <Button
                   variant="ghost"
@@ -106,8 +106,8 @@ export function AuthorityAppShell({
                 </Button>
               ) : null}
               {limited ? <AppLogo href={homeHref} /> : null}
-              <div className="hidden sm:block">
-                <p className="text-sm font-medium">Authority operations</p>
+              <div className="hidden min-w-0 sm:block">
+                <p className="truncate text-sm font-medium">Authority operations</p>
                 <p className="text-xs text-muted-foreground">
                   Incident verification & response
                 </p>

@@ -7,7 +7,7 @@ test("home page presents the product and public map link", async ({ page }) => {
       name: "Report Floods. Verify Reality. Protect Communities.",
     })
   ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Live Map" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "View Live Map" })).toBeVisible();
 });
 
 test("login page is available without a session", async ({ page }) => {

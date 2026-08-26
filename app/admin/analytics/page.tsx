@@ -30,6 +30,8 @@ export default async function AdminAnalyticsPage({
       <PageHeader
         title="Analytics"
         description="Platform-wide incident and account metrics. All figures come from the live database."
+        backFallbackHref="/admin/dashboard"
+        backLabel="Back to dashboard"
       />
       <AnalyticsDashboard
         snapshot={snapshot}

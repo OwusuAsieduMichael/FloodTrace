@@ -20,7 +20,7 @@ export function MapWeatherChip({ weather }: MapWeatherChipProps) {
         <p className="font-medium">
           {formatTemperatureC(weather.current.temperatureC)}
         </p>
-        <p className="capitalize text-muted-foreground">
+        <p className="max-w-[9rem] truncate capitalize text-muted-foreground">
           {weather.current.condition.description}
         </p>
       </div>

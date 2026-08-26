@@ -73,8 +73,8 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur-md">
-          <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
-            <div className="flex items-center gap-3">
+          <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <Button
                 variant="ghost"
                 size="icon-sm"
@@ -84,9 +84,9 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
               >
                 <Menu className="size-4" />
               </Button>
-              <div>
-                <p className="text-sm font-medium">System administration</p>
-                <p className="text-xs text-muted-foreground">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium">System administration</p>
+                <p className="hidden text-xs text-muted-foreground sm:block">
                   Users, approvals, and configuration
                 </p>
               </div>

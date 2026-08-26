@@ -9,7 +9,9 @@ export default async function CitizenEmergencyPage() {
     <div className="space-y-8">
       <PageHeader
         title="Emergency assistance"
-        description="Quick access to configured emergency contacts for urgent assistance."
+        description="Ghana emergency numbers. 112 is the national toll-free line for Police, Fire, Ambulance, and NADMO."
+        backFallbackHref="/citizen/dashboard"
+        backLabel="Back to dashboard"
       />
       <EmergencyContactsPanel contacts={contacts} />
     </div>

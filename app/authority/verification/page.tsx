@@ -61,6 +61,8 @@ export default async function AuthorityVerificationPage({
       <PageHeader
         title="Verification queue"
         description="Inspect live camera evidence, location, and linked supporting reports before verifying or rejecting."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
       />
 
       <div className="grid gap-6 xl:grid-cols-5">

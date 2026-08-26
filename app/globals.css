@@ -96,7 +96,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased overflow-x-clip;
   }
 }
 
@@ -109,6 +109,15 @@
 .leaflet-container {
   font-family: inherit;
   z-index: 0;
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.leaflet-control-attribution {
+  max-width: calc(100% - 0.75rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .leaflet-popup-content-wrapper {

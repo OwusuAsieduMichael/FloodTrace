@@ -8,4 +8,6 @@ export interface NavItem {
   external?: boolean;
   /** Shown in compact mobile nav */
   mobilePrimary?: boolean;
+  /** Optional shorter label for the compact mobile bar */
+  mobileTitle?: string;
 }

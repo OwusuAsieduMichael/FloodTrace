@@ -12,7 +12,7 @@ import type { AuthorityIncidentFilters } from "@/lib/incidents/authority";
 import type { IncidentSeverity, IncidentType } from "@/types";
 
 const selectClassName =
-  "h-9 rounded-lg border border-input bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
+  "h-9 w-full min-w-0 rounded-lg border border-input bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 lg:w-auto";
 
 interface IncidentFiltersProps {
   filters: AuthorityIncidentFilters;
@@ -31,7 +31,7 @@ export function IncidentFilters({
       action="/authority/incidents"
       className="flex flex-col gap-3 rounded-xl border border-border bg-card p-3 lg:flex-row lg:flex-wrap lg:items-end"
     >
-      <label className="min-w-[220px] flex-1 space-y-1">
+      <label className="w-full min-w-0 flex-1 space-y-1 lg:min-w-[220px]">
         <span className="text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
           Search
         </span>

@@ -48,7 +48,7 @@ export function CitizenAppShell({
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-40 border-b border-border/60 bg-background/95 backdrop-blur-md">
-          <div className="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
+          <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-3 md:hidden">
               <AppLogo href="/citizen/dashboard" showWordmark={false} />
               <div className="min-w-0">
@@ -94,7 +94,7 @@ export function CitizenAppShell({
                   aria-current={active ? "page" : undefined}
                 >
                   <Icon className="size-5" aria-hidden />
-                  <span className="truncate">{item.title}</span>
+                  <span className="truncate">{item.mobileTitle ?? item.title}</span>
                 </Link>
               );
             })}

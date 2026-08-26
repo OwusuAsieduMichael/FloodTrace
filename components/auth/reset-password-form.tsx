@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getPostAuthRedirect } from "@/lib/auth/redirects";
 import { createClient } from "@/lib/supabase/client";
@@ -106,9 +106,8 @@ export function ResetPasswordForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="new-password">New password</Label>
-            <Input
+            <PasswordInput
               id="new-password"
-              type="password"
               autoComplete="new-password"
               required
               minLength={8}
@@ -119,9 +118,8 @@ export function ResetPasswordForm() {
 
           <div className="space-y-2">
             <Label htmlFor="confirm-new-password">Confirm new password</Label>
-            <Input
+            <PasswordInput
               id="confirm-new-password"
-              type="password"
               autoComplete="new-password"
               required
               minLength={8}

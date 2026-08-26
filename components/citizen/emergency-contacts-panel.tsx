@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { EmergencyContact } from "@/types";
+import { telHref } from "@/lib/config/emergency-contacts";
 
 interface EmergencyContactsPanelProps {
   contacts: EmergencyContact[];
@@ -23,8 +24,10 @@ export function EmergencyContactsPanel({
         <AlertTriangle className="size-4" />
         <AlertTitle>For urgent life-threatening emergencies</AlertTitle>
         <AlertDescription>
-          Call your local emergency number immediately. FloodTrace reports help
-          authorities respond to flooding — they do not replace emergency services.
+          Dial <span className="font-medium text-foreground">112</span> immediately.
+          It is Ghana&apos;s toll-free emergency number for Police, Fire, Ambulance,
+          and NADMO. FloodTrace reports help authorities respond to flooding — they
+          do not replace emergency services.
         </AlertDescription>
       </Alert>
 
@@ -60,7 +63,7 @@ export function EmergencyContactsPanel({
                 <CardDescription>{contact.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" render={<a href={`tel:${contact.phone}`} />}>
+                <Button className="w-full" render={<a href={telHref(contact.phone)} />}>
                   <Phone className="size-4" />
                   Call {contact.phone}
                 </Button>
@@ -82,7 +85,7 @@ export function EmergencyContactsPanel({
 export function ReportHeroCta() {
   return (
     <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background">
-      <CardContent className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+      <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="space-y-2">
           <p className="text-sm font-medium text-primary">Primary action</p>
           <h2 className="text-xl font-semibold tracking-tight">Report a flood</h2>
@@ -91,7 +94,7 @@ export function ReportHeroCta() {
             report goes directly to municipal authorities for verification.
           </p>
         </div>
-        <Button size="lg" render={<Link href="/citizen/report" />}>
+        <Button size="lg" className="w-full shrink-0 sm:w-auto" render={<Link href="/citizen/report" />}>
           <Camera className="size-4" />
           Start report
         </Button>

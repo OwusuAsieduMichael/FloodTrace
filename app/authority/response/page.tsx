@@ -45,6 +45,8 @@ export default async function AuthorityResponsePage({
       <PageHeader
         title="Response tracking"
         description="Active assignments currently in the field. Open an incident to inspect evidence or reassign ownership."
+        backFallbackHref="/authority/dashboard"
+        backLabel="Back to dashboard"
         actions={
           <div className="flex flex-wrap gap-2">
             <Button
