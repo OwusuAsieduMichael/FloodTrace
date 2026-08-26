@@ -21,6 +21,11 @@ test.describe("mobile layout", () => {
       })
     ).toBeVisible();
     await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Features" })).toBeVisible();
+    await page.getByRole("button", { name: "Close menu" }).click();
+    await expect(page.getByRole("navigation", { name: "Site" })).toHaveCount(0);
     await assertNoHorizontalOverflow(page);
 
     await page.goto("/auth/login");

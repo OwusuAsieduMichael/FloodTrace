@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -9,11 +8,11 @@ import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { navigateAfterAuth } from "@/lib/auth/navigate-after-auth";
 import { getPostAuthRedirect } from "@/lib/auth/redirects";
 import { createClient } from "@/lib/supabase/client";
 
 export function ResetPasswordForm() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -64,14 +63,13 @@ export function ResetPasswordForm() {
 
       if (profile) {
         toast.success("Password updated.");
-        router.push(getPostAuthRedirect(profile));
-        router.refresh();
+        navigateAfterAuth(getPostAuthRedirect(profile));
         return;
       }
     }
 
     toast.success("Password updated. You can sign in now.");
-    router.push("/auth/login");
+    navigateAfterAuth("/auth/login");
   }
 
   if (hasSession === null) {

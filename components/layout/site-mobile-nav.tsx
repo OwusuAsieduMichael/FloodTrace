@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 
 const links = [
   { href: "/#features", label: "Features" },
@@ -18,28 +18,25 @@ export function SiteMobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="md:hidden">
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={() => setOpen((value) => !value)}
+    <div className="relative md:hidden">
+      <MobileIconButton
+        label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
-        aria-label={open ? "Close menu" : "Open menu"}
+        onClick={() => setOpen((value) => !value)}
       >
-        {open ? <X className="size-4" /> : <Menu className="size-4" />}
-      </Button>
+        {open ? <X className="size-5" /> : <Menu className="size-5" />}
+      </MobileIconButton>
 
       {open ? (
         <>
           <button
             type="button"
             className="fixed inset-0 z-40 bg-black/40"
-            aria-label="Close menu"
+            aria-label="Dismiss menu"
             onClick={() => setOpen(false)}
           />
           <nav
-            className="absolute right-4 top-14 z-50 w-[min(16rem,calc(100vw-2rem))] rounded-xl border border-border bg-background p-2 shadow-lg"
+            className="absolute right-0 top-12 z-50 w-[min(16rem,calc(100vw-2rem))] rounded-xl border border-border bg-background p-2 shadow-lg"
             aria-label="Site"
           >
             {links.map((link) => (

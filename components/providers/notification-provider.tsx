@@ -41,53 +41,63 @@ export function NotificationProvider({
   }
 
   useEffect(() => {
-    const supabase = createClient();
+    let cancelled = false;
 
-    async function refreshUnread() {
-      const { count } = await supabase
-        .from("notifications")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", userId)
-        .eq("read", false);
+    try {
+      const supabase = createClient();
 
-      if (count !== null) {
-        setUnreadCount(count);
+      async function refreshUnread() {
+        const { count } = await supabase
+          .from("notifications")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", userId)
+          .eq("read", false);
+
+        if (!cancelled && count !== null) {
+          setUnreadCount(count);
+        }
       }
+
+      const channel = supabase
+        .channel(`notifications:${userId}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${userId}`,
+          },
+          (payload) => {
+            const row = payload.new as Notification;
+            void refreshUnread();
+            toast.message(row.title, { description: row.message });
+          }
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${userId}`,
+          },
+          () => {
+            void refreshUnread();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        cancelled = true;
+        void supabase.removeChannel(channel);
+      };
+    } catch (error) {
+      console.error("Notification subscription failed:", error);
+      return () => {
+        cancelled = true;
+      };
     }
-
-    const channel = supabase
-      .channel(`notifications:${userId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-          filter: `user_id=eq.${userId}`,
-        },
-        (payload) => {
-          const row = payload.new as Notification;
-          void refreshUnread();
-          toast.message(row.title, { description: row.message });
-        }
-      )
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "notifications",
-          filter: `user_id=eq.${userId}`,
-        },
-        () => {
-          void refreshUnread();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      void supabase.removeChannel(channel);
-    };
   }, [userId]);
 
   const value = useMemo(() => ({ unreadCount }), [unreadCount]);

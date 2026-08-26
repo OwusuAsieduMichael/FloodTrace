@@ -4,11 +4,10 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
+import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { adminNavItems } from "@/lib/navigation";
-import { cn } from "@/lib/utils";
 
 interface AdminAppShellProps {
   children: React.ReactNode;
@@ -38,52 +37,47 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
       </aside>
 
       {mobileOpen ? (
-        <button
-          type="button"
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          aria-label="Close navigation"
-          onClick={() => setMobileOpen(false)}
-        />
-      ) : null}
-
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border/60 bg-background transition-transform lg:hidden",
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
-          <AppLogo href="/admin/dashboard" />
-          <Button
-            variant="ghost"
-            size="icon-sm"
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            aria-label="Close navigation"
             onClick={() => setMobileOpen(false)}
-            aria-label="Close menu"
-          >
-            <X className="size-4" />
-          </Button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4">
-          <SidebarNav
-            items={adminNavItems}
-            onNavigate={() => setMobileOpen(false)}
           />
-        </div>
-      </aside>
+          <aside
+            className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border/60 bg-background shadow-lg lg:hidden"
+            aria-label="Administration"
+          >
+            <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
+              <AppLogo href="/admin/dashboard" />
+              <MobileIconButton
+                label="Close menu"
+                onClick={() => setMobileOpen(false)}
+              >
+                <X className="size-5" />
+              </MobileIconButton>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <SidebarNav
+                items={adminNavItems}
+                onNavigate={() => setMobileOpen(false)}
+              />
+            </div>
+          </aside>
+        </>
+      ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur-md">
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-              <Button
-                variant="ghost"
-                size="icon-sm"
+              <MobileIconButton
+                label="Open navigation"
                 className="lg:hidden"
                 onClick={() => setMobileOpen(true)}
-                aria-label="Open navigation"
               >
-                <Menu className="size-4" />
-              </Button>
+                <Menu className="size-5" />
+              </MobileIconButton>
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">System administration</p>
                 <p className="hidden text-xs text-muted-foreground sm:block">

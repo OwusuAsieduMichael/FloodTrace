@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Building2, CheckCircle2, UserRound } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -14,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { navigateAfterAuth } from "@/lib/auth/navigate-after-auth";
 import { getPostAuthRedirect } from "@/lib/auth/redirects";
 import { createClient } from "@/lib/supabase/client";
 import type { UserRole } from "@/types";
@@ -23,7 +23,6 @@ type SignupStep = "account" | "role" | "profile" | "done";
 const STEPS: SignupStep[] = ["account", "role", "profile", "done"];
 
 export function SignupWizard() {
-  const router = useRouter();
   const [step, setStep] = useState<SignupStep>("account");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -116,8 +115,7 @@ export function SignupWizard() {
       }
 
       toast.success("Account created successfully.");
-      router.push(getPostAuthRedirect(profile));
-      router.refresh();
+      navigateAfterAuth(getPostAuthRedirect(profile));
       return;
     }
 

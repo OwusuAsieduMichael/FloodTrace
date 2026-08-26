@@ -12,6 +12,8 @@ import {
   getAuthorityAttentionIncidents,
   getAuthorityIncidentStats,
   getAuthorityIncidents,
+  type AuthorityIncidentListItem,
+  type AuthorityIncidentStats,
 } from "@/lib/incidents/authority";
 
 export const metadata = {
@@ -19,14 +21,32 @@ export const metadata = {
   description: "Authority control center for flood and drainage incident response.",
 };
 
+const EMPTY_STATS: AuthorityIncidentStats = {
+  total: 0,
+  pendingVerification: 0,
+  verified: 0,
+  assigned: 0,
+  resolved: 0,
+  critical: 0,
+  supportingReports: 0,
+};
+
 export default async function AuthorityDashboardPage() {
   const profile = await getCurrentProfile();
 
-  const [stats, attention, latest] = await Promise.all([
-    getAuthorityIncidentStats(),
-    getAuthorityAttentionIncidents(6),
-    getAuthorityIncidents({ scope: "primary" }),
-  ]);
+  let stats: AuthorityIncidentStats = EMPTY_STATS;
+  let attention: AuthorityIncidentListItem[] = [];
+  let latest: AuthorityIncidentListItem[] = [];
+
+  try {
+    [stats, attention, latest] = await Promise.all([
+      getAuthorityIncidentStats(),
+      getAuthorityAttentionIncidents(6),
+      getAuthorityIncidents({ scope: "primary" }),
+    ]);
+  } catch (error) {
+    console.error("Failed to load authority dashboard data:", error);
+  }
 
   const recent = latest.slice(0, 6);
 

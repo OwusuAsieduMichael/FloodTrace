@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -13,11 +13,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatCooldown } from "@/lib/auth/email-cooldown";
+import { navigateAfterAuth } from "@/lib/auth/navigate-after-auth";
 import { safePostLoginPath } from "@/lib/security/safe-path";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect");
   const [email, setEmail] = useState("");
@@ -66,8 +66,7 @@ export function LoginForm() {
     }
 
     toast.success("Welcome back.");
-    router.push(safePostLoginPath(redirectTo, profile));
-    router.refresh();
+    navigateAfterAuth(safePostLoginPath(redirectTo, profile));
   }
 
   async function handleResendConfirmation() {
