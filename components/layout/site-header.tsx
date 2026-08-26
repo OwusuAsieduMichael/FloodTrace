@@ -8,9 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background">
       <div className="relative mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 sm:h-16 sm:px-6">
-        <AppLogo />
+        <AppLogo className="min-w-0" />
 
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
           <Link href="/#features" className="transition-colors hover:text-foreground">
@@ -24,7 +24,7 @@ export function SiteHeader() {
           </Link>
         </nav>
 
-        <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <Suspense
             fallback={
               <div className="flex items-center gap-2">

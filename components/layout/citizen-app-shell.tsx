@@ -47,7 +47,7 @@ export function CitizenAppShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-40 border-b border-border/60 bg-background/95 backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b border-border/60 bg-background">
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-3 md:hidden">
               <AppLogo href="/citizen/dashboard" showWordmark={false} />
@@ -74,7 +74,7 @@ export function CitizenAppShell({
         </main>
 
         <nav
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/95 backdrop-blur-md md:hidden"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background md:hidden"
           aria-label="Primary"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
@@ -119,7 +119,7 @@ export function CitizenAppShell({
           <>
             <button
               type="button"
-              className="fixed inset-0 z-40 bg-black/40 md:hidden"
+              className="fixed inset-x-0 top-14 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 bg-black/40 md:hidden"
               aria-label="Close menu"
               onClick={() => setMoreOpen(false)}
             />

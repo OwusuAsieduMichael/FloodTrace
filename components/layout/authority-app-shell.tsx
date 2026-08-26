@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
+import { ClientPortal } from "@/components/layout/client-portal";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { Badge } from "@/components/ui/badge";
@@ -34,60 +35,58 @@ export function AuthorityAppShell({
   return (
     <div className="flex min-h-dvh bg-background">
       {!limited ? (
-        <>
-          <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/15 lg:flex lg:flex-col">
-            <div className="flex h-16 items-center border-b border-border/60 px-4">
+        <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/15 lg:flex lg:flex-col">
+          <div className="flex h-16 items-center border-b border-border/60 px-4">
+            <AppLogo href={homeHref} />
+          </div>
+          <div className="flex flex-1 flex-col gap-2 p-4">
+            <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              Operations
+            </p>
+            <SidebarNav items={authorityNavItems} badges={notificationBadges} />
+          </div>
+          <div className="border-t border-border/60 p-4">
+            <Badge variant="secondary" className="w-full justify-center py-1">
+              {roleLabel}
+            </Badge>
+          </div>
+        </aside>
+      ) : null}
+
+      {!limited && mobileOpen ? (
+        <ClientPortal>
+          <button
+            type="button"
+            className="fixed inset-x-0 bottom-0 top-14 z-[80] bg-black/40 sm:top-16 lg:hidden"
+            aria-label="Close navigation"
+            onClick={() => setMobileOpen(false)}
+          />
+          <aside
+            className="fixed inset-y-0 left-0 z-[90] flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg lg:hidden"
+            aria-label="Operations"
+          >
+            <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
               <AppLogo href={homeHref} />
+              <MobileIconButton
+                label="Close menu"
+                onClick={() => setMobileOpen(false)}
+              >
+                <X className="size-5" />
+              </MobileIconButton>
             </div>
-            <div className="flex flex-1 flex-col gap-2 p-4">
-              <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                Operations
-              </p>
-              <SidebarNav items={authorityNavItems} badges={notificationBadges} />
-            </div>
-            <div className="border-t border-border/60 p-4">
-              <Badge variant="secondary" className="w-full justify-center py-1">
-                {roleLabel}
-              </Badge>
+            <div className="flex-1 overflow-y-auto p-4">
+              <SidebarNav
+                items={authorityNavItems}
+                badges={notificationBadges}
+                onNavigate={() => setMobileOpen(false)}
+              />
             </div>
           </aside>
-
-          {mobileOpen ? (
-            <>
-              <button
-                type="button"
-                className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-                aria-label="Close navigation"
-                onClick={() => setMobileOpen(false)}
-              />
-              <aside
-                className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border/60 bg-background shadow-lg lg:hidden"
-                aria-label="Operations"
-              >
-                <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
-                  <AppLogo href={homeHref} />
-                  <MobileIconButton
-                    label="Close menu"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <X className="size-5" />
-                  </MobileIconButton>
-                </div>
-                <div className="flex-1 overflow-y-auto p-4">
-                  <SidebarNav
-                    items={authorityNavItems}
-                    badges={notificationBadges}
-                    onNavigate={() => setMobileOpen(false)}
-                  />
-                </div>
-              </aside>
-            </>
-          ) : null}
-        </>
+        </ClientPortal>
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b border-border/60 bg-background">
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               {!limited ? (

@@ -7,7 +7,7 @@ export function AppToaster() {
     <Toaster
       richColors
       closeButton
-      position="top-center"
+      position="bottom-center"
       toastOptions={{
         classNames: {
           toast: "font-sans",

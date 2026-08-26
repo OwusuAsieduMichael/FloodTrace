@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
+import { ClientPortal } from "@/components/layout/client-portal";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 
 const links = [
@@ -18,7 +19,7 @@ export function SiteMobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative md:hidden">
+    <div className="md:hidden">
       <MobileIconButton
         label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
@@ -28,15 +29,15 @@ export function SiteMobileNav() {
       </MobileIconButton>
 
       {open ? (
-        <>
+        <ClientPortal>
           <button
             type="button"
-            className="fixed inset-0 z-40 bg-black/40"
+            className="fixed inset-x-0 bottom-0 top-14 z-[80] bg-black/40 sm:top-16"
             aria-label="Dismiss menu"
             onClick={() => setOpen(false)}
           />
           <nav
-            className="absolute right-0 top-12 z-50 w-[min(16rem,calc(100vw-2rem))] rounded-xl border border-border bg-background p-2 shadow-lg"
+            className="fixed right-4 top-[calc(3.5rem+env(safe-area-inset-top))] z-[90] w-[min(16rem,calc(100vw-2rem))] rounded-xl border border-border bg-background p-2 shadow-lg"
             aria-label="Site"
           >
             {links.map((link) => (
@@ -50,7 +51,7 @@ export function SiteMobileNav() {
               </Link>
             ))}
           </nav>
-        </>
+        </ClientPortal>
       ) : null}
     </div>
   );

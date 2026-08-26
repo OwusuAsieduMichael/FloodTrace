@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
+import { ClientPortal } from "@/components/layout/client-portal";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { Badge } from "@/components/ui/badge";
@@ -37,15 +38,15 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
       </aside>
 
       {mobileOpen ? (
-        <>
+        <ClientPortal>
           <button
             type="button"
-            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            className="fixed inset-x-0 bottom-0 top-14 z-[80] bg-black/40 sm:top-16 lg:hidden"
             aria-label="Close navigation"
             onClick={() => setMobileOpen(false)}
           />
           <aside
-            className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-border/60 bg-background shadow-lg lg:hidden"
+            className="fixed inset-y-0 left-0 z-[90] flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg lg:hidden"
             aria-label="Administration"
           >
             <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
@@ -64,11 +65,11 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
               />
             </div>
           </aside>
-        </>
+        </ClientPortal>
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b border-border/60 bg-background">
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <MobileIconButton

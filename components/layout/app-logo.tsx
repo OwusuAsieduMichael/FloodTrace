@@ -22,7 +22,7 @@ export function AppLogo({
       <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
         <Droplets className="size-4" aria-hidden />
       </span>
-      {showWordmark ? <span>FloodTrace</span> : null}
+      {showWordmark ? <span className="truncate">FloodTrace</span> : null}
     </Link>
   );
 }

@@ -22,7 +22,7 @@ export async function HeaderAuthActions() {
         >
           Sign in
         </Button>
-        <Button size="sm" className="px-2.5" render={<Link href="/auth/signup" />}>
+        <Button size="sm" className="hidden px-2.5 md:inline-flex" render={<Link href="/auth/signup" />}>
           Get started
         </Button>
       </div>

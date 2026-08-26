@@ -20,7 +20,7 @@ export function AuthShell({
 }: AuthShellProps) {
   return (
     <div className="flex min-h-full flex-col bg-muted/30">
-      <header className="border-b border-border/60 bg-background/80 backdrop-blur-md">
+      <header className="border-b border-border/60 bg-background">
         <div className="mx-auto flex h-16 max-w-lg items-center px-4 sm:px-6">
           <Link
             href="/"

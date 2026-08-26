@@ -16,7 +16,7 @@ export function MobileIconButton({
     <button
       type={type}
       className={cn(
-        "relative z-50 inline-flex size-11 shrink-0 items-center justify-center rounded-lg text-foreground touch-manipulation hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+        "relative z-50 inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-foreground pointer-events-auto touch-manipulation hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
         className
       )}
       {...props}
