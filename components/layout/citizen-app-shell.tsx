@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
+import { HEADER_SAFE_TOP, MOBILE_LAYER_TOP } from "@/components/layout/use-open-layer";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -47,7 +48,9 @@ export function CitizenAppShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-50 border-b border-border/60 bg-background">
+        <header
+          className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
+        >
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-3 md:hidden">
               <AppLogo href="/citizen/dashboard" showWordmark={false} />
@@ -119,7 +122,7 @@ export function CitizenAppShell({
           <>
             <button
               type="button"
-              className="fixed inset-x-0 top-14 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 bg-black/40 md:hidden"
+              className={`fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 bg-black/40 md:hidden ${MOBILE_LAYER_TOP}`}
               aria-label="Close menu"
               onClick={() => setMoreOpen(false)}
             />

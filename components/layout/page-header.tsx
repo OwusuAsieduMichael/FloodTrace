@@ -32,7 +32,7 @@ export function PageHeader({
           <BackToInterface fallbackHref={backFallbackHref} label={backLabel} />
         ) : null}
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight break-words sm:text-2xl">
+          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
             {title}
           </h1>
           {description ? (

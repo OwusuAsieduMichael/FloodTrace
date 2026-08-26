@@ -17,12 +17,16 @@ export async function HeaderAuthActions() {
         <Button
           variant="ghost"
           size="sm"
-          className="hidden px-2 sm:inline-flex"
+          className="relative z-10 h-11 min-h-11 px-3 touch-manipulation sm:h-8 sm:min-h-8 sm:px-2"
           render={<Link href="/auth/login" />}
         >
           Sign in
         </Button>
-        <Button size="sm" className="hidden px-2.5 md:inline-flex" render={<Link href="/auth/signup" />}>
+        <Button
+          size="sm"
+          className="hidden h-8 px-2.5 md:inline-flex"
+          render={<Link href="/auth/signup" />}
+        >
           Get started
         </Button>
       </div>

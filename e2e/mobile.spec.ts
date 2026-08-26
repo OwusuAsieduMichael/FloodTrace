@@ -21,11 +21,21 @@ test.describe("mobile layout", () => {
       })
     ).toBeVisible();
     await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
     await page.getByRole("button", { name: "Open menu" }).click();
     await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Features" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Site" }).getByRole("link", { name: "Sign in" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Site" }).getByRole("link", { name: "Get started" })).toBeVisible();
     await page.getByRole("button", { name: "Close menu" }).click();
     await expect(page.getByRole("navigation", { name: "Site" })).toHaveCount(0);
+    await page.getByRole("link", { name: "Sign in" }).click();
+    await expect(page).toHaveURL(/\/auth\/login/);
+    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await page.getByRole("navigation", { name: "Site" }).getByRole("link", { name: "Get started" }).click();
+    await expect(page).toHaveURL(/\/auth\/signup/);
+    await page.goto("/");
     await assertNoHorizontalOverflow(page);
 
     await page.goto("/auth/login");

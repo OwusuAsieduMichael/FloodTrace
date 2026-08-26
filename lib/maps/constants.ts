@@ -1,6 +1,6 @@
 import type { IncidentSeverity } from "@/types";
 
-/** Default map center — Accra, Ghana */
+/** Default map center: Accra, Ghana */
 export const DEFAULT_MAP_CENTER = {
   lat: 5.6037,
   lng: -0.187,

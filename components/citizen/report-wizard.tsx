@@ -355,7 +355,7 @@ export function ReportWizard() {
                 <div className="rounded-lg border border-border/60 p-3">
                   <dt className="text-muted-foreground">Type</dt>
                   <dd className="font-medium">
-                    {incidentType ? formatIncidentType(incidentType) : "—"}
+                    {incidentType ? formatIncidentType(incidentType) : "Not set"}
                   </dd>
                 </div>
                 <div className="rounded-lg border border-border/60 p-3">
@@ -369,7 +369,7 @@ export function ReportWizard() {
                   <dd className="font-mono font-medium">
                     {location
                       ? formatCoordinates(location.latitude, location.longitude)
-                      : "—"}
+                      : "Not set"}
                   </dd>
                 </div>
                 {description ? (

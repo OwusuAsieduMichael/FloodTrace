@@ -2,7 +2,7 @@
 
 Camera-verified flood and drainage reporting for citizens and municipal authorities.
 
-Citizens submit live camera evidence with automatic GPS and timestamps. Authorities verify, assign, and resolve incidents. The public map shows only verified work — never unverified submissions or private reporter details.
+Citizens submit live camera evidence with automatic GPS and timestamps. Authorities verify, assign, and resolve incidents. The public map shows only verified work, never unverified submissions or private reporter details.
 
 ## Stack
 
@@ -28,12 +28,12 @@ Open [http://localhost:3000](http://localhost:3000).
 npm run db:push
 ```
 
-Apply the SQL files in `supabase/migrations/` to your Supabase project. Seed data in `supabase/seed.sql` is development-only and labeled `[DEV SEED]` — never treat it as live statistics.
+Apply the SQL files in `supabase/migrations/` to your Supabase project. Seed data in `supabase/seed.sql` is development-only and labeled `[DEV SEED]`. Never treat it as live statistics.
 
 ### Health checks
 
-- `GET /api/health` — public liveness (`{ "ok": true }`)
-- `GET /api/health/supabase`, `/schema`, `/storage` — admin session required
+- `GET /api/health`: public liveness (`{ "ok": true }`)
+- `GET /api/health/supabase`, `/schema`, `/storage`: admin session required
 
 ## Tests
 
@@ -85,7 +85,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs lint, typecheck, unit tests, pr
 - [ ] Weather appears only when OpenWeatherMap is configured
 - [ ] Notifications for submit / verify / assign / resolve / reject
 - [ ] Authority verify, reject, assign, resolve with before/after evidence
-- [ ] Analytics empty values stay empty (`—`), not estimates
+- [ ] Analytics empty values stay empty (`None`), not estimates
 - [ ] Unauthenticated `/citizen`, `/authority`, and `/admin` redirect to login
 - [ ] Layouts work on a phone and a desktop
 
@@ -95,4 +95,4 @@ Never fabricate GPS coordinates, weather, incident statistics, authority respons
 
 ## License
 
-Private — OwusuAsieduMichael/FloodTrace
+Private: OwusuAsieduMichael/FloodTrace

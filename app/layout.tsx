@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "FloodTrace — Camera-Verified Flood Reporting",
+    default: "FloodTrace: Camera-Verified Flood Reporting",
     template: "%s | FloodTrace",
   },
   description:

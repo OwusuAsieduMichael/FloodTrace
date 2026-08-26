@@ -1,6 +1,6 @@
 import type { EmergencyContact } from "@/types";
 
-/** Ghana emergency numbers — 112 is the national toll-free line for all services. */
+/** Ghana emergency numbers. 112 is the national toll-free line for all services. */
 export const GHANA_EMERGENCY_CONTACTS: EmergencyContact[] = [
   {
     name: "National Emergency",

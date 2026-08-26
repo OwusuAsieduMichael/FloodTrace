@@ -26,7 +26,7 @@ export function EmergencyContactsPanel({
         <AlertDescription>
           Dial <span className="font-medium text-foreground">112</span> immediately.
           It is Ghana&apos;s toll-free emergency number for Police, Fire, Ambulance,
-          and NADMO. FloodTrace reports help authorities respond to flooding — they
+          and NADMO. FloodTrace reports help authorities respond to flooding. They
           do not replace emergency services.
         </AlertDescription>
       </Alert>
@@ -46,7 +46,7 @@ export function EmergencyContactsPanel({
                 {contacts.map((contact) => (
                   <li key={contact.name}>
                     <span className="font-medium text-foreground">{contact.name}</span>
-                    {" — "}
+                    {": "}
                     {contact.description}
                   </li>
                 ))}

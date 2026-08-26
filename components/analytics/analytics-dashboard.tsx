@@ -118,7 +118,7 @@ export function AnalyticsDashboard({
             label: "Median time to verify",
             value:
               snapshot.medianVerifyHours == null
-                ? "—"
+                ? "None"
                 : formatDurationHours(snapshot.medianVerifyHours),
             hint:
               snapshot.verifySampleSize > 0
@@ -130,7 +130,7 @@ export function AnalyticsDashboard({
             label: "Median time to resolve",
             value:
               snapshot.medianResolveHours == null
-                ? "—"
+                ? "None"
                 : formatDurationHours(snapshot.medianResolveHours),
             hint:
               snapshot.resolveSampleSize > 0

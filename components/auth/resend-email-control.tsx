@@ -27,7 +27,7 @@ export function ResendEmailControl({
       <Button
         type="button"
         variant="outline"
-        className="w-full"
+        className="h-11 w-full text-base sm:h-9 sm:text-sm"
         disabled={!canResend || isSending || waiting}
         onClick={onResend}
       >

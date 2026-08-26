@@ -187,6 +187,10 @@ export function SignupWizard() {
                 <Input
                   id="signup-email"
                   type="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   autoComplete="email"
                   required
                   value={email}
@@ -219,7 +223,7 @@ export function SignupWizard() {
                 />
               </div>
 
-              <Button type="button" className="w-full" onClick={goToAccountStep}>
+              <Button type="button" className="h-11 w-full text-base sm:h-9 sm:text-sm" onClick={goToAccountStep}>
                 Continue
               </Button>
             </div>
@@ -287,12 +291,12 @@ export function SignupWizard() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 h-11 sm:h-8"
                   onClick={() => setStep("account")}
                 >
                   Back
                 </Button>
-                <Button type="button" className="flex-1" onClick={goToProfileStep}>
+                <Button type="button" className="flex-1 h-11 sm:h-8" onClick={goToProfileStep}>
                   Continue
                 </Button>
               </div>
@@ -328,14 +332,14 @@ export function SignupWizard() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 h-11 sm:h-8"
                   onClick={() => setStep("role")}
                 >
                   Back
                 </Button>
                 <Button
                   type="button"
-                  className="flex-1"
+                  className="flex-1 h-11 sm:h-8"
                   disabled={isLoading}
                   onClick={handleSignup}
                 >
@@ -363,7 +367,7 @@ export function SignupWizard() {
                   </p>
                 )}
               </div>
-              <Button render={<Link href="/auth/login" />} className="w-full">
+              <Button render={<Link href="/auth/login" />} className="h-11 w-full text-base sm:h-9 sm:text-sm">
                 Go to sign in
               </Button>
               {needsEmailConfirmation ? (
@@ -383,7 +387,7 @@ export function SignupWizard() {
       {step !== "done" ? (
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/auth/login" className="font-medium text-primary hover:underline">
+          <Link href="/auth/login" className="inline-flex min-h-11 items-center font-medium text-primary hover:underline sm:min-h-0">
             Sign in
           </Link>
         </p>

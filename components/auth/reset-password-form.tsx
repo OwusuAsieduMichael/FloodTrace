@@ -90,7 +90,7 @@ export function ResetPasswordForm() {
             This reset link is invalid or has expired. Request a new one to
             continue.
           </p>
-          <Button render={<Link href="/auth/forgot-password" />} className="w-full">
+          <Button render={<Link href="/auth/forgot-password" />} className="h-11 w-full text-base sm:h-9 sm:text-sm">
             Request new link
           </Button>
         </CardContent>
@@ -126,7 +126,7 @@ export function ResetPasswordForm() {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="h-11 w-full text-base sm:h-9 sm:text-sm" disabled={isLoading}>
             {isLoading ? "Updating…" : "Update password"}
           </Button>
         </form>

@@ -53,7 +53,7 @@ export function ForecastList({ days }: ForecastListProps) {
               </p>
             </div>
             <p className="text-sm">
-              {formatTemperatureC(day.minC)} – {formatTemperatureC(day.maxC)}
+              {formatTemperatureC(day.minC)} to {formatTemperatureC(day.maxC)}
             </p>
             <p className="text-xs text-muted-foreground">
               Rain {formatRainMm(day.rainfallMm)}

@@ -41,7 +41,7 @@ export default async function CitizenProfilePage() {
           </div>
           <div>
             <p className="text-muted-foreground">Email</p>
-            <p className="font-medium">{user?.email ?? "—"}</p>
+            <p className="font-medium">{user?.email ?? "Not set"}</p>
           </div>
           <div>
             <p className="text-muted-foreground">Phone</p>

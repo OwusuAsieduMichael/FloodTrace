@@ -1,2 +1,2 @@
-/** Severity analysis abstraction — manual now, AI-ready later */
+/** Severity analysis abstraction. Manual now, AI-ready later. */
 export {};

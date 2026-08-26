@@ -106,6 +106,10 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
+              inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               autoComplete="email"
               required
               value={email}
@@ -119,7 +123,7 @@ export function LoginForm() {
               <Label htmlFor="password">Password</Label>
               <Link
                 href="/auth/forgot-password"
-                className="text-xs text-primary hover:underline"
+                className="inline-flex min-h-11 items-center text-xs text-primary hover:underline sm:min-h-0"
               >
                 Forgot password?
               </Link>
@@ -133,7 +137,7 @@ export function LoginForm() {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="h-11 w-full text-base sm:h-9 sm:text-sm" disabled={isLoading}>
             {isLoading ? "Signing in…" : "Sign in"}
           </Button>
         </form>
@@ -152,7 +156,7 @@ export function LoginForm() {
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className="font-medium text-primary hover:underline">
+          <Link href="/auth/signup" className="inline-flex min-h-11 items-center font-medium text-primary hover:underline sm:min-h-0">
             Create one
           </Link>
         </p>

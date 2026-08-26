@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useLayoutEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 export function ClientPortal({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+  const [target, setTarget] = useState<HTMLElement | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
+  useLayoutEffect(() => {
+    setTarget(document.body);
   }, []);
 
-  if (!mounted) {
+  if (!target) {
     return null;
   }
 
-  return createPortal(children, document.body);
+  return createPortal(children, target);
 }

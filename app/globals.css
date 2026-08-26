@@ -95,8 +95,15 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    -webkit-hyphens: none;
+    hyphens: none;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    -webkit-hyphens: none;
+    hyphens: none;
   }
 }
 

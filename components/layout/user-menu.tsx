@@ -26,17 +26,17 @@ export function UserMenu({
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handlePointerDown(event: PointerEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     }
 
     if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("pointerdown", handlePointerDown);
     }
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, [open]);
 
   const initials = (fullName ?? email)
@@ -51,7 +51,7 @@ export function UserMenu({
       <Button
         variant="outline"
         size="sm"
-        className="gap-2 pl-2"
+        className="h-11 min-h-11 gap-2 pl-2 touch-manipulation sm:h-8 sm:min-h-8"
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-haspopup="menu"
@@ -77,7 +77,7 @@ export function UserMenu({
           <Link
             href={dashboardHref}
             role="menuitem"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted"
+            className="flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted"
             onClick={() => setOpen(false)}
           >
             <User className="size-4" />
@@ -88,7 +88,7 @@ export function UserMenu({
             type="button"
             role="menuitem"
             disabled={isSigningOut}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-60"
+            className="flex min-h-11 w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive touch-manipulation hover:bg-destructive/10 disabled:opacity-60"
             onClick={async () => {
               setIsSigningOut(true);
               await signOutToLanding();

@@ -1,12 +1,17 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
 import { ClientPortal } from "@/components/layout/client-portal";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
+import {
+  HEADER_SAFE_TOP,
+  MOBILE_LAYER_TOP,
+  useOpenLayer,
+} from "@/components/layout/use-open-layer";
 import { Badge } from "@/components/ui/badge";
 import { adminNavItems } from "@/lib/navigation";
 
@@ -17,6 +22,8 @@ interface AdminAppShellProps {
 
 export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+  useOpenLayer(mobileOpen, closeMobile);
 
   return (
     <div className="flex min-h-dvh bg-background">
@@ -37,47 +44,46 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
         </div>
       </aside>
 
-      {mobileOpen ? (
-        <ClientPortal>
-          <button
-            type="button"
-            className="fixed inset-x-0 bottom-0 top-14 z-[80] bg-black/40 sm:top-16 lg:hidden"
-            aria-label="Close navigation"
-            onClick={() => setMobileOpen(false)}
-          />
-          <aside
-            className="fixed inset-y-0 left-0 z-[90] flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg lg:hidden"
-            aria-label="Administration"
-          >
-            <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
-              <AppLogo href="/admin/dashboard" />
-              <MobileIconButton
-                label="Close menu"
-                onClick={() => setMobileOpen(false)}
-              >
-                <X className="size-5" />
-              </MobileIconButton>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4">
-              <SidebarNav
-                items={adminNavItems}
-                onNavigate={() => setMobileOpen(false)}
-              />
-            </div>
-          </aside>
-        </ClientPortal>
-      ) : null}
+      <ClientPortal>
+        {mobileOpen ? (
+          <>
+            <button
+              type="button"
+              className={`fixed inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden ${MOBILE_LAYER_TOP}`}
+              aria-label="Close navigation"
+              onClick={closeMobile}
+            />
+            <aside
+              className={`fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg lg:hidden ${MOBILE_LAYER_TOP}`}
+              aria-label="Administration"
+            >
+              <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
+                <AppLogo href="/admin/dashboard" />
+                <MobileIconButton label="Close menu" onClick={closeMobile}>
+                  <X className="size-5" />
+                </MobileIconButton>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4">
+                <SidebarNav items={adminNavItems} onNavigate={closeMobile} />
+              </div>
+            </aside>
+          </>
+        ) : null}
+      </ClientPortal>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-50 border-b border-border/60 bg-background">
+        <header
+          className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
+        >
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <MobileIconButton
-                label="Open navigation"
+                label={mobileOpen ? "Close navigation" : "Open navigation"}
                 className="lg:hidden"
-                onClick={() => setMobileOpen(true)}
+                aria-expanded={mobileOpen}
+                onClick={() => setMobileOpen((value) => !value)}
               >
-                <Menu className="size-5" />
+                {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
               </MobileIconButton>
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">System administration</p>

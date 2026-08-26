@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-/** Shared report payload rules — GPS, timestamp, and type must be real captured values. */
+/** Shared report payload rules. GPS, timestamp, and type must be real captured values. */
 export const submitReportSchema = z.object({
   incident_type: z.enum(["flood", "blocked_drain"]),
   severity: z.enum(["low", "medium", "high", "critical"]),

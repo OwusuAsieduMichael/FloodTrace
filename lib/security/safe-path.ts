@@ -1,7 +1,7 @@
 import type { AuthProfile } from "@/lib/auth/redirects";
 import { getPostAuthRedirect } from "@/lib/auth/redirects";
 
-/** Relative app paths only — blocks protocol-relative and off-site redirects. */
+/** Relative app paths only. Blocks protocol-relative and off-site redirects. */
 export function isSafeInternalPath(value: string | null | undefined): value is string {
   if (!value) {
     return false;

@@ -76,7 +76,7 @@ export function ForgotPasswordForm() {
             label="Resend reset email"
             waitLabel="You can request another reset email in"
           />
-          <Button render={<Link href="/auth/login" />} variant="outline" className="w-full">
+          <Button render={<Link href="/auth/login" />} variant="outline" className="h-11 w-full text-base sm:h-9 sm:text-sm">
             Back to sign in
           </Button>
         </CardContent>
@@ -93,6 +93,10 @@ export function ForgotPasswordForm() {
             <Input
               id="reset-email"
               type="email"
+              inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               autoComplete="email"
               required
               value={email}
@@ -103,7 +107,7 @@ export function ForgotPasswordForm() {
 
           <Button
             type="submit"
-            className="w-full"
+            className="h-11 w-full text-base sm:h-9 sm:text-sm"
             disabled={isLoading || cooldown.remaining > 0}
           >
             {isLoading
@@ -122,7 +126,7 @@ export function ForgotPasswordForm() {
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Remember your password?{" "}
-          <Link href="/auth/login" className="font-medium text-primary hover:underline">
+          <Link href="/auth/login" className="inline-flex min-h-11 items-center font-medium text-primary hover:underline sm:min-h-0">
             Sign in
           </Link>
         </p>

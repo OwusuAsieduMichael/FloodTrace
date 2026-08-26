@@ -31,7 +31,7 @@ function redirectUnlessCurrent(pathname: string, destination: string): string | 
 
 /**
  * Decide where the session proxy should send this request, or `null` to continue.
- * Never returns the current path — that is what produced ERR_TOO_MANY_REDIRECTS
+ * Never returns the current path. That is what produced ERR_TOO_MANY_REDIRECTS
  * after a successful Authority sign-in.
  */
 export function getProxyRedirect(

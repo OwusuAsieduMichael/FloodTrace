@@ -92,7 +92,7 @@ export function WeatherPanel({ initial }: WeatherPanelProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <p className="text-sm text-muted-foreground">
           Conditions are from OpenWeatherMap. Rainfall is shown only when the
-          provider reports it — values are never estimated.
+          provider reports it. Values are never estimated.
         </p>
         <Button
           variant="outline"

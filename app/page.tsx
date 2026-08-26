@@ -25,7 +25,7 @@ const features = [
     icon: MapPin,
     title: "Automatic GPS location",
     description:
-      "Your location is detected automatically — no manual coordinate entry. Authorities see exactly where incidents occur.",
+      "Your location is detected automatically. No manual coordinate entry. Authorities see exactly where incidents occur.",
   },
   {
     icon: ShieldCheck,
@@ -76,23 +76,23 @@ export default function HomePage() {
               >
                 Disaster Management Information System
               </Badge>
-              <h1 className="text-3xl font-semibold tracking-tight text-balance text-white sm:text-5xl lg:text-6xl">
+              <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Report Floods. Verify Reality. Protect Communities.
               </h1>
-              <p className="mt-5 text-base text-pretty text-white/80 sm:mt-6 sm:text-xl">
+              <p className="mt-5 text-base text-white/80 sm:mt-6 sm:text-xl">
                 FloodTrace enables citizens to report floods and blocked drainage
                 with live camera evidence while authorities verify, assign, and
                 resolve incidents with full transparency.
               </p>
               <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-10 sm:flex-row sm:items-center">
-                <Button size="lg" className="w-full sm:w-auto" render={<Link href="/auth/signup" />}>
+                <Button size="lg" className="h-11 w-full text-base sm:h-9 sm:w-auto sm:text-sm" render={<Link href="/auth/signup" />}>
                   Report an Incident
                   <ArrowRight className="size-4" aria-hidden />
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white sm:w-auto"
+                  className="h-11 w-full border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white sm:h-9 sm:w-auto"
                   render={<Link href="/map" />}
                 >
                   <Radio className="size-4" aria-hidden />
@@ -111,8 +111,8 @@ export default function HomePage() {
                 Built for citizens and authorities
               </h2>
               <p className="mt-4 text-muted-foreground">
-                A complete incident lifecycle — from camera capture to verified
-                resolution — designed for urban flood and drainage management.
+                A complete incident lifecycle, from camera capture to verified
+                resolution, designed for urban flood and drainage management.
               </p>
             </div>
             <div className="mt-14 grid gap-6 sm:grid-cols-2">
