@@ -1,0 +1,10 @@
+{
+  "name": "FloodTrace",
+  "short_name": "FloodTrace",
+  "description": "Camera-verified flood and drainage reporting",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e5a8a",
+  "icons": []
+}

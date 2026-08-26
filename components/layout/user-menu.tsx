@@ -1,0 +1,100 @@
+"use client";
+
+import Link from "next/link";
+import { ChevronDown, LogOut, User } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+import { signOutAction } from "@/lib/auth/actions";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+interface UserMenuProps {
+  fullName: string | null;
+  email: string;
+  dashboardHref: string;
+  roleLabel: string;
+}
+
+export function UserMenu({
+  fullName,
+  email,
+  dashboardHref,
+  roleLabel,
+}: UserMenuProps) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  const initials = (fullName ?? email)
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <Button
+        variant="outline"
+        size="sm"
+        className="gap-2 pl-2"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+      >
+        <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+          {initials}
+        </span>
+        <span className="hidden max-w-28 truncate sm:inline">{fullName ?? "Account"}</span>
+        <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
+      </Button>
+
+      {open ? (
+        <div
+          role="menu"
+          className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-border bg-popover p-1 shadow-lg"
+        >
+          <div className="border-b border-border px-3 py-2.5">
+            <p className="truncate text-sm font-medium">{fullName ?? "Account"}</p>
+            <p className="truncate text-xs text-muted-foreground">{email}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{roleLabel}</p>
+          </div>
+
+          <Link
+            href={dashboardHref}
+            role="menuitem"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted"
+            onClick={() => setOpen(false)}
+          >
+            <User className="size-4" />
+            Dashboard
+          </Link>
+
+          <form action={signOutAction}>
+            <button
+              type="submit"
+              role="menuitem"
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
+            >
+              <LogOut className="size-4" />
+              Sign out
+            </button>
+          </form>
+        </div>
+      ) : null}
+    </div>
+  );
+}
