@@ -1,6 +1,11 @@
 import { expect, test } from "vitest";
 
 import { getPostAuthRedirect, isAuthPath, isPublicPath } from "@/lib/auth/redirects";
+import {
+  EMAIL_RESEND_COOLDOWN_SECONDS,
+  formatCooldown,
+  remainingCooldownSeconds,
+} from "@/lib/auth/email-cooldown";
 import { isSafeInternalPath, safePostLoginPath } from "@/lib/security/safe-path";
 
 test("citizens land on the citizen dashboard", () => {
@@ -57,4 +62,17 @@ test("post-login redirects stay inside the signed-in role", () => {
   const pending = { role: "authority" as const, authority_status: "pending" as const };
   expect(safePostLoginPath("/authority/dashboard", pending)).toBe("/authority/pending");
   expect(safePostLoginPath("/authority/pending", pending)).toBe("/authority/pending");
+});
+
+test("confirmation emails wait a full minute before another send", () => {
+  const sentAt = 1_000_000;
+
+  expect(remainingCooldownSeconds(sentAt, sentAt)).toBe(
+    EMAIL_RESEND_COOLDOWN_SECONDS
+  );
+  expect(remainingCooldownSeconds(sentAt, sentAt + 15_000)).toBe(45);
+  expect(remainingCooldownSeconds(sentAt, sentAt + 60_000)).toBe(0);
+  expect(remainingCooldownSeconds(sentAt, sentAt + 90_000)).toBe(0);
+  expect(formatCooldown(45)).toBe("0:45");
+  expect(formatCooldown(60)).toBe("1:00");
 });

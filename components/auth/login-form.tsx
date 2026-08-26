@@ -6,10 +6,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { PasswordInput } from "@/components/auth/password-input";
+import { ResendEmailControl } from "@/components/auth/resend-email-control";
+import { useEmailResendCooldown } from "@/components/auth/use-email-resend-cooldown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatCooldown } from "@/lib/auth/email-cooldown";
 import { safePostLoginPath } from "@/lib/security/safe-path";
 import { createClient } from "@/lib/supabase/client";
 
@@ -20,6 +23,9 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const confirmationCooldown = useEmailResendCooldown("signup", email);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,7 +38,17 @@ export function LoginForm() {
     });
 
     if (error) {
-      toast.error(error.message);
+      const unconfirmed =
+        error.code === "email_not_confirmed" ||
+        /not confirmed/i.test(error.message);
+
+      if (unconfirmed) {
+        setNeedsEmailConfirmation(true);
+        toast.error("Confirm your email before signing in.");
+      } else {
+        toast.error(error.message);
+      }
+
       setIsLoading(false);
       return;
     }
@@ -52,6 +68,34 @@ export function LoginForm() {
     toast.success("Welcome back.");
     router.push(safePostLoginPath(redirectTo, profile));
     router.refresh();
+  }
+
+  async function handleResendConfirmation() {
+    if (!confirmationCooldown.canResend) {
+      toast.error(
+        `Wait ${formatCooldown(confirmationCooldown.remaining)} before requesting another confirmation.`
+      );
+      return;
+    }
+
+    setIsResending(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    setIsResending(false);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    confirmationCooldown.markSent();
+    toast.success("A new confirmation email is on the way.");
   }
 
   return (
@@ -94,6 +138,18 @@ export function LoginForm() {
             {isLoading ? "Signing in…" : "Sign in"}
           </Button>
         </form>
+
+        {needsEmailConfirmation ? (
+          <div className="mt-4">
+            <ResendEmailControl
+              remaining={confirmationCooldown.remaining}
+              canResend={confirmationCooldown.canResend}
+              isSending={isResending}
+              onResend={handleResendConfirmation}
+              label="Resend confirmation"
+            />
+          </div>
+        ) : null}
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}

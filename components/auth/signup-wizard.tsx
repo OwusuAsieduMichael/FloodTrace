@@ -7,6 +7,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { PasswordInput } from "@/components/auth/password-input";
+import { ResendEmailControl } from "@/components/auth/resend-email-control";
+import { useEmailResendCooldown } from "@/components/auth/use-email-resend-cooldown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,7 +32,9 @@ export function SignupWizard() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const confirmationCooldown = useEmailResendCooldown("signup", email);
 
   const stepIndex = STEPS.indexOf(step);
 
@@ -118,8 +122,35 @@ export function SignupWizard() {
     }
 
     setNeedsEmailConfirmation(true);
+    confirmationCooldown.markSent();
     setStep("done");
     setIsLoading(false);
+  }
+
+  async function handleResendConfirmation() {
+    if (!confirmationCooldown.canResend) {
+      return;
+    }
+
+    setIsResending(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    setIsResending(false);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    confirmationCooldown.markSent();
+    toast.success("A new confirmation email is on the way.");
   }
 
   return (
@@ -337,6 +368,15 @@ export function SignupWizard() {
               <Button render={<Link href="/auth/login" />} className="w-full">
                 Go to sign in
               </Button>
+              {needsEmailConfirmation ? (
+                <ResendEmailControl
+                  remaining={confirmationCooldown.remaining}
+                  canResend={confirmationCooldown.canResend}
+                  isSending={isResending}
+                  onResend={handleResendConfirmation}
+                  label="Resend confirmation"
+                />
+              ) : null}
             </div>
           ) : null}
         </CardContent>

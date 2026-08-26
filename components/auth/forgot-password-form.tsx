@@ -4,37 +4,60 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { ResendEmailControl } from "@/components/auth/resend-email-control";
+import { useEmailResendCooldown } from "@/components/auth/use-email-resend-cooldown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatCooldown } from "@/lib/auth/email-cooldown";
 import { createClient } from "@/lib/supabase/client";
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const cooldown = useEmailResendCooldown("recovery", email);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
+  async function sendResetEmail() {
+    if (!cooldown.canResend) {
+      toast.error(
+        `Wait ${formatCooldown(cooldown.remaining)} before requesting another reset email.`
+      );
+      return false;
+    }
 
     const supabase = createClient();
     const redirectTo = `${window.location.origin}/auth/reset-password`;
-
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo,
     });
 
     if (error) {
       toast.error(error.message);
-      setIsLoading(false);
-      return;
+      return false;
     }
 
-    setSent(true);
-    setIsLoading(false);
+    cooldown.markSent();
     toast.success("Password reset email sent.");
+    return true;
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsLoading(true);
+    const ok = await sendResetEmail();
+    setIsLoading(false);
+
+    if (ok) {
+      setSent(true);
+    }
+  }
+
+  async function handleResend() {
+    setIsLoading(true);
+    await sendResetEmail();
+    setIsLoading(false);
   }
 
   if (sent) {
@@ -45,6 +68,14 @@ export function ForgotPasswordForm() {
             If an account exists for <strong>{email}</strong>, you will receive
             a password reset link shortly.
           </p>
+          <ResendEmailControl
+            remaining={cooldown.remaining}
+            canResend={cooldown.canResend}
+            isSending={isLoading}
+            onResend={handleResend}
+            label="Resend reset email"
+            waitLabel="You can request another reset email in"
+          />
           <Button render={<Link href="/auth/login" />} variant="outline" className="w-full">
             Back to sign in
           </Button>
@@ -70,9 +101,23 @@ export function ForgotPasswordForm() {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Sending…" : "Send reset link"}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading || cooldown.remaining > 0}
+          >
+            {isLoading
+              ? "Sending…"
+              : cooldown.remaining > 0
+                ? `Try again in ${formatCooldown(cooldown.remaining)}`
+                : "Send reset link"}
           </Button>
+          {cooldown.remaining > 0 ? (
+            <p className="text-center text-xs text-muted-foreground">
+              You can request another confirmation in{" "}
+              {formatCooldown(cooldown.remaining)}.
+            </p>
+          ) : null}
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
