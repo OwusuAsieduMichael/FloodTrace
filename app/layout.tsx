@@ -29,6 +29,12 @@ export const metadata: Metadata = {
     "Ghana",
     "civic technology",
   ],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "FloodTrace",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

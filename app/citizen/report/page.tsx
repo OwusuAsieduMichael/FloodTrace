@@ -1,12 +1,13 @@
-import { PlaceholderPage } from "@/components/layout/placeholder-page";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { ReportWizard } from "@/components/citizen/report-wizard";
 
 export default function CitizenReportPage() {
   return (
-    <PlaceholderPage
-      title="Report incident"
-      description="Live camera capture with automatic GPS and timestamp."
-      phase="Phase 7"
-      backHref="/citizen/dashboard"
-    />
+    <AuthShell
+      title="Report an incident"
+      description="Capture live camera evidence with automatic GPS and timestamp."
+    >
+      <ReportWizard />
+    </AuthShell>
   );
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { CitizenAppShell } from "@/components/layout/citizen-app-shell";
+import { OfflineSyncProvider } from "@/components/providers/offline-sync-provider";
 import { getCurrentProfile } from "@/lib/auth/session";
 
 export default async function CitizenLayout({
@@ -14,11 +15,13 @@ export default async function CitizenLayout({
   }
 
   return (
-    <CitizenAppShell
-      fullName={profile.full_name}
-      userMenu={<AppUserMenu />}
-    >
-      {children}
-    </CitizenAppShell>
+    <OfflineSyncProvider>
+      <CitizenAppShell
+        fullName={profile.full_name}
+        userMenu={<AppUserMenu />}
+      >
+        {children}
+      </CitizenAppShell>
+    </OfflineSyncProvider>
   );
 }

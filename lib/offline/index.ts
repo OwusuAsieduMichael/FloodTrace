@@ -1,2 +1,23 @@
-/** IndexedDB offline queue — implemented in Phase 9 */
-export {};
+export {
+  OFFLINE_DB_NAME,
+  OFFLINE_DB_VERSION,
+  OFFLINE_STORE_NAME,
+} from "./constants";
+export {
+  buildReportFormData,
+  enqueuePendingReport,
+  getOfflineQueueSummary,
+  isLikelyNetworkError,
+  isOfflineEnvironment,
+  listOfflineReports,
+  removePendingReport,
+  updatePendingReportStatus,
+  type EnqueuePendingReportInput,
+} from "./queue";
+export { syncPendingReports } from "./sync";
+export type {
+  OfflineQueueSummary,
+  PendingReportRecord,
+  PendingReportStatus,
+  SyncPendingReportsResult,
+} from "./types";
