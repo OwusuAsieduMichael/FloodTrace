@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { getCurrentProfile } from "@/lib/auth/session";
+import { processDuplicateDetection } from "@/lib/duplicate-detection";
 import { createClient } from "@/lib/supabase/server";
 import { uploadIncidentEvidence, removeIncidentEvidence } from "@/lib/storage";
 
@@ -22,7 +23,11 @@ const submitReportSchema = z.object({
 });
 
 export type SubmitReportResult =
-  | { success: true; incidentId: string }
+  | {
+      success: true;
+      incidentId: string;
+      linkedToPrimary?: string;
+    }
   | { success: false; error: string };
 
 export async function submitIncidentReport(
@@ -132,8 +137,22 @@ export async function submitIncidentReport(
     };
   }
 
+  const duplicateResult = await processDuplicateDetection(supabase, {
+    incidentId: incident.id,
+    incidentType: incident_type,
+    latitude,
+    longitude,
+    capturedAt: captured_at,
+  });
+
   revalidatePath("/citizen/dashboard");
   revalidatePath("/citizen/reports");
 
-  return { success: true, incidentId: incident.id };
+  return {
+    success: true,
+    incidentId: incident.id,
+    linkedToPrimary: duplicateResult.linked
+      ? duplicateResult.parentIncidentId
+      : undefined,
+  };
 }

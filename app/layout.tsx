@@ -30,6 +30,13 @@ export const metadata: Metadata = {
     "civic technology",
   ],
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon-512x512.png", sizes: "512x512", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/favicon-512x512.png", sizes: "512x512", type: "image/png" }],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

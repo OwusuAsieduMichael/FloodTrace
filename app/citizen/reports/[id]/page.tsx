@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { IncidentStatusTimeline } from "@/components/citizen/incident-status-timeline";
+import { SupportingReportNotice } from "@/components/citizen/supporting-report-notice";
 import { EvidenceGallery } from "@/components/media/evidence-gallery";
 import { PageHeader } from "@/components/layout/page-header";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
@@ -61,6 +62,10 @@ export default async function CitizenReportDetailPage({
         <StatusBadge status={incident.status} />
         <SeverityBadge severity={incident.severity} />
       </div>
+
+      {incident.parent_incident_id ? (
+        <SupportingReportNotice parentIncidentId={incident.parent_incident_id} />
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">

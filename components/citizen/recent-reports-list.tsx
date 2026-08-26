@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, FileText, MapPin } from "lucide-react";
 
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -29,6 +30,9 @@ export function ReportRow({ incident }: ReportRowProps) {
           </span>
           <StatusBadge status={incident.status} />
           <SeverityBadge severity={incident.severity} />
+          {!incident.is_primary ? (
+            <Badge variant="secondary">Supporting</Badge>
+          ) : null}
         </div>
         <p className="font-medium">{formatIncidentType(incident.incident_type)}</p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">

@@ -146,7 +146,13 @@ export function ReportWizard() {
         return;
       }
 
-      toast.success("Report submitted successfully.");
+      if (result.linkedToPrimary) {
+        toast.success(
+          "Report submitted as supporting evidence for a nearby incident."
+        );
+      } else {
+        toast.success("Report submitted successfully.");
+      }
       router.push(`/citizen/reports/${result.incidentId}`);
       router.refresh();
     } catch (error) {

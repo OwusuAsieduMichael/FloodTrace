@@ -24,6 +24,7 @@ export interface CitizenIncidentListItem {
   submitted_at: string;
   latitude: number;
   longitude: number;
+  is_primary: boolean;
 }
 
 export async function getCitizenIncidentStats(
@@ -82,7 +83,7 @@ export async function getCitizenRecentIncidents(
   const { data, error } = await supabase
     .from("incidents")
     .select(
-      "id, incident_type, description, location_name, severity, status, submitted_at, latitude, longitude"
+      "id, incident_type, description, location_name, severity, status, submitted_at, latitude, longitude, is_primary"
     )
     .eq("reporter_id", userId)
     .order("submitted_at", { ascending: false })
@@ -103,7 +104,7 @@ export async function getCitizenIncidents(
   const { data, error } = await supabase
     .from("incidents")
     .select(
-      "id, incident_type, description, location_name, severity, status, submitted_at, latitude, longitude"
+      "id, incident_type, description, location_name, severity, status, submitted_at, latitude, longitude, is_primary"
     )
     .eq("reporter_id", userId)
     .order("submitted_at", { ascending: false });
