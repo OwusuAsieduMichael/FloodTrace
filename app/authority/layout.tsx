@@ -1,19 +1,15 @@
-import { redirect } from "next/navigation";
-
 import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { AuthorityAppShell } from "@/components/layout/authority-app-shell";
 import { NotificationProvider } from "@/components/providers/notification-provider";
-import { getCurrentProfile } from "@/lib/auth/session";
+import { requirePortalProfile } from "@/lib/auth/session";
 import { getUnreadNotificationCount } from "@/lib/notifications/queries";
+
+export const dynamic = "force-dynamic";
 
 export default async function AuthorityLayout({
   children,
 }: LayoutProps<"/authority">) {
-  const profile = await getCurrentProfile();
-
-  if (!profile || profile.role !== "authority") {
-    redirect("/auth/login");
-  }
+  const profile = await requirePortalProfile("authority");
 
   const isOperational = profile.authority_status === "approved";
   const roleLabel =

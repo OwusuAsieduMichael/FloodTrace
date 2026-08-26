@@ -1,25 +1,27 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import type { AuthProfile } from "@/lib/auth/redirects";
 import {
-  getPostAuthRedirect,
-  isAuthPath,
-  type AuthProfile,
-} from "@/lib/auth/redirects";
-
-function isProtectedPath(pathname: string) {
-  return (
-    pathname.startsWith("/citizen") ||
-    pathname.startsWith("/authority") ||
-    pathname.startsWith("/admin")
-  );
-}
+  getProxyRedirect,
+  isProtectedPath,
+} from "@/lib/auth/session-redirect";
 
 function copySessionCookies(from: NextResponse, to: NextResponse) {
   from.cookies.getAll().forEach(({ name, value }) => {
-    to.cookies.set(name, value);
+    to.cookies.set({ name, value, path: "/" });
   });
   return to;
+}
+
+function applyPrivateCacheHeaders(response: NextResponse) {
+  response.headers.set(
+    "Cache-Control",
+    "private, no-cache, no-store, must-revalidate, max-age=0",
+  );
+  response.headers.set("Expires", "0");
+  response.headers.set("Pragma", "no-cache");
+  return response;
 }
 
 function redirectTo(
@@ -38,7 +40,9 @@ function redirectTo(
     }
   }
 
-  return copySessionCookies(sessionResponse, NextResponse.redirect(redirectUrl));
+  return applyPrivateCacheHeaders(
+    copySessionCookies(sessionResponse, NextResponse.redirect(redirectUrl)),
+  );
 }
 
 export async function updateSession(request: NextRequest) {
@@ -91,76 +95,33 @@ export async function updateSession(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) {
-      if (isProtectedPath(pathname)) {
-        return redirectTo(request, sessionResponse, "/auth/login", {
-          redirect: pathname,
-        });
-      }
+    const { data: profile, error: profileError } = user
+      ? await supabase
+          .from("profiles")
+          .select("role, authority_status")
+          .eq("id", user.id)
+          .maybeSingle()
+      : { data: null, error: null };
 
-      return sessionResponse;
+    if (profileError) {
+      console.error("Proxy profile lookup failed:", profileError);
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role, authority_status")
-      .eq("id", user.id)
-      .maybeSingle();
+    const destination = getProxyRedirect(
+      pathname,
+      Boolean(user),
+      (profile as AuthProfile | null) ?? null,
+    );
 
-    const homePath = profile
-      ? getPostAuthRedirect(profile as AuthProfile)
-      : "/auth/login";
-
-    const isCallback = pathname.startsWith("/auth/callback");
-    const isResetPassword = pathname.startsWith("/auth/reset-password");
-
-    if (isAuthPath(pathname) && !isCallback && !isResetPassword) {
-      return redirectTo(request, sessionResponse, homePath);
-    }
-
-    if (!profile || !isProtectedPath(pathname)) {
-      return sessionResponse;
-    }
-
-    const role = profile.role as AuthProfile["role"];
-    const authorityStatus = profile.authority_status as AuthProfile["authority_status"];
-
-    if (pathname.startsWith("/admin") && role !== "admin") {
-      return redirectTo(request, sessionResponse, homePath);
-    }
-
-    if (pathname.startsWith("/citizen") && role !== "citizen") {
-      return redirectTo(request, sessionResponse, homePath);
-    }
-
-    if (pathname.startsWith("/authority")) {
-      if (role !== "authority" && role !== "admin") {
-        return redirectTo(request, sessionResponse, homePath);
-      }
-
-      if (role === "admin") {
-        return redirectTo(request, sessionResponse, "/admin/dashboard");
-      }
-
-      const isPendingPage = pathname.startsWith("/authority/pending");
-      const isRejectedPage = pathname.startsWith("/authority/rejected");
-      const isDashboard = pathname.startsWith("/authority/dashboard");
-
-      if (authorityStatus === "pending" && !isPendingPage) {
-        return redirectTo(request, sessionResponse, "/authority/pending");
-      }
-
-      if (authorityStatus === "rejected" && !isRejectedPage) {
-        return redirectTo(request, sessionResponse, "/authority/rejected");
-      }
-
-      if (authorityStatus === "approved" && (isPendingPage || isRejectedPage)) {
-        return redirectTo(request, sessionResponse, "/authority/dashboard");
-      }
-
-      if (isDashboard && authorityStatus !== "approved") {
-        return redirectTo(request, sessionResponse, homePath);
-      }
+    if (destination) {
+      return redirectTo(
+        request,
+        sessionResponse,
+        destination,
+        destination === "/auth/login" && !user
+          ? { redirect: pathname }
+          : undefined,
+      );
     }
 
     return sessionResponse;

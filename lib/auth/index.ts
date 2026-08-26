@@ -5,5 +5,10 @@ export {
   isPublicPath,
   type AuthProfile,
 } from "./redirects";
+export {
+  getPortalAccessRedirect,
+  getProxyRedirect,
+  isProtectedPath,
+} from "./session-redirect";
 export { isSafeInternalPath, safePostLoginPath } from "@/lib/security/safe-path";
-export { getCurrentProfile, getCurrentUser } from "./session";
+export { getCurrentProfile, getCurrentUser, requirePortalProfile } from "./session";

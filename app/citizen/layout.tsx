@@ -1,20 +1,16 @@
-import { redirect } from "next/navigation";
-
 import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { CitizenAppShell } from "@/components/layout/citizen-app-shell";
 import { NotificationProvider } from "@/components/providers/notification-provider";
 import { OfflineSyncProvider } from "@/components/providers/offline-sync-provider";
-import { getCurrentProfile } from "@/lib/auth/session";
+import { requirePortalProfile } from "@/lib/auth/session";
 import { getUnreadNotificationCount } from "@/lib/notifications";
+
+export const dynamic = "force-dynamic";
 
 export default async function CitizenLayout({
   children,
 }: LayoutProps<"/citizen">) {
-  const profile = await getCurrentProfile();
-
-  if (!profile || profile.role !== "citizen") {
-    redirect("/auth/login");
-  }
+  const profile = await requirePortalProfile("citizen");
 
   const unread = await getUnreadNotificationCount(profile.id);
 

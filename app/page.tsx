@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   Camera,
@@ -54,20 +55,31 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden border-b border-border">
+        <section className="relative isolate overflow-hidden border-b border-border">
+          <Image
+            src="/FLOOD.jpg"
+            alt="Floodwaters approaching a city skyline"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
           <div
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,oklch(0.45_0.12_230/0.12),transparent)]"
+            className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/75 via-black/60 to-black/80"
             aria-hidden
           />
-          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-28 lg:py-32">
+          <div className="relative z-[2] mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28 lg:py-36">
             <div className="mx-auto max-w-3xl text-center">
-              <Badge variant="secondary" className="mb-6">
+              <Badge
+                variant="secondary"
+                className="mb-6 border-white/20 bg-white/15 text-white"
+              >
                 Disaster Management Information System
               </Badge>
-              <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+              <h1 className="text-3xl font-semibold tracking-tight text-balance text-white sm:text-5xl lg:text-6xl">
                 Report Floods. Verify Reality. Protect Communities.
               </h1>
-              <p className="mt-5 text-base text-muted-foreground text-pretty sm:mt-6 sm:text-xl">
+              <p className="mt-5 text-base text-pretty text-white/80 sm:mt-6 sm:text-xl">
                 FloodTrace enables citizens to report floods and blocked drainage
                 with live camera evidence while authorities verify, assign, and
                 resolve incidents with full transparency.
@@ -80,7 +92,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto"
+                  className="w-full border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white sm:w-auto"
                   render={<Link href="/map" />}
                 >
                   <Radio className="size-4" aria-hidden />

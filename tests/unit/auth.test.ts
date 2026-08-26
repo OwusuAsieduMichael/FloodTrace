@@ -6,6 +6,10 @@ import {
   formatCooldown,
   remainingCooldownSeconds,
 } from "@/lib/auth/email-cooldown";
+import {
+  getPortalAccessRedirect,
+  getProxyRedirect,
+} from "@/lib/auth/session-redirect";
 import { isSafeInternalPath, safePostLoginPath } from "@/lib/security/safe-path";
 
 test("citizens land on the citizen dashboard", () => {
@@ -62,6 +66,31 @@ test("post-login redirects stay inside the signed-in role", () => {
   const pending = { role: "authority" as const, authority_status: "pending" as const };
   expect(safePostLoginPath("/authority/dashboard", pending)).toBe("/authority/pending");
   expect(safePostLoginPath("/authority/pending", pending)).toBe("/authority/pending");
+});
+
+test("signed-in authorities are not bounced between login and the dashboard", () => {
+  const approved = { role: "authority" as const, authority_status: "approved" as const };
+  const pending = { role: "authority" as const, authority_status: "pending" as const };
+
+  expect(getProxyRedirect("/auth/login", true, approved)).toBe("/authority/dashboard");
+  expect(getProxyRedirect("/authority/dashboard", true, approved)).toBeNull();
+  expect(getProxyRedirect("/authority/pending", true, approved)).toBe(
+    "/authority/dashboard"
+  );
+
+  expect(getProxyRedirect("/authority/dashboard", true, pending)).toBe(
+    "/authority/pending"
+  );
+  expect(getProxyRedirect("/authority/pending", true, pending)).toBeNull();
+
+  expect(getPortalAccessRedirect("authority", true, approved)).toBeNull();
+  expect(getPortalAccessRedirect("authority", false, null)).toBe("/auth/login");
+});
+
+test("a session without a profile does not loop on login", () => {
+  expect(getProxyRedirect("/auth/login", true, null)).toBeNull();
+  expect(getProxyRedirect("/authority/dashboard", true, null)).toBe("/");
+  expect(getPortalAccessRedirect("authority", true, null)).toBe("/");
 });
 
 test("confirmation emails wait a full minute before another send", () => {

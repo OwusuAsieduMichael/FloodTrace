@@ -1,17 +1,13 @@
-import { redirect } from "next/navigation";
-
 import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { AdminAppShell } from "@/components/layout/admin-app-shell";
-import { getCurrentProfile } from "@/lib/auth/session";
+import { requirePortalProfile } from "@/lib/auth/session";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({
   children,
 }: LayoutProps<"/admin">) {
-  const profile = await getCurrentProfile();
-
-  if (!profile || profile.role !== "admin") {
-    redirect("/auth/login");
-  }
+  const profile = await requirePortalProfile("admin");
 
   return (
     <AdminAppShell userMenu={<AppUserMenu />}>{children}</AdminAppShell>
