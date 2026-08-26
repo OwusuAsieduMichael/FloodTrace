@@ -16,6 +16,7 @@ import {
   isNavItemActive,
 } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
+import { useUnreadNotificationCount } from "@/components/providers/notification-provider";
 
 interface CitizenAppShellProps {
   children: React.ReactNode;
@@ -30,6 +31,9 @@ export function CitizenAppShell({
 }: CitizenAppShellProps) {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
+  const unread = useUnreadNotificationCount();
+  const notificationBadges =
+    unread > 0 ? { "/citizen/notifications": unread } : undefined;
 
   return (
     <div className="flex min-h-dvh bg-background">
@@ -38,7 +42,7 @@ export function CitizenAppShell({
           <AppLogo href="/citizen/dashboard" />
         </div>
         <div className="flex flex-1 flex-col gap-4 p-4">
-          <SidebarNav items={citizenNavItems} />
+          <SidebarNav items={citizenNavItems} badges={notificationBadges} />
         </div>
       </aside>
 
@@ -137,6 +141,7 @@ export function CitizenAppShell({
               <Separator className="mb-3" />
               <SidebarNav
                 items={citizenSecondaryItems}
+                badges={notificationBadges}
                 onNavigate={() => setMoreOpen(false)}
               />
             </div>

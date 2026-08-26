@@ -11,7 +11,9 @@ import type {
 } from "./types";
 import type { IncidentSeverity, IncidentType } from "@/types";
 
-function summarizeQueue(reports: PendingReportRecord[]): OfflineQueueSummary {
+export function summarizeOfflineQueue(
+  reports: PendingReportRecord[]
+): OfflineQueueSummary {
   return reports.reduce<OfflineQueueSummary>(
     (summary, report) => {
       summary.total += 1;
@@ -32,7 +34,7 @@ function summarizeQueue(reports: PendingReportRecord[]): OfflineQueueSummary {
 
 export async function getOfflineQueueSummary(): Promise<OfflineQueueSummary> {
   const reports = await getAllPendingReports();
-  return summarizeQueue(reports);
+  return summarizeOfflineQueue(reports);
 }
 
 export async function listOfflineReports(): Promise<PendingReportRecord[]> {

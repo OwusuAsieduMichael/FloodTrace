@@ -4,7 +4,7 @@ import type { DuplicateDetectionConfig, IncidentType } from "@/types";
 import { DUPLICATE_MATCH_STATUSES } from "./constants";
 import { boundingBoxForRadius, distanceMeters } from "./haversine";
 
-interface DuplicateCandidate {
+export interface DuplicateCandidate {
   id: string;
   latitude: number;
   longitude: number;
@@ -19,6 +19,49 @@ export interface FindDuplicateParentInput {
   capturedAt: string;
   excludeIncidentId: string;
   config: DuplicateDetectionConfig;
+}
+
+export function isWithinDuplicateTimeWindow(
+  capturedAt: string,
+  candidateCapturedAt: string,
+  timeWindowMinutes: number
+): boolean {
+  const delta = Math.abs(
+    new Date(capturedAt).getTime() - new Date(candidateCapturedAt).getTime()
+  );
+
+  return delta <= timeWindowMinutes * 60 * 1000;
+}
+
+/** Nearest primary within the radius; ties go to the earlier submission. */
+export function selectNearestDuplicateId(
+  latitude: number,
+  longitude: number,
+  candidates: DuplicateCandidate[],
+  radiusMeters: number
+): string | null {
+  const matches = candidates
+    .map((candidate) => ({
+      ...candidate,
+      distance: distanceMeters(
+        latitude,
+        longitude,
+        candidate.latitude,
+        candidate.longitude
+      ),
+    }))
+    .filter((candidate) => candidate.distance <= radiusMeters)
+    .sort((left, right) => {
+      if (left.distance !== right.distance) {
+        return left.distance - right.distance;
+      }
+
+      return (
+        new Date(left.submitted_at).getTime() - new Date(right.submitted_at).getTime()
+      );
+    });
+
+  return matches[0]?.id ?? null;
 }
 
 export async function findDuplicateParentIncident(
@@ -53,26 +96,10 @@ export async function findDuplicateParentIncident(
     return null;
   }
 
-  const matches = (data as DuplicateCandidate[])
-    .map((candidate) => ({
-      ...candidate,
-      distance: distanceMeters(
-        latitude,
-        longitude,
-        candidate.latitude,
-        candidate.longitude
-      ),
-    }))
-    .filter((candidate) => candidate.distance <= config.radius_meters)
-    .sort((left, right) => {
-      if (left.distance !== right.distance) {
-        return left.distance - right.distance;
-      }
-
-      return (
-        new Date(left.submitted_at).getTime() - new Date(right.submitted_at).getTime()
-      );
-    });
-
-  return matches[0]?.id ?? null;
+  return selectNearestDuplicateId(
+    latitude,
+    longitude,
+    data as DuplicateCandidate[],
+    config.radius_meters
+  );
 }

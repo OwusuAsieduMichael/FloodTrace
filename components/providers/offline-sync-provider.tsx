@@ -113,8 +113,6 @@ export function OfflineSyncProvider({ children }: { children: React.ReactNode })
   );
 
   useEffect(() => {
-    setIsOnline(typeof navigator !== "undefined" ? navigator.onLine : true);
-
     function handleOnline() {
       setIsOnline(true);
       void runSync();
@@ -136,10 +134,16 @@ export function OfflineSyncProvider({ children }: { children: React.ReactNode })
     window.addEventListener("offline", handleOffline);
     window.addEventListener("floodtrace:offline-queue-changed", handleQueueChanged);
 
-    void refreshQueue().then(() => {
-      if (navigator.onLine) {
-        void runSync();
-      }
+    if (!navigator.onLine) {
+      queueMicrotask(handleOffline);
+    }
+
+    queueMicrotask(() => {
+      void refreshQueue().then(() => {
+        if (navigator.onLine) {
+          void runSync();
+        }
+      });
     });
 
     return () => {

@@ -11,6 +11,7 @@ export {
   isOfflineEnvironment,
   listOfflineReports,
   removePendingReport,
+  summarizeOfflineQueue,
   updatePendingReportStatus,
   type EnqueuePendingReportInput,
 } from "./queue";

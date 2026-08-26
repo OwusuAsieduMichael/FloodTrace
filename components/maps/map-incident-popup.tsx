@@ -1,14 +1,17 @@
 "use client";
 
+import Link from "next/link";
+
 import type { PublicMapIncident } from "@/lib/incidents/public";
 import { formatIncidentDate, formatIncidentType, formatShortId } from "@/lib/incidents/format";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 
 interface MapIncidentPopupProps {
   incident: PublicMapIncident;
+  href?: string;
 }
 
-export function MapIncidentPopup({ incident }: MapIncidentPopupProps) {
+export function MapIncidentPopup({ incident, href }: MapIncidentPopupProps) {
   return (
     <div className="min-w-[220px] space-y-2 p-1">
       <div className="flex flex-wrap items-center gap-1.5">
@@ -30,6 +33,11 @@ export function MapIncidentPopup({ incident }: MapIncidentPopupProps) {
       <p className="text-[11px] text-muted-foreground">
         Reported {formatIncidentDate(incident.submitted_at)}
       </p>
+      {href ? (
+        <Link href={href} className="text-xs font-medium text-primary hover:underline">
+          Open incident
+        </Link>
+      ) : null}
     </div>
   );
 }

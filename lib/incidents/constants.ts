@@ -1,4 +1,4 @@
-import type { IncidentStatus, IncidentType } from "@/types";
+import type { IncidentSeverity, IncidentStatus, IncidentType } from "@/types";
 
 export const INCIDENT_TYPE_LABELS: Record<IncidentType, string> = {
   flood: "Flood",
@@ -28,3 +28,19 @@ export const TIMELINE_LABELS: Record<IncidentStatus, string> = {
 
 /** Statuses visible on the anonymous public map. */
 export const PUBLIC_MAP_STATUSES: IncidentStatus[] = ["verified", "assigned", "resolved"];
+
+export const ALL_INCIDENT_STATUSES: IncidentStatus[] = [
+  "submitted",
+  "pending_review",
+  "verified",
+  "assigned",
+  "resolved",
+  "rejected",
+];
+
+export const SEVERITY_LABELS: Record<IncidentSeverity, string> = {
+  critical: "Critical",
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+};

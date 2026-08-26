@@ -10,9 +10,15 @@ interface SidebarNavProps {
   items: NavItem[];
   onNavigate?: () => void;
   className?: string;
+  badges?: Record<string, number>;
 }
 
-export function SidebarNav({ items, onNavigate, className }: SidebarNavProps) {
+export function SidebarNav({
+  items,
+  onNavigate,
+  className,
+  badges,
+}: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
@@ -35,7 +41,12 @@ export function SidebarNav({ items, onNavigate, className }: SidebarNavProps) {
             aria-current={active ? "page" : undefined}
           >
             <Icon className="size-4 shrink-0" aria-hidden />
-            <span>{item.title}</span>
+            <span className="flex-1 truncate">{item.title}</span>
+            {badges?.[item.href] ? (
+              <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-semibold text-primary-foreground">
+                {badges[item.href] > 99 ? "99+" : badges[item.href]}
+              </span>
+            ) : null}
           </Link>
         );
       })}

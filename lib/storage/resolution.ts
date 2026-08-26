@@ -78,3 +78,14 @@ export async function getSignedResolutionUrl(
     expiresInSeconds
   );
 }
+
+export async function removeResolutionEvidence(
+  supabase: SupabaseClient,
+  storagePath: string
+): Promise<void> {
+  return deleteStorageObject(
+    supabase,
+    STORAGE_BUCKETS.RESOLUTION_EVIDENCE,
+    storagePath
+  );
+}

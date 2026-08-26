@@ -4,8 +4,9 @@ import {
   getCitizenIncidentStats,
   getCitizenRecentIncidents,
   getPublicActiveIncidentCount,
-  getUnreadNotificationCount,
 } from "@/lib/incidents";
+import { getUnreadNotificationCount, maybeCreateRainfallWarning } from "@/lib/notifications";
+import { getWeather } from "@/lib/weather";
 import { CitizenQuickLinks, NearbyIncidentsCard } from "@/components/citizen/dashboard-extras";
 import { EmergencyContactsPanel, ReportHeroCta } from "@/components/citizen/emergency-contacts-panel";
 import { OfflineSyncBanner } from "@/components/citizen/offline-sync-banner";
@@ -25,14 +26,20 @@ export default async function CitizenDashboardPage() {
     recentIncidents,
     emergencyContacts,
     activeIncidentCount,
-    unreadNotifications,
+    weather,
   ] = await Promise.all([
     getCitizenIncidentStats(profile.id),
     getCitizenRecentIncidents(profile.id),
     getEmergencyContacts(),
     getPublicActiveIncidentCount(),
-    getUnreadNotificationCount(profile.id),
+    getWeather(),
   ]);
+
+  if (weather.ok) {
+    await maybeCreateRainfallWarning(profile.id, weather.data);
+  }
+
+  const unreadNotifications = await getUnreadNotificationCount(profile.id);
 
   return (
     <div className="space-y-8">
@@ -56,7 +63,10 @@ export default async function CitizenDashboardPage() {
 
         <div className="space-y-6">
           <NearbyIncidentsCard activeCount={activeIncidentCount} />
-          <CitizenQuickLinks unreadNotifications={unreadNotifications} />
+          <CitizenQuickLinks
+            unreadNotifications={unreadNotifications}
+            weather={weather}
+          />
         </div>
       </div>
 

@@ -144,3 +144,39 @@ export interface DuplicateDetectionConfig {
   radius_meters: number;
   time_window_minutes: number;
 }
+
+export interface WeatherCondition {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+export interface WeatherCurrent {
+  temperatureC: number;
+  feelsLikeC: number;
+  humidity: number;
+  windSpeedMs: number | null;
+  rainfallMmLastHour: number | null;
+  rainfallMmLast3Hours: number | null;
+  condition: WeatherCondition;
+  observedAt: string;
+}
+
+export interface WeatherForecastDay {
+  date: string;
+  minC: number;
+  maxC: number;
+  rainfallMm: number;
+  condition: WeatherCondition;
+}
+
+export interface WeatherData {
+  latitude: number;
+  longitude: number;
+  locationName: string;
+  current: WeatherCurrent;
+  forecast: WeatherForecastDay[];
+  source: "openweathermap";
+  fetchedAt: string;
+}

@@ -2,7 +2,9 @@ import { redirect } from "next/navigation";
 
 import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { AuthorityAppShell } from "@/components/layout/authority-app-shell";
+import { NotificationProvider } from "@/components/providers/notification-provider";
 import { getCurrentProfile } from "@/lib/auth/session";
+import { getUnreadNotificationCount } from "@/lib/notifications";
 
 export default async function AuthorityLayout({
   children,
@@ -28,14 +30,20 @@ export default async function AuthorityLayout({
         ? "/authority/rejected"
         : "/authority/pending";
 
+  const unread = isOperational
+    ? await getUnreadNotificationCount(profile.id)
+    : 0;
+
   return (
-    <AuthorityAppShell
-      roleLabel={roleLabel}
-      homeHref={homeHref}
-      limited={!isOperational}
-      userMenu={<AppUserMenu />}
-    >
-      {children}
-    </AuthorityAppShell>
+    <NotificationProvider userId={profile.id} initialUnread={unread}>
+      <AuthorityAppShell
+        roleLabel={roleLabel}
+        homeHref={homeHref}
+        limited={!isOperational}
+        userMenu={<AppUserMenu />}
+      >
+        {children}
+      </AuthorityAppShell>
+    </NotificationProvider>
   );
 }

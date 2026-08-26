@@ -3,6 +3,9 @@ export { resolveDuplicateDetectionConfig } from "./config";
 export { boundingBoxForRadius, distanceMeters } from "./haversine";
 export {
   findDuplicateParentIncident,
+  isWithinDuplicateTimeWindow,
+  selectNearestDuplicateId,
+  type DuplicateCandidate,
   type FindDuplicateParentInput,
 } from "./find-duplicate";
 export {

@@ -1,26 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
 import { getCurrentProfile } from "@/lib/auth/session";
 import { processDuplicateDetection } from "@/lib/duplicate-detection";
+import { submitReportSchema } from "@/lib/incidents/submit-schema";
+import { notifyReportSubmitted } from "@/lib/notifications";
+import { rateLimit } from "@/lib/security/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 import { uploadIncidentEvidence, removeIncidentEvidence } from "@/lib/storage";
-
-const submitReportSchema = z.object({
-  incident_type: z.enum(["flood", "blocked_drain"]),
-  severity: z.enum(["low", "medium", "high", "critical"]),
-  description: z
-    .string()
-    .max(2000)
-    .optional()
-    .transform((value) => value?.trim() || null),
-  latitude: z.coerce.number().min(-90).max(90),
-  longitude: z.coerce.number().min(-180).max(180),
-  accuracy: z.coerce.number().positive().optional(),
-  captured_at: z.string().datetime(),
-});
 
 export type SubmitReportResult =
   | {
@@ -37,6 +25,15 @@ export async function submitIncidentReport(
 
   if (!profile || profile.role !== "citizen") {
     return { success: false, error: "You must be signed in as a citizen to report." };
+  }
+
+  const limited = rateLimit(`report:${profile.id}`, 8, 10 * 60_000);
+
+  if (!limited.ok) {
+    return {
+      success: false,
+      error: "Too many reports in a short time. Wait a few minutes and try again.",
+    };
   }
 
   const photo = formData.get("photo");
@@ -145,8 +142,20 @@ export async function submitIncidentReport(
     capturedAt: captured_at,
   });
 
+  await notifyReportSubmitted({
+    reporterId: profile.id,
+    incidentId: incident.id,
+    incidentType: incident_type,
+    severity,
+    linkedToPrimary: duplicateResult.linked
+      ? duplicateResult.parentIncidentId
+      : undefined,
+  });
+
   revalidatePath("/citizen/dashboard");
   revalidatePath("/citizen/reports");
+  revalidatePath("/citizen/notifications");
+  revalidatePath("/authority/notifications");
 
   return {
     success: true,

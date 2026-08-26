@@ -6,7 +6,6 @@ export {
   getCitizenIncidents,
   getCitizenRecentIncidents,
   getPublicActiveIncidentCount,
-  getUnreadNotificationCount,
   type CitizenIncidentListItem,
   type CitizenIncidentStats,
 } from "./citizen";
@@ -15,10 +14,12 @@ export {
   type PublicMapIncident,
 } from "./public";
 export {
+  ALL_INCIDENT_STATUSES,
   INCIDENT_TYPE_LABELS,
   IN_PROGRESS_STATUSES,
   PENDING_STATUSES,
   PUBLIC_MAP_STATUSES,
+  SEVERITY_LABELS,
   TIMELINE_LABELS,
   TIMELINE_STATUSES,
 } from "./constants";

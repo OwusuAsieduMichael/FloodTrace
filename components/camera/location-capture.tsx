@@ -69,9 +69,17 @@ export function LocationCapture({ location, onCapture }: LocationCaptureProps) {
   }, [onCapture]);
 
   useEffect(() => {
-    if (!location) {
-      detectLocation();
+    if (location) {
+      return;
     }
+
+    const frame = window.requestAnimationFrame(() => {
+      detectLocation();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
   }, [location, detectLocation]);
 
   if (location) {

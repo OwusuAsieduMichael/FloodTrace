@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
 import { getPublicMapIncidents } from "@/lib/incidents/public";
+import { getWeather } from "@/lib/weather";
 
 export const metadata = {
   title: "Live flood map",
@@ -14,7 +15,10 @@ export const metadata = {
 };
 
 export default async function MapPage() {
-  const incidents = await getPublicMapIncidents();
+  const [incidents, weather] = await Promise.all([
+    getPublicMapIncidents(),
+    getWeather(),
+  ]);
 
   return (
     <>
@@ -29,7 +33,10 @@ export default async function MapPage() {
             </Button>
           }
         />
-        <PublicIncidentMap incidents={incidents} />
+        <PublicIncidentMap
+          incidents={incidents}
+          weather={weather.ok ? weather.data : null}
+        />
       </main>
       <SiteFooter />
     </>

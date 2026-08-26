@@ -13,6 +13,8 @@ interface MapFiltersProps {
   onStatusChange: (value: IncidentStatus | "all") => void;
   visibleCount: number;
   totalCount: number;
+  statuses?: IncidentStatus[];
+  showingLabel?: string;
 }
 
 export function MapFilters({
@@ -22,11 +24,13 @@ export function MapFilters({
   onStatusChange,
   visibleCount,
   totalCount,
+  statuses = PUBLIC_MAP_STATUSES,
+  showingLabel = "verified incident",
 }: MapFiltersProps) {
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-border bg-background/95 p-3 shadow-sm backdrop-blur-sm sm:flex-row sm:flex-wrap sm:items-center">
       <p className="text-xs text-muted-foreground">
-        Showing {visibleCount} of {totalCount} verified incident
+        Showing {visibleCount} of {totalCount} {showingLabel}
         {totalCount === 1 ? "" : "s"}
       </p>
 
@@ -50,7 +54,7 @@ export function MapFilters({
           <FilterChip active={statusFilter === "all"} onClick={() => onStatusChange("all")}>
             All
           </FilterChip>
-          {PUBLIC_MAP_STATUSES.map((status) => (
+          {statuses.map((status) => (
             <FilterChip
               key={status}
               active={statusFilter === status}

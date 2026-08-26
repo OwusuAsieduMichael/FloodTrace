@@ -18,9 +18,19 @@ interface CameraCaptureProps {
   photo: CapturedPhoto | null;
   onCapture: (photo: CapturedPhoto) => void;
   onClear: () => void;
+  captureLabel?: string;
+  helperText?: string;
+  previewAlt?: string;
 }
 
-export function CameraCapture({ photo, onCapture, onClear }: CameraCaptureProps) {
+export function CameraCapture({
+  photo,
+  onCapture,
+  onClear,
+  captureLabel = "Capture photo",
+  helperText = "Live camera capture is required. Gallery uploads are not accepted for incident evidence.",
+  previewAlt = "Captured incident evidence",
+}: CameraCaptureProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -68,11 +78,18 @@ export function CameraCapture({ photo, onCapture, onClear }: CameraCaptureProps)
   }, [stopStream]);
 
   useEffect(() => {
-    if (!photo) {
-      void startCamera();
+    if (photo) {
+      return () => {
+        stopStream();
+      };
     }
 
+    const frame = window.requestAnimationFrame(() => {
+      void startCamera();
+    });
+
     return () => {
+      window.cancelAnimationFrame(frame);
       stopStream();
     };
   }, [photo, startCamera, stopStream]);
@@ -135,7 +152,7 @@ export function CameraCapture({ photo, onCapture, onClear }: CameraCaptureProps)
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={photo.previewUrl}
-          alt="Captured incident evidence"
+          alt={previewAlt}
           className="aspect-[4/3] w-full rounded-xl border border-border object-cover"
         />
         <div className="flex gap-2">
@@ -194,15 +211,12 @@ export function CameraCapture({ photo, onCapture, onClear }: CameraCaptureProps)
             onClick={handleCapture}
           >
             <Camera className="size-4" />
-            {isStarting ? "Starting camera…" : "Capture photo"}
+            {isStarting ? "Starting camera…" : captureLabel}
           </Button>
         )}
       </div>
 
-      <p className="text-xs text-muted-foreground">
-        Live camera capture is required. Gallery uploads are not accepted for
-        incident evidence.
-      </p>
+      <p className="text-xs text-muted-foreground">{helperText}</p>
     </div>
   );
 }

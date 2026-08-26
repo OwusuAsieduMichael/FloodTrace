@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { MapPinned, Radio } from "lucide-react";
 
+import { WeatherSummaryCard } from "@/components/weather/weather-summary-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { WeatherResult } from "@/lib/weather";
 
 interface NearbyIncidentsCardProps {
   activeCount: number;
@@ -32,9 +34,10 @@ export function NearbyIncidentsCard({ activeCount }: NearbyIncidentsCardProps) {
 
 interface QuickLinksProps {
   unreadNotifications: number;
+  weather: WeatherResult;
 }
 
-export function CitizenQuickLinks({ unreadNotifications }: QuickLinksProps) {
+export function CitizenQuickLinks({ unreadNotifications, weather }: QuickLinksProps) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <Card>
@@ -53,19 +56,7 @@ export function CitizenQuickLinks({ unreadNotifications }: QuickLinksProps) {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">Weather</CardTitle>
-          <CardDescription>
-            Local rainfall and conditions for your area — coming in Phase 12.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button variant="outline" size="sm" render={<Link href="/citizen/weather" />}>
-            View weather
-          </Button>
-        </CardContent>
-      </Card>
+      <WeatherSummaryCard weather={weather} />
     </div>
   );
 }

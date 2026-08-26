@@ -7,10 +7,12 @@ import { formatShortId } from "@/lib/incidents/format";
 
 interface SupportingReportNoticeProps {
   parentIncidentId: string;
+  href?: string;
 }
 
 export function SupportingReportNotice({
   parentIncidentId,
+  href,
 }: SupportingReportNoticeProps) {
   return (
     <Alert variant="info">
@@ -25,7 +27,7 @@ export function SupportingReportNotice({
         <Button
           size="sm"
           variant="outline"
-          render={<Link href={`/citizen/reports/${parentIncidentId}`} />}
+          render={<Link href={href ?? `/citizen/reports/${parentIncidentId}`} />}
         >
           View primary report
         </Button>

@@ -32,6 +32,7 @@ export {
 } from "./evidence";
 export {
   getSignedResolutionUrl,
+  removeResolutionEvidence,
   uploadResolutionEvidence,
 } from "./resolution";
 export {

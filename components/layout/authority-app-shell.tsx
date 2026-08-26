@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { authorityNavItems } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
+import { useUnreadNotificationCount } from "@/components/providers/notification-provider";
 
 interface AuthorityAppShellProps {
   children: React.ReactNode;
@@ -27,6 +28,9 @@ export function AuthorityAppShell({
   limited = false,
 }: AuthorityAppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const unread = useUnreadNotificationCount();
+  const notificationBadges =
+    unread > 0 ? { "/authority/notifications": unread } : undefined;
 
   return (
     <div className="flex min-h-dvh bg-background">
@@ -40,7 +44,7 @@ export function AuthorityAppShell({
               <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
                 Operations
               </p>
-              <SidebarNav items={authorityNavItems} />
+              <SidebarNav items={authorityNavItems} badges={notificationBadges} />
             </div>
             <div className="border-t border-border/60 p-4">
               <Badge variant="secondary" className="w-full justify-center py-1">
@@ -78,6 +82,7 @@ export function AuthorityAppShell({
             <div className="flex-1 overflow-y-auto p-4">
               <SidebarNav
                 items={authorityNavItems}
+                badges={notificationBadges}
                 onNavigate={() => setMobileOpen(false)}
               />
             </div>

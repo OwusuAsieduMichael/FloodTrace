@@ -1,12 +1,29 @@
-import { PlaceholderPage } from "@/components/layout/placeholder-page";
+import { NotificationInbox } from "@/components/notifications/notification-inbox";
+import { PageHeader } from "@/components/layout/page-header";
+import { getCurrentProfile } from "@/lib/auth/session";
+import { getNotifications } from "@/lib/notifications";
 
-export default function CitizenNotificationsPage() {
+export const metadata = {
+  title: "Notifications",
+  description: "Updates on your reports, rainfall, and incident activity.",
+};
+
+export default async function CitizenNotificationsPage() {
+  const profile = await getCurrentProfile();
+
+  if (!profile) {
+    return null;
+  }
+
+  const notifications = await getNotifications(profile.id);
+
   return (
-    <PlaceholderPage
-      title="Notifications"
-      description="Updates on your reports, weather alerts, and incident activity."
-      phase="Phase 13"
-      backHref="/citizen/dashboard"
-    />
+    <div className="space-y-8">
+      <PageHeader
+        title="Notifications"
+        description="Updates on your reports, rainfall warnings, and incident activity."
+      />
+      <NotificationInbox notifications={notifications} role="citizen" />
+    </div>
   );
 }

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getPostAuthRedirect } from "@/lib/auth/redirects";
+import { safePostLoginPath } from "@/lib/security/safe-path";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
@@ -49,7 +49,7 @@ export function LoginForm() {
     }
 
     toast.success("Welcome back.");
-    router.push(redirectTo ?? getPostAuthRedirect(profile));
+    router.push(safePostLoginPath(redirectTo, profile));
     router.refresh();
   }
 

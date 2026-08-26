@@ -62,6 +62,12 @@ export function SignupWizard() {
       return;
     }
 
+    if (role !== "citizen" && role !== "authority") {
+      toast.error("Choose a citizen or authority account.");
+      setIsLoading(false);
+      return;
+    }
+
     if (!fullName.trim()) {
       toast.error("Enter your full name.");
       return;

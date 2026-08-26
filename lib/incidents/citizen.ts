@@ -188,19 +188,3 @@ export async function getPublicActiveIncidentCount(): Promise<number> {
 
   return count;
 }
-
-export async function getUnreadNotificationCount(userId: string): Promise<number> {
-  const supabase = await createClient();
-
-  const { count, error } = await supabase
-    .from("notifications")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", userId)
-    .eq("read", false);
-
-  if (error || count === null) {
-    return 0;
-  }
-
-  return count;
-}

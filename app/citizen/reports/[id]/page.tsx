@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { IncidentStatusTimeline } from "@/components/citizen/incident-status-timeline";
 import { SupportingReportNotice } from "@/components/citizen/supporting-report-notice";
 import { EvidenceGallery } from "@/components/media/evidence-gallery";
+import { ResolutionRecordCard } from "@/components/media/resolution-record-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import {
   getCitizenIncidentMedia,
   getCitizenIncidentStatusHistory,
 } from "@/lib/incidents";
+import { getIncidentResolution } from "@/lib/incidents/resolutions";
 
 interface ReportDetailPageProps {
   params: Promise<{ id: string }>;
@@ -39,9 +41,14 @@ export default async function CitizenReportDetailPage({
     notFound();
   }
 
-  const [history, media] = await Promise.all([
+  const resolutionIncidentId = incident.is_primary
+    ? incident.id
+    : (incident.parent_incident_id ?? incident.id);
+
+  const [history, media, resolution] = await Promise.all([
     getCitizenIncidentStatusHistory(incident.id),
     getCitizenIncidentMedia(incident.id),
+    getIncidentResolution(resolutionIncidentId),
   ]);
 
   const primaryMedia = media.filter((item) => item.media_source === "citizen_evidence");
@@ -69,6 +76,17 @@ export default async function CitizenReportDetailPage({
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
+          {resolution ? (
+            <ResolutionRecordCard
+              documentation={resolution}
+              title={
+                incident.is_primary
+                  ? "Resolution"
+                  : "Resolution on primary incident"
+              }
+            />
+          ) : null}
+
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Evidence</CardTitle>
