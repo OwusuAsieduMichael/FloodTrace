@@ -26,7 +26,7 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
   useOpenLayer(mobileOpen, closeMobile);
 
   return (
-    <div className="flex min-h-dvh bg-background">
+    <div className="flex min-h-screen min-h-dvh bg-background">
       <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/15 lg:flex lg:flex-col">
         <div className="flex h-16 items-center border-b border-border/60 px-4">
           <AppLogo href="/admin/dashboard" />

@@ -62,7 +62,7 @@ export async function updateSession(request: NextRequest) {
       });
     }
 
-    return supabaseResponse;
+    return applyPrivateCacheHeaders(supabaseResponse);
   }
 
   try {
@@ -124,7 +124,7 @@ export async function updateSession(request: NextRequest) {
       );
     }
 
-    return sessionResponse;
+    return applyPrivateCacheHeaders(sessionResponse);
   } catch (error) {
     console.error("Proxy session update failed:", error);
 
@@ -134,6 +134,6 @@ export async function updateSession(request: NextRequest) {
       });
     }
 
-    return supabaseResponse;
+    return applyPrivateCacheHeaders(supabaseResponse);
   }
 }

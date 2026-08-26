@@ -2,7 +2,6 @@ import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { AuthorityAppShell } from "@/components/layout/authority-app-shell";
 import { NotificationProvider } from "@/components/providers/notification-provider";
 import { requirePortalProfile } from "@/lib/auth/session";
-import { getUnreadNotificationCount } from "@/lib/notifications/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -26,18 +25,8 @@ export default async function AuthorityLayout({
         ? "/authority/rejected"
         : "/authority/pending";
 
-  let unread = 0;
-
-  if (isOperational) {
-    try {
-      unread = await getUnreadNotificationCount(profile.id);
-    } catch (error) {
-      console.error("Failed to load unread notification count:", error);
-    }
-  }
-
   return (
-    <NotificationProvider userId={profile.id} initialUnread={unread}>
+    <NotificationProvider userId={profile.id} initialUnread={0}>
       <AuthorityAppShell
         roleLabel={roleLabel}
         homeHref={homeHref}

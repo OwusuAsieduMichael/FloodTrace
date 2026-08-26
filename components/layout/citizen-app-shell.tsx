@@ -37,7 +37,7 @@ export function CitizenAppShell({
     unread > 0 ? { "/citizen/notifications": unread } : undefined;
 
   return (
-    <div className="flex min-h-dvh bg-background">
+    <div className="flex min-h-screen min-h-dvh bg-background">
       <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/20 md:flex md:flex-col">
         <div className="flex h-16 items-center border-b border-border/60 px-4">
           <AppLogo href="/citizen/dashboard" />

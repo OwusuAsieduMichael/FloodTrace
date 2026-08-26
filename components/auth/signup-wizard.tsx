@@ -242,7 +242,7 @@ export function SignupWizard() {
                   type="button"
                   onClick={() => setRole("citizen")}
                   className={cn(
-                    "rounded-xl border p-4 text-left transition-colors",
+                    "rounded-xl border p-4 text-left touch-manipulation transition-colors",
                     role === "citizen"
                       ? "border-primary bg-primary/5"
                       : "border-border hover:border-primary/40"
@@ -266,7 +266,7 @@ export function SignupWizard() {
                   type="button"
                   onClick={() => setRole("authority")}
                   className={cn(
-                    "rounded-xl border p-4 text-left transition-colors",
+                    "rounded-xl border p-4 text-left touch-manipulation transition-colors",
                     role === "authority"
                       ? "border-primary bg-primary/5"
                       : "border-border hover:border-primary/40"
@@ -291,12 +291,12 @@ export function SignupWizard() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 h-11 sm:h-8"
+                  className="h-11 flex-1 touch-manipulation sm:h-8"
                   onClick={() => setStep("account")}
                 >
                   Back
                 </Button>
-                <Button type="button" className="flex-1 h-11 sm:h-8" onClick={goToProfileStep}>
+                <Button type="button" className="h-11 flex-1 touch-manipulation sm:h-8" onClick={goToProfileStep}>
                   Continue
                 </Button>
               </div>
@@ -332,14 +332,14 @@ export function SignupWizard() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 h-11 sm:h-8"
+                  className="h-11 flex-1 touch-manipulation sm:h-8"
                   onClick={() => setStep("role")}
                 >
                   Back
                 </Button>
                 <Button
                   type="button"
-                  className="flex-1 h-11 sm:h-8"
+                  className="h-11 flex-1 touch-manipulation sm:h-8"
                   disabled={isLoading}
                   onClick={handleSignup}
                 >

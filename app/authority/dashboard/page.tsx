@@ -7,7 +7,6 @@ import { IncidentTable } from "@/components/authority/incident-table";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getCurrentProfile } from "@/lib/auth/session";
 import {
   getAuthorityAttentionIncidents,
   getAuthorityIncidentStats,
@@ -32,8 +31,6 @@ const EMPTY_STATS: AuthorityIncidentStats = {
 };
 
 export default async function AuthorityDashboardPage() {
-  const profile = await getCurrentProfile();
-
   let stats: AuthorityIncidentStats = EMPTY_STATS;
   let attention: AuthorityIncidentListItem[] = [];
   let latest: AuthorityIncidentListItem[] = [];
@@ -42,23 +39,17 @@ export default async function AuthorityDashboardPage() {
     [stats, attention, latest] = await Promise.all([
       getAuthorityIncidentStats(),
       getAuthorityAttentionIncidents(6),
-      getAuthorityIncidents({ scope: "primary" }),
+      getAuthorityIncidents({ scope: "primary", limit: 6 }),
     ]);
   } catch (error) {
     console.error("Failed to load authority dashboard data:", error);
   }
 
-  const recent = latest.slice(0, 6);
-
   return (
     <div className="space-y-8">
       <PageHeader
         title="Operations overview"
-        description={
-          profile?.full_name
-            ? `${profile.full_name}, monitor verification queues and incident response.`
-            : "Monitor verification queues and incident response across reported locations."
-        }
+        description="Monitor verification queues and incident response across reported locations."
         actions={
           <div className="flex flex-wrap gap-2">
             <Button
@@ -116,7 +107,7 @@ export default async function AuthorityDashboardPage() {
           </CardHeader>
           <CardContent>
             <IncidentTable
-              incidents={recent}
+              incidents={latest}
               emptyTitle="No incidents yet"
               emptyDescription="Citizen reports will appear here after they are submitted with camera evidence."
               showEmptyAction={false}

@@ -86,6 +86,15 @@ const securityHeaders = [
   { key: "Content-Security-Policy", value: contentSecurityPolicy },
 ];
 
+const documentCacheHeaders = [
+  {
+    key: "Cache-Control",
+    value: "private, no-cache, no-store, must-revalidate, max-age=0",
+  },
+  { key: "Pragma", value: "no-cache" },
+  { key: "Expires", value: "0" },
+];
+
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
@@ -99,6 +108,11 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      {
+        source:
+          "/((?!_next/static|_next/image|.*\\.(?:ico|png|jpg|jpeg|gif|webp|svg)$).*)",
+        headers: documentCacheHeaders,
       },
     ];
   },

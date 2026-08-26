@@ -43,6 +43,7 @@ export interface AuthorityIncidentFilters {
   type?: IncidentType;
   severity?: IncidentSeverity;
   scope?: "primary" | "supporting" | "all";
+  limit?: number;
 }
 
 export interface AuthorityIncidentDetail extends Incident {
@@ -185,43 +186,93 @@ async function loadSupportingCounts(
   return counts;
 }
 
-async function fetchAuthorityIncidentRows(): Promise<AuthorityIncidentListItem[]> {
+type IncidentRow = {
+  id: string;
+  incident_type: IncidentType;
+  description: string | null;
+  location_name: string | null;
+  latitude: number;
+  longitude: number;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  submitted_at: string;
+  assigned_to: string | null;
+  reporter_id: string;
+  is_primary: boolean;
+  parent_incident_id: string | null;
+};
+
+async function mapIncidentRows(
+  data: IncidentRow[]
+): Promise<AuthorityIncidentListItem[]> {
+  const names = await loadProfileNames(
+    data.flatMap((row) => [row.assigned_to, row.reporter_id])
+  );
+  const counts = await loadSupportingCounts(data.map((row) => row.id));
+
+  return data.map((row) => ({
+    id: row.id,
+    incident_type: row.incident_type,
+    description: row.description,
+    location_name: row.location_name,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    severity: row.severity,
+    status: row.status,
+    submitted_at: row.submitted_at,
+    assigned_to: row.assigned_to,
+    assignee_name: names.get(row.assigned_to ?? "") ?? null,
+    reporter_name: names.get(row.reporter_id) ?? null,
+    is_primary: row.is_primary,
+    parent_incident_id: row.parent_incident_id,
+    supporting_count: counts.get(row.id) ?? 0,
+  }));
+}
+
+async function fetchAuthorityIncidentRows(
+  filters: AuthorityIncidentFilters = {}
+): Promise<AuthorityIncidentListItem[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("incidents")
     .select(
       "id, incident_type, description, location_name, latitude, longitude, severity, status, submitted_at, assigned_to, reporter_id, is_primary, parent_incident_id"
     )
     .order("submitted_at", { ascending: false });
 
+  if (filters.scope === "primary") {
+    query = query.eq("is_primary", true);
+  } else if (filters.scope === "supporting") {
+    query = query.eq("is_primary", false);
+  }
+
+  if (filters.status === "pending") {
+    query = query.in("status", PENDING_STATUSES);
+  } else if (filters.status) {
+    query = query.eq("status", filters.status);
+  }
+
+  if (filters.type) {
+    query = query.eq("incident_type", filters.type);
+  }
+
+  if (filters.severity) {
+    query = query.eq("severity", filters.severity);
+  }
+
+  if (filters.limit && !filters.q) {
+    query = query.limit(filters.limit);
+  }
+
+  const { data, error } = await query;
+
   if (error || !data) {
     console.error("Failed to load authority incidents:", error);
     return [];
   }
 
-  const names = await loadProfileNames(
-    data.flatMap((row) => [row.assigned_to as string | null, row.reporter_id as string])
-  );
-  const counts = await loadSupportingCounts(data.map((row) => row.id as string));
-
-  return data.map((row) => ({
-    id: row.id,
-    incident_type: row.incident_type as IncidentType,
-    description: row.description,
-    location_name: row.location_name,
-    latitude: row.latitude,
-    longitude: row.longitude,
-    severity: row.severity as IncidentSeverity,
-    status: row.status as IncidentStatus,
-    submitted_at: row.submitted_at,
-    assigned_to: row.assigned_to,
-    assignee_name: names.get(row.assigned_to as string) ?? null,
-    reporter_name: names.get(row.reporter_id as string) ?? null,
-    is_primary: row.is_primary,
-    parent_incident_id: row.parent_incident_id,
-    supporting_count: counts.get(row.id) ?? 0,
-  }));
+  return mapIncidentRows(data as IncidentRow[]);
 }
 
 export function filterAuthorityIncidents(
@@ -264,26 +315,59 @@ export function filterAuthorityIncidents(
 export async function getAuthorityIncidents(
   filters: AuthorityIncidentFilters = {}
 ): Promise<AuthorityIncidentListItem[]> {
-  const incidents = await fetchAuthorityIncidentRows();
-  return filterAuthorityIncidents(incidents, {
+  const resolved: AuthorityIncidentFilters = {
     scope: "primary",
     ...filters,
-  });
+  };
+  const incidents = await fetchAuthorityIncidentRows(resolved);
+  const filtered = filterAuthorityIncidents(incidents, resolved);
+
+  return resolved.limit ? filtered.slice(0, resolved.limit) : filtered;
 }
 
 export async function getAuthorityAttentionIncidents(
   limit = 8
 ): Promise<AuthorityIncidentListItem[]> {
-  const incidents = await fetchAuthorityIncidentRows();
+  const [pending, critical] = await Promise.all([
+    fetchAuthorityIncidentRows({
+      scope: "primary",
+      status: "pending",
+      limit,
+    }),
+    fetchAuthorityIncidentRows({
+      scope: "primary",
+      severity: "critical",
+      limit: limit * 2,
+    }),
+  ]);
 
-  return incidents
-    .filter(
-      (incident) =>
-        incident.is_primary &&
-        (PENDING_STATUSES.includes(incident.status) ||
-          (incident.severity === "critical" &&
-            incident.status !== "resolved" &&
-            incident.status !== "rejected"))
+  const seen = new Set<string>();
+  const merged: AuthorityIncidentListItem[] = [];
+
+  for (const incident of [...pending, ...critical]) {
+    if (seen.has(incident.id)) {
+      continue;
+    }
+
+    const needsAttention =
+      PENDING_STATUSES.includes(incident.status) ||
+      (incident.severity === "critical" &&
+        incident.status !== "resolved" &&
+        incident.status !== "rejected");
+
+    if (!needsAttention) {
+      continue;
+    }
+
+    seen.add(incident.id);
+    merged.push(incident);
+  }
+
+  return merged
+    .sort(
+      (left, right) =>
+        new Date(right.submitted_at).getTime() -
+        new Date(left.submitted_at).getTime()
     )
     .slice(0, limit);
 }
@@ -366,16 +450,25 @@ export async function getSupportingIncidents(
   }
 
   const ids = links.map((row) => row.supporting_incident_id as string);
-  const incidents = await fetchAuthorityIncidentRows();
+  const { data, error } = await supabase
+    .from("incidents")
+    .select(
+      "id, incident_type, description, location_name, latitude, longitude, severity, status, submitted_at, assigned_to, reporter_id, is_primary, parent_incident_id"
+    )
+    .in("id", ids)
+    .order("submitted_at", { ascending: false });
 
-  return incidents.filter((incident) => ids.includes(incident.id));
+  if (error || !data) {
+    return [];
+  }
+
+  return mapIncidentRows(data as IncidentRow[]);
 }
 
 export async function getAuthorityMapIncidents() {
-  const incidents = await fetchAuthorityIncidentRows();
+  const incidents = await fetchAuthorityIncidentRows({ scope: "primary" });
 
   return incidents
-    .filter((incident) => incident.is_primary)
     .map((incident) => ({
       id: incident.id,
       incident_type: incident.incident_type,

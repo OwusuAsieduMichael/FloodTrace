@@ -40,7 +40,7 @@ export function AuthorityAppShell({
     unread > 0 ? { "/authority/notifications": unread } : undefined;
 
   return (
-    <div className="flex min-h-dvh bg-background">
+    <div className="flex min-h-screen min-h-dvh bg-background">
       {!limited ? (
         <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/15 lg:flex lg:flex-col">
           <div className="flex h-16 items-center border-b border-border/60 px-4">

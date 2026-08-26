@@ -20,7 +20,7 @@ export function AuthShell({
   className,
 }: AuthShellProps) {
   return (
-    <div className="flex min-h-dvh flex-col bg-muted/30">
+    <div className="flex min-h-screen min-h-dvh flex-col bg-muted/30">
       <header
         className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
       >
