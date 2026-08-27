@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, FileText, MapPin } from "lucide-react";
 
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import type { CitizenIncidentListItem } from "@/lib/incidents";
 import {
-  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -40,11 +40,11 @@ export function ReportRow({ incident }: ReportRowProps) {
           <span>{formatRelativeDate(incident.submitted_at)}</span>
           <span className="inline-flex items-center gap-1">
             <MapPin className="size-3.5" aria-hidden />
-            {formatIncidentLocation(
-              incident.location_name,
-              incident.latitude,
-              incident.longitude
-            )}
+            <IncidentLocationLabel
+              locationName={incident.location_name}
+              latitude={incident.latitude}
+              longitude={incident.longitude}
+            />
           </span>
         </div>
       </div>

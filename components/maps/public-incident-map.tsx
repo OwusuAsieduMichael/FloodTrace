@@ -58,7 +58,7 @@ export function PublicIncidentMap({ incidents, weather }: PublicIncidentMapProps
       />
 
       <div className="relative h-[min(70dvh,560px)] min-h-[280px] overflow-hidden rounded-xl border border-border">
-        <PublicIncidentMapInner incidents={filteredIncidents} />
+        <PublicIncidentMapInner incidents={filteredIncidents} lookupMissing={false} />
         {weather ? (
           <div className="pointer-events-none absolute right-2 top-2 z-[1000] max-w-[calc(100%-1rem)] sm:right-3 sm:top-3">
             <MapWeatherChip weather={weather} />

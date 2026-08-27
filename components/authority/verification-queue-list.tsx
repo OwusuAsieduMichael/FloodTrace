@@ -2,11 +2,11 @@ import Link from "next/link";
 import { ClipboardCheck, type LucideIcon } from "lucide-react";
 
 import { EmptyState } from "@/components/shared/empty-state";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { cn } from "@/lib/utils";
 import type { AuthorityIncidentListItem } from "@/lib/incidents/authority";
 import {
-  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -43,7 +43,7 @@ export function VerificationQueueList({
   }
 
   return (
-    <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+    <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
       {incidents.map((incident) => {
         const selected = incident.id === selectedId;
 
@@ -68,11 +68,12 @@ export function VerificationQueueList({
               </p>
               <p className="text-xs text-muted-foreground">
                 {formatRelativeDate(incident.submitted_at)}
-                {` · ${formatIncidentLocation(
-                  incident.location_name,
-                  incident.latitude,
-                  incident.longitude
-                )}`}
+                {" · "}
+                <IncidentLocationLabel
+                  locationName={incident.location_name}
+                  latitude={incident.latitude}
+                  longitude={incident.longitude}
+                />
                 {incident.supporting_count > 0
                   ? ` · ${incident.supporting_count} supporting`
                   : ""}

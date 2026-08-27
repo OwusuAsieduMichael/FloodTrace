@@ -144,7 +144,7 @@ export function LocationCapture({ location, onCapture }: LocationCaptureProps) {
               </p>
             ) : (
               <p className="text-sm text-muted-foreground">
-                GPS location confirmed
+                Position captured. Street name will be added on submit.
               </p>
             )}
             <p className="text-xs text-muted-foreground">

@@ -75,7 +75,7 @@ export function NotificationInbox({
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted-foreground">
+        <p className="portal-on-photo-muted text-sm">
           {unread > 0
             ? `${unread} unread notification${unread === 1 ? "" : "s"}`
             : "You are caught up."}
@@ -92,7 +92,7 @@ export function NotificationInbox({
         ) : null}
       </div>
 
-      <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+      <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
         {items.map((item) => {
           const type = item.type as NotificationType;
           const href = notificationHref(type, item.incident_id, role);

@@ -5,10 +5,14 @@ import { revalidatePath } from "next/cache";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { processDuplicateDetection } from "@/lib/duplicate-detection";
 import { submitReportSchema } from "@/lib/incidents/submit-schema";
+import { reverseGeocodePlaceName } from "@/lib/geo/reverse-geocode";
 import { notifyReportSubmitted } from "@/lib/notifications";
 import { rateLimit } from "@/lib/security/rate-limit";
+import {
+  removeIncidentEvidence,
+  uploadIncidentEvidence,
+} from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
-import { reverseGeocodePlaceName } from "@/lib/geo/reverse-geocode";
 
 export type SubmitReportResult =
   | {
@@ -50,6 +54,7 @@ export async function submitIncidentReport(
     longitude: formData.get("longitude"),
     accuracy: formData.get("accuracy") || undefined,
     captured_at: formData.get("captured_at"),
+    location_name: formData.get("location_name") || undefined,
   });
 
   if (!parsed.success) {
@@ -61,8 +66,9 @@ export async function submitIncidentReport(
 
   const { incident_type, severity, description, latitude, longitude, captured_at } =
     parsed.data;
-
-  const locationName = await reverseGeocodePlaceName(latitude, longitude);
+  const clientLocationName = parsed.data.location_name;
+  const locationName =
+    (await reverseGeocodePlaceName(latitude, longitude)) || clientLocationName;
 
   const supabase = await createClient();
 

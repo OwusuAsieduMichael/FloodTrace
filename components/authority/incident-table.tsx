@@ -3,13 +3,13 @@ import { ListChecks, MapPin } from "lucide-react";
 
 import { IncidentActions } from "@/components/authority/incident-actions";
 import { EmptyState } from "@/components/shared/empty-state";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { AuthorityIncidentListItem } from "@/lib/incidents/authority";
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import {
-  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -47,7 +47,7 @@ export function IncidentTable({
 
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-xl border border-border lg:block">
+      <div className="hidden overflow-x-auto rounded-xl border border-border bg-card lg:block">
         <table className="w-full min-w-[960px] text-left text-sm">
           <thead className="border-b border-border bg-muted/40 text-xs tracking-wide text-muted-foreground uppercase">
             <tr>
@@ -80,11 +80,11 @@ export function IncidentTable({
                 </td>
                 <td className="px-4 py-3">{formatIncidentType(incident.incident_type)}</td>
                 <td className="max-w-[180px] truncate px-4 py-3 text-muted-foreground">
-                  {formatIncidentLocation(
-                    incident.location_name,
-                    incident.latitude,
-                    incident.longitude
-                  )}
+                  <IncidentLocationLabel
+                    locationName={incident.location_name}
+                    latitude={incident.latitude}
+                    longitude={incident.longitude}
+                  />
                 </td>
                 <td className="px-4 py-3">
                   <SeverityBadge severity={incident.severity} />
@@ -136,11 +136,11 @@ export function IncidentTable({
               <span>{formatRelativeDate(incident.submitted_at)}</span>
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" aria-hidden />
-                {formatIncidentLocation(
-                  incident.location_name,
-                  incident.latitude,
-                  incident.longitude
-                )}
+                <IncidentLocationLabel
+                  locationName={incident.location_name}
+                  latitude={incident.latitude}
+                  longitude={incident.longitude}
+                />
               </span>
               <span>
                 {incident.supporting_count} supporting report

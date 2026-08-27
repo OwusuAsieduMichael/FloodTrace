@@ -77,7 +77,7 @@ export default async function AuthorityAssignmentsPage({
 
       <div className="grid gap-6 xl:grid-cols-5">
         <div className="space-y-3 xl:col-span-2">
-          <h2 className="text-sm font-medium">
+          <h2 className="portal-on-photo text-sm font-medium">
             Ready to assign ({unassigned.length}) · Active ({assigned.length})
           </h2>
           <VerificationQueueList
@@ -113,7 +113,7 @@ export default async function AuthorityAssignmentsPage({
           ) : (
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-lg font-semibold">
+                <h2 className="portal-on-photo text-lg font-semibold">
                   Assign #{formatShortId(selected.id)}
                 </h2>
                 <Button

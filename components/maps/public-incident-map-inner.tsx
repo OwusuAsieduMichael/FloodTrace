@@ -28,6 +28,7 @@ import "leaflet/dist/leaflet.css";
 interface PublicIncidentMapInnerProps {
   incidents: PublicMapIncident[];
   detailHrefBase?: string;
+  lookupMissing?: boolean;
 }
 
 function FitBounds({ bounds }: { bounds: LatLngBounds | null }) {
@@ -45,6 +46,7 @@ function FitBounds({ bounds }: { bounds: LatLngBounds | null }) {
 export function PublicIncidentMapInner({
   incidents,
   detailHrefBase,
+  lookupMissing = true,
 }: PublicIncidentMapInnerProps) {
   const bounds = getIncidentMapBounds(incidents);
   const center = getMapCenter(incidents);
@@ -75,6 +77,7 @@ export function PublicIncidentMapInner({
             <MapIncidentPopup
               incident={incident}
               href={detailHrefBase ? `${detailHrefBase}/${incident.id}` : undefined}
+              lookupMissing={lookupMissing}
             />
           </Popup>
         </CircleMarker>

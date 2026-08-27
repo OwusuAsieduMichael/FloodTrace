@@ -44,8 +44,20 @@ test("falls back to the first segments of a long display name", () => {
   ).toBe("Independence Avenue, Ridge, Accra");
 });
 
-test("incident location prefers the place name over raw coordinates", () => {
+test("includes house numbers on street labels", () => {
+  expect(
+    formatPlaceName({
+      houseNumber: "19",
+      road: "Patrice Lumumba Road",
+      suburb: "Airport Residential Area",
+      city: "Accra",
+      country: "Ghana",
+    })
+  ).toBe("19 Patrice Lumumba Road, Airport Residential Area, Accra");
+});
+
+test("incident location prefers the place name and never shows raw coordinates", () => {
   expect(formatIncidentLocation("Osu, Accra", 5.55, -0.18)).toBe("Osu, Accra");
-  expect(formatIncidentLocation(null, 5.60371, -0.187)).toBe("5.60371, -0.18700");
-  expect(formatIncidentLocation("  ")).toBe("Unknown location");
+  expect(formatIncidentLocation(null, 5.60371, -0.187)).toBe("Unknown area");
+  expect(formatIncidentLocation("  ")).toBe("Unknown area");
 });

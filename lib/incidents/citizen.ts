@@ -1,4 +1,7 @@
-import { persistMissingLocationName } from "@/lib/geo/persist-location-name";
+import {
+  fillMissingLocationNames,
+  persistMissingLocationName,
+} from "@/lib/geo/persist-location-name";
 import { createClient } from "@/lib/supabase/server";
 import type { Incident, IncidentStatusHistory } from "@/types";
 
@@ -94,7 +97,7 @@ export async function getCitizenRecentIncidents(
     return [];
   }
 
-  return data as CitizenIncidentListItem[];
+  return fillMissingLocationNames(data as CitizenIncidentListItem[]);
 }
 
 export async function getCitizenIncidents(
@@ -114,7 +117,7 @@ export async function getCitizenIncidents(
     return [];
   }
 
-  return data as CitizenIncidentListItem[];
+  return fillMissingLocationNames(data as CitizenIncidentListItem[]);
 }
 
 export async function getCitizenIncidentById(

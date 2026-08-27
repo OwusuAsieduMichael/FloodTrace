@@ -13,6 +13,11 @@ export const submitReportSchema = z.object({
   longitude: z.coerce.number().min(-180).max(180),
   accuracy: z.coerce.number().positive().optional(),
   captured_at: z.string().datetime(),
+  location_name: z
+    .string()
+    .max(180)
+    .optional()
+    .transform((value) => value?.trim() || null),
 });
 
 export type SubmitReportInput = z.infer<typeof submitReportSchema>;

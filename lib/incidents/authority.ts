@@ -1,4 +1,7 @@
-import { persistMissingLocationName } from "@/lib/geo/persist-location-name";
+import {
+  fillMissingLocationNames,
+  persistMissingLocationName,
+} from "@/lib/geo/persist-location-name";
 import { createClient } from "@/lib/supabase/server";
 import type {
   Incident,
@@ -211,7 +214,7 @@ async function mapIncidentRows(
   );
   const counts = await loadSupportingCounts(data.map((row) => row.id));
 
-  return data.map((row) => ({
+  const mapped = data.map((row) => ({
     id: row.id,
     incident_type: row.incident_type,
     description: row.description,
@@ -228,6 +231,8 @@ async function mapIncidentRows(
     parent_incident_id: row.parent_incident_id,
     supporting_count: counts.get(row.id) ?? 0,
   }));
+
+  return fillMissingLocationNames(mapped);
 }
 
 async function fetchAuthorityIncidentRows(

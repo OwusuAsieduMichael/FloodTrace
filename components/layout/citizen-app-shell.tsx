@@ -6,6 +6,7 @@ import { Menu, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
+import { PortalBackdrop } from "@/components/layout/portal-backdrop";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { HEADER_SAFE_TOP, MOBILE_LAYER_TOP } from "@/components/layout/use-open-layer";
 import { Button } from "@/components/ui/button";
@@ -37,8 +38,9 @@ export function CitizenAppShell({
     unread > 0 ? { "/citizen/notifications": unread } : undefined;
 
   return (
-    <div className="flex min-h-screen min-h-dvh bg-background">
-      <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/20 md:flex md:flex-col">
+    <div className="portal-interface relative isolate flex min-h-screen min-h-dvh">
+      <PortalBackdrop />
+      <aside className="relative z-10 hidden w-64 shrink-0 border-r border-border/60 bg-background md:flex md:flex-col">
         <div className="flex h-16 items-center border-b border-border/60 px-4">
           <AppLogo href="/citizen/dashboard" />
         </div>
@@ -47,7 +49,7 @@ export function CitizenAppShell({
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <header
           className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
         >

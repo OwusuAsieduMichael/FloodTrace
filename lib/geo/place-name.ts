@@ -1,4 +1,5 @@
 export interface PlaceAddressParts {
+  houseNumber?: string | null;
   road?: string | null;
   neighbourhood?: string | null;
   suburb?: string | null;
@@ -36,6 +37,11 @@ export function formatPlaceName(
   fallback?: string | null
 ): string | null {
   const road = clean(parts.road);
+  const houseNumber = clean(parts.houseNumber);
+  const street =
+    road && houseNumber && !road.toLowerCase().startsWith(houseNumber.toLowerCase())
+      ? `${houseNumber} ${road}`
+      : road;
   const locality =
     clean(parts.neighbourhood) ||
     clean(parts.suburb) ||
@@ -47,7 +53,7 @@ export function formatPlaceName(
   const assembled: string[] = [];
   const seen = new Set<string>();
 
-  pushUnique(assembled, seen, road);
+  pushUnique(assembled, seen, street);
   pushUnique(assembled, seen, locality);
   pushUnique(assembled, seen, city);
 

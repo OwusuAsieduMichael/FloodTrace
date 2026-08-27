@@ -1,3 +1,4 @@
+import { fillMissingLocationNames } from "@/lib/geo/persist-location-name";
 import { PUBLIC_MAP_STATUSES } from "@/lib/incidents/constants";
 import { createClient } from "@/lib/supabase/server";
 import type { IncidentSeverity, IncidentStatus, IncidentType } from "@/types";
@@ -32,5 +33,5 @@ export async function getPublicMapIncidents(): Promise<PublicMapIncident[]> {
     return [];
   }
 
-  return data as PublicMapIncident[];
+  return fillMissingLocationNames(data as PublicMapIncident[]);
 }

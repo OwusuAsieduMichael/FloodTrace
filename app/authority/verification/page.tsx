@@ -67,7 +67,7 @@ export default async function AuthorityVerificationPage({
 
       <div className="grid gap-6 xl:grid-cols-5">
         <div className="space-y-3 xl:col-span-2">
-          <h2 className="text-sm font-medium">Pending review ({queue.length})</h2>
+          <h2 className="portal-on-photo text-sm font-medium">Pending review ({queue.length})</h2>
           <VerificationQueueList incidents={queue} selectedId={selectedId} />
         </div>
 
@@ -91,7 +91,7 @@ export default async function AuthorityVerificationPage({
           ) : (
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-lg font-semibold">
+                <h2 className="portal-on-photo text-lg font-semibold">
                   Review #{formatShortId(selected.id)}
                 </h2>
                 <Button

@@ -5,6 +5,7 @@ import { SupportingReportNotice } from "@/components/citizen/supporting-report-n
 import { IncidentLocationMap } from "@/components/maps/incident-location-map";
 import { EvidenceGallery } from "@/components/media/evidence-gallery";
 import { ResolutionRecordCard } from "@/components/media/resolution-record-card";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,6 @@ import type {
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import {
   formatIncidentDate,
-  formatIncidentLocation,
   formatIncidentType,
   formatShortId,
 } from "@/lib/incidents/format";
@@ -127,11 +127,11 @@ export async function IncidentInspection({
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <p className="font-medium">
-                {formatIncidentLocation(
-                  incident.location_name,
-                  incident.latitude,
-                  incident.longitude
-                )}
+                <IncidentLocationLabel
+                  locationName={incident.location_name}
+                  latitude={incident.latitude}
+                  longitude={incident.longitude}
+                />
               </p>
               <IncidentLocationMap incident={incident} />
               <Button

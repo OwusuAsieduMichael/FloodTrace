@@ -15,6 +15,7 @@ import { AnalyticsBarList } from "@/components/analytics/bar-list";
 import { AnalyticsMetricGrid } from "@/components/analytics/metric-grid";
 import { AnalyticsRangeToggle } from "@/components/analytics/range-toggle";
 import { AnalyticsTrendColumns } from "@/components/analytics/trend-columns";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -24,7 +25,6 @@ import {
   type AnalyticsRange,
   type AnalyticsSnapshot,
 } from "@/lib/analytics";
-import { formatIncidentLocation } from "@/lib/incidents/format";
 import { cn } from "@/lib/utils";
 
 interface AnalyticsDashboardProps {
@@ -285,11 +285,11 @@ export function AnalyticsDashboard({
                     >
                       <div>
                         <p className="font-medium">
-                          {formatIncidentLocation(
-                            cluster.location_name,
-                            cluster.latitude,
-                            cluster.longitude
-                          )}
+                          <IncidentLocationLabel
+                            locationName={cluster.location_name}
+                            latitude={cluster.latitude}
+                            longitude={cluster.longitude}
+                          />
                         </p>
                       </div>
                       <span className="tabular-nums text-muted-foreground">

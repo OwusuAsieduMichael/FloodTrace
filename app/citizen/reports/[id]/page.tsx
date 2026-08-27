@@ -4,13 +4,13 @@ import { IncidentStatusTimeline } from "@/components/citizen/incident-status-tim
 import { SupportingReportNotice } from "@/components/citizen/supporting-report-notice";
 import { EvidenceGallery } from "@/components/media/evidence-gallery";
 import { ResolutionRecordCard } from "@/components/media/resolution-record-card";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { PageHeader } from "@/components/layout/page-header";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentProfile } from "@/lib/auth/session";
 import {
   formatIncidentDate,
-  formatIncidentLocation,
   formatIncidentType,
   formatShortId,
   getCitizenIncidentById,
@@ -126,11 +126,11 @@ export default async function CitizenReportDetailPage({
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               <p className="font-medium">
-                {formatIncidentLocation(
-                  incident.location_name,
-                  incident.latitude,
-                  incident.longitude
-                )}
+                <IncidentLocationLabel
+                  locationName={incident.location_name}
+                  latitude={incident.latitude}
+                  longitude={incident.longitude}
+                />
               </p>
               <p className="text-muted-foreground">
                 Submitted {formatIncidentDate(incident.submitted_at)}

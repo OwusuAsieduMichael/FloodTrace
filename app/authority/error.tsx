@@ -17,10 +17,10 @@ export default function AuthorityError({
 
   return (
     <div className="mx-auto max-w-lg space-y-4 py-10 text-center">
-      <h2 className="text-xl font-semibold tracking-tight">
+      <h2 className="portal-on-photo text-xl font-semibold tracking-tight">
         Operations dashboard could not load
       </h2>
-      <p className="text-sm text-muted-foreground">
+      <p className="portal-on-photo-muted text-sm">
         The workspace is still signed in. Try again, or open another operations
         page from the menu.
       </p>

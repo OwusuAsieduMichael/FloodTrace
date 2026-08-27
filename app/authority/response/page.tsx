@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Truck } from "lucide-react";
 
 import { IncidentActions } from "@/components/authority/incident-actions";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
@@ -12,7 +13,6 @@ import { getAuthorityIncidents } from "@/lib/incidents/authority";
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import { getActiveAssignments } from "@/lib/incidents/assignments";
 import {
-  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -111,11 +111,11 @@ export default async function AuthorityResponsePage({
                 </CardHeader>
                 <CardContent className="space-y-4 text-sm">
                   <p className="text-muted-foreground">
-                    {formatIncidentLocation(
-                      incident.location_name,
-                      incident.latitude,
-                      incident.longitude
-                    )}{" "}
+                    <IncidentLocationLabel
+                      locationName={incident.location_name}
+                      latitude={incident.latitude}
+                      longitude={incident.longitude}
+                    />{" "}
                     · submitted{" "}
                     {formatRelativeDate(incident.submitted_at)}
                   </p>

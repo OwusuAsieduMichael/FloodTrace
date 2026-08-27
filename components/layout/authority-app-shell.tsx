@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
 import { ClientPortal } from "@/components/layout/client-portal";
+import { PortalBackdrop } from "@/components/layout/portal-backdrop";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { Badge } from "@/components/ui/badge";
@@ -40,9 +41,10 @@ export function AuthorityAppShell({
     unread > 0 ? { "/authority/notifications": unread } : undefined;
 
   return (
-    <div className="flex min-h-screen min-h-dvh bg-background">
+    <div className="portal-interface relative isolate flex min-h-screen min-h-dvh">
+      <PortalBackdrop />
       {!limited ? (
-        <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/15 lg:flex lg:flex-col">
+        <aside className="relative z-10 hidden w-64 shrink-0 border-r border-border/60 bg-background lg:flex lg:flex-col">
           <div className="flex h-16 items-center border-b border-border/60 px-4">
             <AppLogo href={homeHref} />
           </div>
@@ -93,7 +95,7 @@ export function AuthorityAppShell({
         </ClientPortal>
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <header
           className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
         >

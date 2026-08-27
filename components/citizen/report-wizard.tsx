@@ -138,6 +138,9 @@ export function ReportWizard() {
     formData.append("longitude", String(location.longitude));
     formData.append("accuracy", String(location.accuracy));
     formData.append("captured_at", photo.capturedAt);
+    if (location.locationName) {
+      formData.append("location_name", location.locationName);
+    }
 
     try {
       const result = await submitIncidentReport(formData);
@@ -187,7 +190,7 @@ export function ReportWizard() {
             >
               {index + 1}
             </span>
-            <span className="hidden text-xs text-muted-foreground sm:inline">
+            <span className="portal-on-photo-muted hidden text-xs sm:inline">
               {STEP_LABELS[item]}
             </span>
             {index < STEPS.length - 1 ? (
@@ -368,7 +371,7 @@ export function ReportWizard() {
                   <dt className="text-muted-foreground">Location</dt>
                   <dd className="font-medium">
                     {location?.locationName ||
-                      (location ? "GPS location confirmed" : "Not set")}
+                      (location ? "Nearest street and area will be saved" : "Not set")}
                   </dd>
                 </div>
                 {description ? (

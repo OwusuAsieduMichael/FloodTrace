@@ -71,7 +71,7 @@ export default async function CitizenDashboardPage() {
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Emergency assistance</h2>
+        <h2 className="portal-on-photo text-lg font-semibold">Emergency assistance</h2>
         <EmergencyContactsPanel contacts={emergencyContacts} compact />
       </section>
     </div>

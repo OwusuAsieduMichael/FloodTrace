@@ -1,3 +1,4 @@
+import { fillMissingLocationNames } from "@/lib/geo/persist-location-name";
 import { createClient } from "@/lib/supabase/server";
 import {
   ALL_INCIDENT_STATUSES,
@@ -226,7 +227,8 @@ export async function getIncidentAnalytics(
     return query.range(from, to);
   });
 
-  const primaries = incidents.filter((row) => row.is_primary);
+  const namedIncidents = await fillMissingLocationNames(incidents);
+  const primaries = namedIncidents.filter((row) => row.is_primary);
   const supporting = incidents.length - primaries.length;
 
   const byStatusMap = new Map<IncidentStatus, number>();

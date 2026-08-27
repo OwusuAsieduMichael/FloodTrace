@@ -111,6 +111,24 @@
   .shell-transition {
     @apply transition-[color,background-color,box-shadow,transform] duration-200 ease-out;
   }
+
+  .portal-interface [data-page-header] {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  }
+
+  .portal-interface .portal-on-photo {
+    color: #fff;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+  }
+
+  .portal-interface .portal-on-photo-muted {
+    color: rgba(255, 255, 255, 0.86);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  }
 }
 
 @keyframes landing-reveal {

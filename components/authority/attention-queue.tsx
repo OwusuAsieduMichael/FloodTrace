@@ -3,13 +3,13 @@ import { ArrowRight, ClipboardCheck } from "lucide-react";
 
 import { IncidentActions } from "@/components/authority/incident-actions";
 import { EmptyState } from "@/components/shared/empty-state";
+import { IncidentLocationLabel } from "@/components/shared/incident-location-label";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { AuthorityIncidentListItem } from "@/lib/incidents/authority";
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import {
-  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -63,11 +63,12 @@ export function AttentionQueue({ incidents }: AttentionQueueProps) {
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {formatRelativeDate(incident.submitted_at)}
-                  {` · ${formatIncidentLocation(
-                    incident.location_name,
-                    incident.latitude,
-                    incident.longitude
-                  )}`}
+                  {" · "}
+                  <IncidentLocationLabel
+                    locationName={incident.location_name}
+                    latitude={incident.latitude}
+                    longitude={incident.longitude}
+                  />
                 </p>
                 <IncidentActions
                   incidentId={incident.id}
