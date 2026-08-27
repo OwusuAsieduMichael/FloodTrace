@@ -1,10 +1,11 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, PanelLeft, PanelLeftClose, X } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
 import { ClientPortal } from "@/components/layout/client-portal";
+import { CollapsibleSidebar } from "@/components/layout/collapsible-sidebar";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import {
@@ -12,8 +13,10 @@ import {
   MOBILE_LAYER_TOP,
   useOpenLayer,
 } from "@/components/layout/use-open-layer";
+import { useSidebarOpen } from "@/components/layout/use-sidebar-open";
 import { Badge } from "@/components/ui/badge";
 import { adminNavItems } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 
 interface AdminAppShellProps {
   children: React.ReactNode;
@@ -24,14 +27,21 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
   useOpenLayer(mobileOpen, closeMobile);
+  const [sidebarOpen, setSidebarOpen] = useSidebarOpen("floodtrace.admin.sidebar");
 
   return (
     <div className="flex min-h-screen min-h-dvh bg-background">
-      <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-muted/15 lg:flex lg:flex-col">
+      <CollapsibleSidebar
+        id="admin-sidebar"
+        open={sidebarOpen}
+        onOpenChange={setSidebarOpen}
+        label="Administration"
+        showFrom="lg"
+      >
         <div className="flex h-16 items-center border-b border-border/60 px-4">
           <AppLogo href="/admin/dashboard" />
         </div>
-        <div className="flex flex-1 flex-col gap-2 p-4">
+        <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-4">
           <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
             Administration
           </p>
@@ -42,34 +52,41 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
             Administrator
           </Badge>
         </div>
-      </aside>
+      </CollapsibleSidebar>
 
       <ClientPortal>
-        {mobileOpen ? (
-          <>
-            <button
-              type="button"
-              className={`fixed inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden ${MOBILE_LAYER_TOP}`}
-              data-tap="none"
-              aria-label="Close navigation"
-              onClick={closeMobile}
-            />
-            <aside
-              className={`fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg lg:hidden ${MOBILE_LAYER_TOP}`}
-              aria-label="Administration"
-            >
-              <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
-                <AppLogo href="/admin/dashboard" />
-                <MobileIconButton label="Close menu" onClick={closeMobile}>
-                  <X className="size-5" />
-                </MobileIconButton>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4">
-                <SidebarNav items={adminNavItems} onNavigate={closeMobile} />
-              </div>
-            </aside>
-          </>
-        ) : null}
+        <button
+          type="button"
+          className={cn(
+            "fixed inset-x-0 bottom-0 z-40 bg-black/40 transition-opacity duration-300 lg:hidden",
+            MOBILE_LAYER_TOP,
+            mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          )}
+          data-tap="none"
+          aria-label="Close navigation"
+          tabIndex={mobileOpen ? 0 : -1}
+          onClick={closeMobile}
+        />
+        <aside
+          className={cn(
+            "fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg transition-transform duration-300 lg:hidden",
+            MOBILE_LAYER_TOP,
+            mobileOpen ? "translate-x-0" : "pointer-events-none -translate-x-full"
+          )}
+          style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+          aria-label="Administration"
+          aria-hidden={!mobileOpen}
+        >
+          <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
+            <AppLogo href="/admin/dashboard" />
+            <MobileIconButton label="Close menu" onClick={closeMobile}>
+              <X className="size-5" />
+            </MobileIconButton>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4">
+            <SidebarNav items={adminNavItems} onNavigate={closeMobile} />
+          </div>
+        </aside>
       </ClientPortal>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -85,6 +102,19 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
                 onClick={() => setMobileOpen((value) => !value)}
               >
                 {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              </MobileIconButton>
+              <MobileIconButton
+                label={sidebarOpen ? "Close side menu" : "Open side menu"}
+                className="hidden lg:inline-flex"
+                aria-expanded={sidebarOpen}
+                aria-controls="admin-sidebar"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+              >
+                {sidebarOpen ? (
+                  <PanelLeftClose className="size-5" />
+                ) : (
+                  <PanelLeft className="size-5" />
+                )}
               </MobileIconButton>
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">System administration</p>

@@ -1,10 +1,11 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, PanelLeft, PanelLeftClose, X } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { AppLogo } from "@/components/layout/app-logo";
 import { ClientPortal } from "@/components/layout/client-portal";
+import { CollapsibleSidebar } from "@/components/layout/collapsible-sidebar";
 import { PortalBackdrop } from "@/components/layout/portal-backdrop";
 import { MobileIconButton } from "@/components/layout/mobile-icon-button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
@@ -15,7 +16,9 @@ import {
   MOBILE_LAYER_TOP,
   useOpenLayer,
 } from "@/components/layout/use-open-layer";
+import { useSidebarOpen } from "@/components/layout/use-sidebar-open";
 import { authorityNavItems } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 import { useUnreadNotificationCount } from "@/components/providers/notification-provider";
 
 interface AuthorityAppShellProps {
@@ -36,6 +39,7 @@ export function AuthorityAppShell({
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
   useOpenLayer(mobileOpen, closeMobile);
+  const [sidebarOpen, setSidebarOpen] = useSidebarOpen("floodtrace.authority.sidebar");
   const unread = useUnreadNotificationCount();
   const notificationBadges =
     unread > 0 ? { "/authority/notifications": unread } : undefined;
@@ -44,11 +48,17 @@ export function AuthorityAppShell({
     <div className="portal-interface relative isolate flex min-h-screen min-h-dvh">
       <PortalBackdrop />
       {!limited ? (
-        <aside className="portal-chrome relative z-10 hidden w-64 shrink-0 border-r lg:flex lg:flex-col">
+        <CollapsibleSidebar
+          id="authority-sidebar"
+          open={sidebarOpen}
+          onOpenChange={setSidebarOpen}
+          label="Operations"
+          showFrom="lg"
+        >
           <div className="flex h-16 items-center border-b border-border/60 px-4">
             <AppLogo href={homeHref} />
           </div>
-          <div className="flex flex-1 flex-col gap-2 p-4">
+          <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-4">
             <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Operations
             </p>
@@ -59,40 +69,47 @@ export function AuthorityAppShell({
               {roleLabel}
             </Badge>
           </div>
-        </aside>
+        </CollapsibleSidebar>
       ) : null}
 
       {!limited ? (
         <ClientPortal>
-          {mobileOpen ? (
-            <>
-              <button
-                type="button"
-                className={`fixed inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden ${MOBILE_LAYER_TOP}`}
-                data-tap="none"
-                aria-label="Close navigation"
-                onClick={closeMobile}
+          <button
+            type="button"
+            className={cn(
+              "fixed inset-x-0 bottom-0 z-40 bg-black/40 transition-opacity duration-300 lg:hidden",
+              MOBILE_LAYER_TOP,
+              mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+            )}
+            data-tap="none"
+            aria-label="Close navigation"
+            tabIndex={mobileOpen ? 0 : -1}
+            onClick={closeMobile}
+          />
+          <aside
+            className={cn(
+              "portal-chrome fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r shadow-lg transition-transform duration-300 lg:hidden",
+              MOBILE_LAYER_TOP,
+              mobileOpen ? "translate-x-0" : "pointer-events-none -translate-x-full"
+            )}
+            style={{ transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+            aria-label="Operations"
+            aria-hidden={!mobileOpen}
+          >
+            <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
+              <AppLogo href={homeHref} />
+              <MobileIconButton label="Close menu" onClick={closeMobile}>
+                <X className="size-5" />
+              </MobileIconButton>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <SidebarNav
+                items={authorityNavItems}
+                badges={notificationBadges}
+                onNavigate={closeMobile}
               />
-              <aside
-                className={`portal-chrome fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r shadow-lg lg:hidden ${MOBILE_LAYER_TOP}`}
-                aria-label="Operations"
-              >
-                <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
-                  <AppLogo href={homeHref} />
-                  <MobileIconButton label="Close menu" onClick={closeMobile}>
-                    <X className="size-5" />
-                  </MobileIconButton>
-                </div>
-                <div className="flex-1 overflow-y-auto p-4">
-                  <SidebarNav
-                    items={authorityNavItems}
-                    badges={notificationBadges}
-                    onNavigate={closeMobile}
-                  />
-                </div>
-              </aside>
-            </>
-          ) : null}
+            </div>
+          </aside>
         </ClientPortal>
       ) : null}
 
@@ -103,14 +120,29 @@ export function AuthorityAppShell({
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               {!limited ? (
-                <MobileIconButton
-                  label={mobileOpen ? "Close navigation" : "Open navigation"}
-                  className="lg:hidden"
-                  aria-expanded={mobileOpen}
-                  onClick={() => setMobileOpen((value) => !value)}
-                >
-                  {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-                </MobileIconButton>
+                <>
+                  <MobileIconButton
+                    label={mobileOpen ? "Close navigation" : "Open navigation"}
+                    className="lg:hidden"
+                    aria-expanded={mobileOpen}
+                    onClick={() => setMobileOpen((value) => !value)}
+                  >
+                    {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+                  </MobileIconButton>
+                  <MobileIconButton
+                    label={sidebarOpen ? "Close side menu" : "Open side menu"}
+                    className="hidden lg:inline-flex"
+                    aria-expanded={sidebarOpen}
+                    aria-controls="authority-sidebar"
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                  >
+                    {sidebarOpen ? (
+                      <PanelLeftClose className="size-5" />
+                    ) : (
+                      <PanelLeft className="size-5" />
+                    )}
+                  </MobileIconButton>
+                </>
               ) : null}
               {limited ? <AppLogo href={homeHref} /> : null}
               <div className="hidden min-w-0 sm:block">
