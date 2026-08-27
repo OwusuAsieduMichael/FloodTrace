@@ -113,6 +113,102 @@
   }
 }
 
+@keyframes landing-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.1rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.landing-reveal-pending {
+  opacity: 0;
+  transform: translate3d(0, 1.1rem, 0);
+}
+
+.landing-reveal-in {
+  animation: landing-reveal 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--landing-delay, 0ms);
+}
+
+.landing-feature-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 1.5rem;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-feature-card-accent {
+  position: absolute;
+  inset-inline: 1.5rem;
+  top: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--primary);
+  opacity: 0.7;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-feature-icon {
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .landing-feature-card:hover {
+    border-color: var(--ring);
+    box-shadow: 0 14px 36px -20px rgb(15 40 70 / 0.28);
+    transform: translate3d(0, -4px, 0);
+  }
+
+  .landing-feature-card:hover .landing-feature-card-accent {
+    transform: scaleX(1);
+  }
+
+  .landing-feature-card:hover .landing-feature-icon {
+    transform: scale(1.06);
+  }
+
+  .landing-feature-card:hover .landing-feature-icon svg {
+    transform: translateY(-1px);
+  }
+
+  .landing-feature-icon svg {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-reveal-pending,
+  .landing-reveal-in,
+  .landing-feature-card,
+  .landing-feature-card-accent,
+  .landing-feature-icon,
+  .landing-feature-icon svg {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 .leaflet-container {
   font-family: inherit;
   z-index: 0;

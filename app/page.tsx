@@ -1,45 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Camera,
-  MapPin,
-  ShieldCheck,
-  CloudRain,
-  ArrowRight,
-  Radio,
-} from "lucide-react";
+import { ArrowRight, Radio } from "lucide-react";
 
+import { FeaturesSection } from "@/components/landing/features-section";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const features = [
-  {
-    icon: Camera,
-    title: "Camera-verified reporting",
-    description:
-      "Capture live photo evidence with automatic timestamps. Reports are structured and verifiable from the moment they are submitted.",
-  },
-  {
-    icon: MapPin,
-    title: "Automatic GPS location",
-    description:
-      "Your location is detected automatically. No manual coordinate entry. Authorities see exactly where incidents occur.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Authority verification",
-    description:
-      "Every incident is reviewed by municipal authorities before it appears publicly. Transparent status tracking from submission to resolution.",
-  },
-  {
-    icon: CloudRain,
-    title: "Real-time conditions",
-    description:
-      "View verified incidents on an interactive map with weather context, filters, and live community reporting.",
-  },
-];
 
 const steps = [
   { label: "Submitted", description: "Citizen captures evidence" },
@@ -103,36 +70,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Features */}
-        <section id="features" className="border-b border-border py-14 sm:py-24">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                Built for citizens and authorities
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                A complete incident lifecycle, from camera capture to verified
-                resolution, designed for urban flood and drainage management.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-6 sm:grid-cols-2">
-              {features.map((feature) => (
-                <article
-                  key={feature.title}
-                  className="group rounded-xl border border-border bg-card p-6 transition-shadow hover:shadow-md"
-                >
-                  <div className="mb-4 flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <feature.icon className="size-5" aria-hidden />
-                  </div>
-                  <h3 className="font-semibold">{feature.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FeaturesSection />
 
         {/* Workflow */}
         <section id="how-it-works" className="py-14 sm:py-24">
