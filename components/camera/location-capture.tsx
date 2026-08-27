@@ -1,17 +1,17 @@
 "use client";
 
 import { Loader2, MapPin, RefreshCw } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { formatCoordinates } from "@/lib/incidents/format";
 
 export interface CapturedLocation {
   latitude: number;
   longitude: number;
   accuracy: number;
   capturedAt: string;
+  locationName: string | null;
 }
 
 interface LocationCaptureProps {
@@ -19,9 +19,34 @@ interface LocationCaptureProps {
   onCapture: (location: CapturedLocation) => void;
 }
 
+async function lookupPlaceName(
+  latitude: number,
+  longitude: number
+): Promise<string | null> {
+  try {
+    const params = new URLSearchParams({
+      lat: String(latitude),
+      lng: String(longitude),
+    });
+    const response = await fetch(`/api/geo/reverse?${params.toString()}`);
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = (await response.json()) as { name?: string | null };
+    const name = data.name?.trim();
+    return name || null;
+  } catch {
+    return null;
+  }
+}
+
 export function LocationCapture({ location, onCapture }: LocationCaptureProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLookingUpName, setIsLookingUpName] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const lookupId = useRef(0);
 
   const detectLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -34,16 +59,35 @@ export function LocationCapture({ location, onCapture }: LocationCaptureProps) {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        onCapture({
+        const captured: CapturedLocation = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           accuracy: position.coords.accuracy,
           capturedAt: new Date().toISOString(),
-        });
+          locationName: null,
+        };
+
+        onCapture(captured);
         setIsLoading(false);
+        setIsLookingUpName(true);
+
+        const currentLookup = lookupId.current + 1;
+        lookupId.current = currentLookup;
+
+        void lookupPlaceName(captured.latitude, captured.longitude).then(
+          (locationName) => {
+            if (lookupId.current !== currentLookup) {
+              return;
+            }
+
+            onCapture({ ...captured, locationName });
+            setIsLookingUpName(false);
+          }
+        );
       },
       (geoError) => {
         setIsLoading(false);
+        setIsLookingUpName(false);
 
         switch (geoError.code) {
           case geoError.PERMISSION_DENIED:
@@ -91,9 +135,18 @@ export function LocationCapture({ location, onCapture }: LocationCaptureProps) {
           </span>
           <div className="space-y-1">
             <p className="font-medium text-success">Location detected</p>
-            <p className="font-mono text-sm">
-              {formatCoordinates(location.latitude, location.longitude)}
-            </p>
+            {location.locationName ? (
+              <p className="text-sm font-medium">{location.locationName}</p>
+            ) : isLookingUpName ? (
+              <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="size-3.5 animate-spin" />
+                Finding street and area…
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                GPS location confirmed
+              </p>
+            )}
             <p className="text-xs text-muted-foreground">
               Accuracy ±{Math.round(location.accuracy)}m ·{" "}
               {new Date(location.capturedAt).toLocaleTimeString()}
@@ -120,8 +173,8 @@ export function LocationCapture({ location, onCapture }: LocationCaptureProps) {
           <MapPin className="size-4" />
           <AlertTitle>Detecting your location</AlertTitle>
           <AlertDescription>
-            GPS coordinates are captured automatically. Reports cannot be submitted
-            without a verified location.
+            Your current area is captured automatically. Reports cannot be
+            submitted without a verified location.
           </AlertDescription>
         </Alert>
       )}

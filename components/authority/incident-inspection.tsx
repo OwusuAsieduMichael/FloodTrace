@@ -15,8 +15,8 @@ import type {
 } from "@/lib/incidents/authority";
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import {
-  formatCoordinates,
   formatIncidentDate,
+  formatIncidentLocation,
   formatIncidentType,
   formatShortId,
 } from "@/lib/incidents/format";
@@ -126,11 +126,12 @@ export async function IncidentInspection({
               <CardTitle className="text-base">Location</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              {incident.location_name ? (
-                <p className="font-medium">{incident.location_name}</p>
-              ) : null}
-              <p className="font-mono text-muted-foreground">
-                {formatCoordinates(incident.latitude, incident.longitude)}
+              <p className="font-medium">
+                {formatIncidentLocation(
+                  incident.location_name,
+                  incident.latitude,
+                  incident.longitude
+                )}
               </p>
               <IncidentLocationMap incident={incident} />
               <Button

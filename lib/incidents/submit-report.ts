@@ -8,7 +8,7 @@ import { submitReportSchema } from "@/lib/incidents/submit-schema";
 import { notifyReportSubmitted } from "@/lib/notifications";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { createClient } from "@/lib/supabase/server";
-import { uploadIncidentEvidence, removeIncidentEvidence } from "@/lib/storage";
+import { reverseGeocodePlaceName } from "@/lib/geo/reverse-geocode";
 
 export type SubmitReportResult =
   | {
@@ -62,6 +62,8 @@ export async function submitIncidentReport(
   const { incident_type, severity, description, latitude, longitude, captured_at } =
     parsed.data;
 
+  const locationName = await reverseGeocodePlaceName(latitude, longitude);
+
   const supabase = await createClient();
 
   const { data: incident, error: incidentError } = await supabase
@@ -72,7 +74,7 @@ export async function submitIncidentReport(
       description,
       latitude,
       longitude,
-      location_name: null,
+      location_name: locationName,
       severity,
       captured_at,
       status: "submitted",

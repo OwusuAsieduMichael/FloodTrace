@@ -9,8 +9,8 @@ import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentProfile } from "@/lib/auth/session";
 import {
-  formatCoordinates,
   formatIncidentDate,
+  formatIncidentLocation,
   formatIncidentType,
   formatShortId,
   getCitizenIncidentById,
@@ -125,11 +125,12 @@ export default async function CitizenReportDetailPage({
               <CardTitle className="text-base">Location</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              {incident.location_name ? (
-                <p className="font-medium">{incident.location_name}</p>
-              ) : null}
-              <p className="font-mono text-muted-foreground">
-                {formatCoordinates(incident.latitude, incident.longitude)}
+              <p className="font-medium">
+                {formatIncidentLocation(
+                  incident.location_name,
+                  incident.latitude,
+                  incident.longitude
+                )}
               </p>
               <p className="text-muted-foreground">
                 Submitted {formatIncidentDate(incident.submitted_at)}

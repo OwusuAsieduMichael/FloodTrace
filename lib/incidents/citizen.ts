@@ -1,3 +1,4 @@
+import { persistMissingLocationName } from "@/lib/geo/persist-location-name";
 import { createClient } from "@/lib/supabase/server";
 import type { Incident, IncidentStatusHistory } from "@/types";
 
@@ -133,7 +134,13 @@ export async function getCitizenIncidentById(
     return null;
   }
 
-  return data as Incident;
+  const incident = data as Incident;
+  const locationName = await persistMissingLocationName(incident);
+
+  return {
+    ...incident,
+    location_name: locationName,
+  };
 }
 
 export async function getCitizenIncidentStatusHistory(

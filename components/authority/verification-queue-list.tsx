@@ -6,6 +6,7 @@ import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 import { cn } from "@/lib/utils";
 import type { AuthorityIncidentListItem } from "@/lib/incidents/authority";
 import {
+  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -67,7 +68,11 @@ export function VerificationQueueList({
               </p>
               <p className="text-xs text-muted-foreground">
                 {formatRelativeDate(incident.submitted_at)}
-                {incident.location_name ? ` · ${incident.location_name}` : ""}
+                {` · ${formatIncidentLocation(
+                  incident.location_name,
+                  incident.latitude,
+                  incident.longitude
+                )}`}
                 {incident.supporting_count > 0
                   ? ` · ${incident.supporting_count} supporting`
                   : ""}

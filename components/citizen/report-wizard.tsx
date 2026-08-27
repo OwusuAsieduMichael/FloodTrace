@@ -21,7 +21,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { INCIDENT_TYPE_LABELS } from "@/lib/incidents/constants";
-import { formatCoordinates, formatIncidentType } from "@/lib/incidents/format";
+import { formatIncidentType } from "@/lib/incidents/format";
 import { submitIncidentReport } from "@/lib/incidents/submit-report";
 import {
   enqueuePendingReport,
@@ -235,7 +235,7 @@ export function ReportWizard() {
               <div>
                 <h2 className="text-lg font-semibold">Confirm location</h2>
                 <p className="text-sm text-muted-foreground">
-                  Your GPS coordinates are detected automatically and attached to
+                  Your current area is detected automatically and attached to
                   this report.
                 </p>
               </div>
@@ -366,10 +366,9 @@ export function ReportWizard() {
                 </div>
                 <div className="rounded-lg border border-border/60 p-3 sm:col-span-2">
                   <dt className="text-muted-foreground">Location</dt>
-                  <dd className="font-mono font-medium">
-                    {location
-                      ? formatCoordinates(location.latitude, location.longitude)
-                      : "Not set"}
+                  <dd className="font-medium">
+                    {location?.locationName ||
+                      (location ? "GPS location confirmed" : "Not set")}
                   </dd>
                 </div>
                 {description ? (

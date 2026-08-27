@@ -26,6 +26,7 @@ export {
 export {
   formatCoordinates,
   formatIncidentDate,
+  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,

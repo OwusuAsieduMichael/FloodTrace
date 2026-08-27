@@ -1,3 +1,4 @@
+import { persistMissingLocationName } from "@/lib/geo/persist-location-name";
 import { createClient } from "@/lib/supabase/server";
 import type {
   Incident,
@@ -388,10 +389,12 @@ export async function getAuthorityIncidentById(
   }
 
   const incident = data as Incident;
+  const locationName = await persistMissingLocationName(incident);
   const names = await loadProfileNames([incident.assigned_to, incident.reporter_id]);
 
   return {
     ...incident,
+    location_name: locationName,
     reporter_name: names.get(incident.reporter_id) ?? null,
     assignee_name: incident.assigned_to
       ? (names.get(incident.assigned_to) ?? null)

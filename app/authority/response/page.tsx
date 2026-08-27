@@ -12,6 +12,7 @@ import { getAuthorityIncidents } from "@/lib/incidents/authority";
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import { getActiveAssignments } from "@/lib/incidents/assignments";
 import {
+  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -110,7 +111,12 @@ export default async function AuthorityResponsePage({
                 </CardHeader>
                 <CardContent className="space-y-4 text-sm">
                   <p className="text-muted-foreground">
-                    {incident.location_name ?? "Coordinates only"} · submitted{" "}
+                    {formatIncidentLocation(
+                      incident.location_name,
+                      incident.latitude,
+                      incident.longitude
+                    )}{" "}
+                    · submitted{" "}
                     {formatRelativeDate(incident.submitted_at)}
                   </p>
                   <p>

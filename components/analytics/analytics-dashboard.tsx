@@ -24,7 +24,7 @@ import {
   type AnalyticsRange,
   type AnalyticsSnapshot,
 } from "@/lib/analytics";
-import { formatCoordinates } from "@/lib/incidents/format";
+import { formatIncidentLocation } from "@/lib/incidents/format";
 import { cn } from "@/lib/utils";
 
 interface AnalyticsDashboardProps {
@@ -285,10 +285,11 @@ export function AnalyticsDashboard({
                     >
                       <div>
                         <p className="font-medium">
-                          {cluster.location_name ?? "Coordinates only"}
-                        </p>
-                        <p className="font-mono text-xs text-muted-foreground">
-                          {formatCoordinates(cluster.latitude, cluster.longitude)}
+                          {formatIncidentLocation(
+                            cluster.location_name,
+                            cluster.latitude,
+                            cluster.longitude
+                          )}
                         </p>
                       </div>
                       <span className="tabular-nums text-muted-foreground">

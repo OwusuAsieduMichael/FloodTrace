@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import type { AuthorityIncidentListItem } from "@/lib/incidents/authority";
 import { authorityIncidentHref } from "@/lib/incidents/authority-href";
 import {
+  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -79,7 +80,11 @@ export function IncidentTable({
                 </td>
                 <td className="px-4 py-3">{formatIncidentType(incident.incident_type)}</td>
                 <td className="max-w-[180px] truncate px-4 py-3 text-muted-foreground">
-                  {incident.location_name ?? "Coordinates only"}
+                  {formatIncidentLocation(
+                    incident.location_name,
+                    incident.latitude,
+                    incident.longitude
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <SeverityBadge severity={incident.severity} />
@@ -131,7 +136,11 @@ export function IncidentTable({
               <span>{formatRelativeDate(incident.submitted_at)}</span>
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" aria-hidden />
-                {incident.location_name ?? "Coordinates only"}
+                {formatIncidentLocation(
+                  incident.location_name,
+                  incident.latitude,
+                  incident.longitude
+                )}
               </span>
               <span>
                 {incident.supporting_count} supporting report

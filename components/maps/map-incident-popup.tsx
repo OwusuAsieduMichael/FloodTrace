@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import type { PublicMapIncident } from "@/lib/incidents/public";
-import { formatIncidentDate, formatIncidentType, formatShortId } from "@/lib/incidents/format";
+import { formatIncidentDate, formatIncidentLocation, formatIncidentType, formatShortId } from "@/lib/incidents/format";
 import { SeverityBadge, StatusBadge } from "@/components/shared/status-badges";
 
 interface MapIncidentPopupProps {
@@ -24,9 +24,13 @@ export function MapIncidentPopup({ incident, href }: MapIncidentPopupProps) {
       <p className="text-sm font-medium text-foreground">
         {formatIncidentType(incident.incident_type)}
       </p>
-      {incident.location_name ? (
-        <p className="text-xs text-muted-foreground">{incident.location_name}</p>
-      ) : null}
+      <p className="text-xs text-muted-foreground">
+        {formatIncidentLocation(
+          incident.location_name,
+          incident.latitude,
+          incident.longitude
+        )}
+      </p>
       {incident.description ? (
         <p className="line-clamp-3 text-xs text-muted-foreground">{incident.description}</p>
       ) : null}

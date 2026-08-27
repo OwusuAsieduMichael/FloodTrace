@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import type { CitizenIncidentListItem } from "@/lib/incidents";
 import {
+  formatIncidentLocation,
   formatIncidentType,
   formatRelativeDate,
   formatShortId,
@@ -37,12 +38,14 @@ export function ReportRow({ incident }: ReportRowProps) {
         <p className="font-medium">{formatIncidentType(incident.incident_type)}</p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
           <span>{formatRelativeDate(incident.submitted_at)}</span>
-          {incident.location_name ? (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="size-3.5" aria-hidden />
-              {incident.location_name}
-            </span>
-          ) : null}
+          <span className="inline-flex items-center gap-1">
+            <MapPin className="size-3.5" aria-hidden />
+            {formatIncidentLocation(
+              incident.location_name,
+              incident.latitude,
+              incident.longitude
+            )}
+          </span>
         </div>
       </div>
       <ArrowRight className="hidden size-4 shrink-0 text-muted-foreground sm:block" />
