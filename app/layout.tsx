@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   },
   description:
     "Report floods and blocked drains with camera-verified evidence. Municipal authorities verify, assign, and resolve incidents transparently.",
+  applicationName: "FloodTrace",
   keywords: [
     "flood reporting",
     "disaster management",
@@ -33,9 +34,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon-512x512.png", sizes: "512x512", type: "image/png" },
-      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/favicon-512x512.png", sizes: "512x512", type: "image/png" }],
+    shortcut: [{ url: "/favicon-512x512.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "512x512", type: "image/png" }],
   },
   appleWebApp: {
     capable: true,

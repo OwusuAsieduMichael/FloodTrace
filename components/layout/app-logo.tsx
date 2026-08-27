@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Droplets } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+
+export const BRAND_MARK_SRC = "/favicon-512x512.png";
 
 interface AppLogoProps {
   href?: string;
@@ -17,11 +19,19 @@ export function AppLogo({
   return (
     <Link
       href={href}
-      className={cn("flex items-center gap-2 font-semibold tracking-tight", className)}
+      className={cn(
+        "flex min-h-11 min-w-0 items-center gap-2 font-semibold tracking-tight",
+        className
+      )}
     >
-      <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <Droplets className="size-4" aria-hidden />
-      </span>
+      <Image
+        src={BRAND_MARK_SRC}
+        alt={showWordmark ? "" : "FloodTrace"}
+        width={32}
+        height={32}
+        className="size-8 shrink-0 rounded-lg"
+        priority
+      />
       {showWordmark ? <span className="truncate">FloodTrace</span> : null}
     </Link>
   );
