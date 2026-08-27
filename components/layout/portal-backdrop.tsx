@@ -19,7 +19,7 @@ export function PortalBackdrop() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(12, 14, 18, 0.28) 0%, rgba(12, 14, 18, 0.18) 42%, rgba(12, 14, 18, 0.4) 100%)",
+            "linear-gradient(180deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.38) 48%, rgba(255, 255, 255, 0.52) 100%)",
         }}
       />
     </div>

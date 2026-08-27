@@ -40,7 +40,7 @@ export function CitizenAppShell({
   return (
     <div className="portal-interface relative isolate flex min-h-screen min-h-dvh">
       <PortalBackdrop />
-      <aside className="relative z-10 hidden w-64 shrink-0 border-r border-border/60 bg-background md:flex md:flex-col">
+      <aside className="portal-chrome relative z-10 hidden w-64 shrink-0 border-r md:flex md:flex-col">
         <div className="flex h-16 items-center border-b border-border/60 px-4">
           <AppLogo href="/citizen/dashboard" />
         </div>
@@ -51,7 +51,7 @@ export function CitizenAppShell({
 
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <header
-          className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
+          className={`portal-chrome sticky top-0 z-[60] isolate border-b ${HEADER_SAFE_TOP}`}
         >
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-3 md:hidden">
@@ -79,7 +79,7 @@ export function CitizenAppShell({
         </main>
 
         <nav
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background md:hidden"
+          className="portal-chrome fixed inset-x-0 bottom-0 z-40 border-t md:hidden"
           aria-label="Primary"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
@@ -93,7 +93,7 @@ export function CitizenAppShell({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex flex-col items-center gap-1 px-2 py-2.5 text-[10px] font-medium transition-colors",
+                    "flex flex-col items-center gap-1 px-2 py-2.5 text-[10px] font-medium touch-manipulation transition-colors",
                     active ? "text-primary" : "text-muted-foreground"
                   )}
                   aria-current={active ? "page" : undefined}
@@ -108,7 +108,7 @@ export function CitizenAppShell({
               type="button"
               onClick={() => setMoreOpen((open) => !open)}
               className={cn(
-                "flex flex-col items-center gap-1 px-2 py-2.5 text-[10px] font-medium transition-colors",
+                "flex flex-col items-center gap-1 px-2 py-2.5 text-[10px] font-medium touch-manipulation transition-colors",
                 moreOpen ? "text-primary" : "text-muted-foreground"
               )}
               aria-expanded={moreOpen}
@@ -125,12 +125,13 @@ export function CitizenAppShell({
             <button
               type="button"
               className={`fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 bg-black/40 md:hidden ${MOBILE_LAYER_TOP}`}
+              data-tap="none"
               aria-label="Close menu"
               onClick={() => setMoreOpen(false)}
             />
             <div
               id="citizen-more-menu"
-              className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-50 mx-4 rounded-xl border border-border bg-background p-4 shadow-lg md:hidden"
+              className="portal-chrome fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-50 mx-4 rounded-xl border p-4 shadow-lg md:hidden"
             >
               <div className="mb-3 flex items-center justify-between">
                 <p className="text-sm font-semibold">More options</p>

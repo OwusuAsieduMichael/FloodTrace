@@ -42,6 +42,7 @@ export function SiteMobileNav() {
             <button
               type="button"
               className={`fixed inset-x-0 bottom-0 z-40 bg-black/40 md:hidden ${MOBILE_LAYER_TOP}`}
+              data-tap="none"
               aria-label="Dismiss menu"
               onClick={close}
             />
@@ -55,7 +56,7 @@ export function SiteMobileNav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm hover:bg-muted"
+                className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-sm touch-manipulation hover:bg-muted"
                 onClick={close}
               >
                 {link.label}

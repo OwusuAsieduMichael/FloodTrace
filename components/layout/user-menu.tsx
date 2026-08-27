@@ -60,7 +60,7 @@ export function UserMenu({
           {initials}
         </span>
         <span className="hidden max-w-28 truncate sm:inline">{fullName ?? "Account"}</span>
-        <ChevronDown className={cn("size-4 shrink-0 transition-transform", open && "rotate-180")} />
+        <ChevronDown className={cn("size-4 shrink-0 transition-transform duration-300", open && "rotate-180")} />
       </Button>
 
       {open ? (
@@ -77,7 +77,7 @@ export function UserMenu({
           <Link
             href={dashboardHref}
             role="menuitem"
-            className="flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted"
+            className="flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm touch-manipulation hover:bg-muted"
             onClick={() => setOpen(false)}
           >
             <User className="size-4" />

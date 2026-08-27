@@ -34,7 +34,7 @@ export function AuthShell({
         <div className={cn("space-y-6", className)}>
           <Link
             href="/"
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground touch-manipulation hover:text-foreground"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg px-1 text-sm font-medium text-muted-foreground touch-manipulation hover:text-foreground"
           >
             <ArrowLeft className="size-4 shrink-0" aria-hidden />
             Back to home

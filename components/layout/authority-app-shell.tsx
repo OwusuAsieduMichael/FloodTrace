@@ -44,7 +44,7 @@ export function AuthorityAppShell({
     <div className="portal-interface relative isolate flex min-h-screen min-h-dvh">
       <PortalBackdrop />
       {!limited ? (
-        <aside className="relative z-10 hidden w-64 shrink-0 border-r border-border/60 bg-background lg:flex lg:flex-col">
+        <aside className="portal-chrome relative z-10 hidden w-64 shrink-0 border-r lg:flex lg:flex-col">
           <div className="flex h-16 items-center border-b border-border/60 px-4">
             <AppLogo href={homeHref} />
           </div>
@@ -69,11 +69,12 @@ export function AuthorityAppShell({
               <button
                 type="button"
                 className={`fixed inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden ${MOBILE_LAYER_TOP}`}
+                data-tap="none"
                 aria-label="Close navigation"
                 onClick={closeMobile}
               />
               <aside
-                className={`fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r border-border/60 bg-background shadow-lg lg:hidden ${MOBILE_LAYER_TOP}`}
+                className={`portal-chrome fixed bottom-0 left-0 z-50 flex w-[min(18rem,calc(100vw-2.5rem))] flex-col border-r shadow-lg lg:hidden ${MOBILE_LAYER_TOP}`}
                 aria-label="Operations"
               >
                 <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
@@ -97,7 +98,7 @@ export function AuthorityAppShell({
 
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <header
-          className={`sticky top-0 z-[60] isolate border-b border-border/60 bg-background ${HEADER_SAFE_TOP}`}
+          className={`portal-chrome sticky top-0 z-[60] isolate border-b ${HEADER_SAFE_TOP}`}
         >
           <div className="flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">

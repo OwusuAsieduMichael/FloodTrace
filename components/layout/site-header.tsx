@@ -20,13 +20,13 @@ export function SiteHeader() {
         <AppLogo className="min-w-0 flex-1 overflow-hidden" />
 
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-          <Link href="/#features" className="transition-colors hover:text-foreground">
+          <Link href="/#features" className="touch-manipulation transition-colors hover:text-foreground">
             Features
           </Link>
-          <Link href="/#how-it-works" className="transition-colors hover:text-foreground">
+          <Link href="/#how-it-works" className="touch-manipulation transition-colors hover:text-foreground">
             How it works
           </Link>
-          <Link href="/map" className="transition-colors hover:text-foreground">
+          <Link href="/map" className="touch-manipulation transition-colors hover:text-foreground">
             Live Map
           </Link>
         </nav>

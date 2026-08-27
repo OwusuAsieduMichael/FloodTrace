@@ -50,6 +50,7 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
             <button
               type="button"
               className={`fixed inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden ${MOBILE_LAYER_TOP}`}
+              data-tap="none"
               aria-label="Close navigation"
               onClick={closeMobile}
             />

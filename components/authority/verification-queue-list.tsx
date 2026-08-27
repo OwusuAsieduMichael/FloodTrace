@@ -52,7 +52,7 @@ export function VerificationQueueList({
             <Link
               href={hrefFor(incident.id)}
               className={cn(
-                "block space-y-2 px-4 py-3 transition-colors hover:bg-muted/40",
+                "block space-y-2 px-4 py-3 touch-manipulation transition-colors hover:bg-muted/40",
                 selected && "bg-primary/5"
               )}
             >

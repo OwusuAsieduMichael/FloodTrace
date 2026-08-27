@@ -108,7 +108,7 @@ export function NotificationInbox({
                   }
                 }}
                 className={cn(
-                  "flex gap-3 px-4 py-4 transition-colors hover:bg-muted/40",
+                  "flex gap-3 px-4 py-4 touch-manipulation transition-colors hover:bg-muted/40",
                   !item.read && "bg-primary/5"
                 )}
               >

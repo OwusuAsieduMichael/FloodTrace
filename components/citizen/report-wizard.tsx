@@ -275,7 +275,7 @@ export function ReportWizard() {
                       type="button"
                       onClick={() => setIncidentType(type)}
                       className={cn(
-                        "rounded-xl border p-4 text-left transition-colors",
+                        "rounded-xl border p-4 text-left touch-manipulation transition-colors",
                         incidentType === type
                           ? "border-primary bg-primary/5"
                           : "border-border hover:border-primary/40"
@@ -297,7 +297,7 @@ export function ReportWizard() {
                       type="button"
                       onClick={() => setSeverity(option)}
                       className={cn(
-                        "rounded-lg border px-3 py-2 transition-colors",
+                        "rounded-lg border px-3 py-2 touch-manipulation transition-colors",
                         severity === option
                           ? "border-primary bg-primary/5"
                           : "border-border hover:border-primary/40"

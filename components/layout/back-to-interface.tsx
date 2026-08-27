@@ -38,7 +38,7 @@ export function BackToInterface({
       variant="ghost"
       size="sm"
       onClick={handleBack}
-      className="-ml-2 w-fit text-muted-foreground"
+      className="-ml-2 h-11 w-fit px-3 text-muted-foreground touch-manipulation sm:h-8"
     >
       <ArrowLeft className="size-4" aria-hidden />
       {label}

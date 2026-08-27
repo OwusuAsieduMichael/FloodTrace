@@ -22,7 +22,7 @@ export function ReportRow({ incident }: ReportRowProps) {
   return (
     <Link
       href={`/citizen/reports/${incident.id}`}
-      className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/30 hover:bg-muted/20 sm:flex-row sm:items-center sm:justify-between"
+      className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 touch-manipulation transition-colors hover:border-primary/30 hover:bg-muted/20 sm:flex-row sm:items-center sm:justify-between"
     >
       <div className="min-w-0 space-y-2">
         <div className="flex flex-wrap items-center gap-2">
