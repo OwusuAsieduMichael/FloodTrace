@@ -47,3 +47,27 @@ export async function markAllNotificationsRead(): Promise<void> {
 
   await revalidateNotificationPages();
 }
+
+export async function deleteNotification(
+  notificationId: string
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return { ok: false, error: "Sign in to delete notifications." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("notifications")
+    .delete()
+    .eq("id", notificationId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return { ok: false, error: "Could not delete that notification." };
+  }
+
+  await revalidateNotificationPages();
+  return { ok: true };
+}

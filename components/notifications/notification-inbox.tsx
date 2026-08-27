@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useOptimistic, useTransition } from "react";
 import { Bell } from "lucide-react";
+import { toast } from "sonner";
 
 import { EmptyState } from "@/components/shared/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  deleteNotification,
   markAllNotificationsRead,
   markNotificationRead,
 } from "@/lib/notifications/actions";
@@ -19,6 +21,11 @@ import { notificationHref } from "@/lib/notifications/href";
 import { formatRelativeDate } from "@/lib/incidents/format";
 import { cn } from "@/lib/utils";
 import type { Notification, UserRole } from "@/types";
+
+type InboxUpdate =
+  | { type: "one"; id: string }
+  | { type: "all" }
+  | { type: "delete"; id: string };
 
 interface NotificationInboxProps {
   notifications: Notification[];
@@ -32,12 +39,13 @@ export function NotificationInbox({
   const [isPending, startTransition] = useTransition();
   const [items, setItems] = useOptimistic(
     notifications,
-    (
-      current: Notification[],
-      update: { type: "one"; id: string } | { type: "all" }
-    ) => {
+    (current: Notification[], update: InboxUpdate) => {
       if (update.type === "all") {
         return current.map((item) => ({ ...item, read: true }));
+      }
+
+      if (update.type === "delete") {
+        return current.filter((item) => item.id !== update.id);
       }
 
       return current.map((item) =>
@@ -59,6 +67,18 @@ export function NotificationInbox({
     startTransition(async () => {
       setItems({ type: "all" });
       await markAllNotificationsRead();
+    });
+  }
+
+  function deleteOne(id: string) {
+    startTransition(async () => {
+      setItems({ type: "delete", id });
+      const result = await deleteNotification(id);
+
+      if (!result.ok) {
+        toast.error(result.error);
+        throw new Error(result.error);
+      }
     });
   }
 
@@ -84,6 +104,7 @@ export function NotificationInbox({
           <Button
             variant="outline"
             size="sm"
+            className="h-11 min-h-11 sm:h-8 sm:min-h-8"
             onClick={markAll}
             disabled={isPending}
           >
@@ -99,19 +120,8 @@ export function NotificationInbox({
           const label = NOTIFICATION_TYPE_LABELS[type] ?? item.type;
 
           return (
-            <li key={item.id}>
-              <Link
-                href={href}
-                onClick={() => {
-                  if (!item.read) {
-                    markOne(item.id);
-                  }
-                }}
-                className={cn(
-                  "flex gap-3 px-4 py-4 touch-manipulation transition-colors hover:bg-muted/40",
-                  !item.read && "bg-primary/5"
-                )}
-              >
+            <li key={item.id} className={cn("px-4 py-4", !item.read && "bg-primary/5")}>
+              <div className="flex gap-3">
                 <span
                   className={cn(
                     "mt-2 size-2 shrink-0 rounded-full",
@@ -119,19 +129,46 @@ export function NotificationInbox({
                   )}
                   aria-hidden
                 />
-                <div className="min-w-0 flex-1 space-y-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium">{item.title}</p>
-                    <Badge variant={item.read ? "outline" : "secondary"}>
-                      {label}
-                    </Badge>
+                <div className="min-w-0 flex-1 space-y-3">
+                  <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-medium">{item.title}</p>
+                      <Badge variant={item.read ? "outline" : "secondary"}>
+                        {label}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{item.message}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatRelativeDate(item.created_at)}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">{item.message}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {formatRelativeDate(item.created_at)}
-                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      className="h-11 min-h-11 flex-1 touch-manipulation sm:h-8 sm:min-h-8 sm:flex-none"
+                      render={
+                        <Link
+                          href={href}
+                          onClick={() => {
+                            if (!item.read) {
+                              markOne(item.id);
+                            }
+                          }}
+                        />
+                      }
+                    >
+                      View
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      className="h-11 min-h-11 flex-1 touch-manipulation sm:h-8 sm:min-h-8 sm:flex-none"
+                      onClick={() => deleteOne(item.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </div>
-              </Link>
+              </div>
             </li>
           );
         })}

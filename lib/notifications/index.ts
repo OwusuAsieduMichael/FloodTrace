@@ -4,6 +4,7 @@ export {
   type NotificationType,
 } from "./constants";
 export {
+  deleteNotification,
   markAllNotificationsRead,
   markNotificationRead,
 } from "./actions";

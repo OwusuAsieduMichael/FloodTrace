@@ -32,6 +32,9 @@ test("citizen notifications open the related report", () => {
     "/citizen/weather"
   );
   expect(notificationHref("new_report", "inc-1", "authority")).toBe(
+    "/authority/incidents/inc-1"
+  );
+  expect(notificationHref("high_priority", null, "authority")).toBe(
     "/authority/incidents"
   );
 });

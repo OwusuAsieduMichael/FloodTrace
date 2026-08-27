@@ -58,6 +58,8 @@ export function NotificationProvider({
         }
       }
 
+      void refreshUnread();
+
       const channel = supabase
         .channel(`notifications:${userId}`)
         .on(
@@ -78,6 +80,18 @@ export function NotificationProvider({
           "postgres_changes",
           {
             event: "UPDATE",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${userId}`,
+          },
+          () => {
+            void refreshUnread();
+          }
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "DELETE",
             schema: "public",
             table: "notifications",
             filter: `user_id=eq.${userId}`,
