@@ -171,6 +171,38 @@
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.landing-feature-icon svg {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-feature-card.is-near {
+  border-color: var(--ring);
+  box-shadow: 0 8px 24px -20px rgb(15 40 70 / 0.16);
+  transform: translate3d(0, -2px, 0);
+}
+
+.landing-feature-card.is-near .landing-feature-card-accent {
+  transform: scaleX(0.46);
+}
+
+.landing-feature-card.is-active {
+  border-color: var(--ring);
+  box-shadow: 0 14px 36px -20px rgb(15 40 70 / 0.28);
+  transform: translate3d(0, -4px, 0);
+}
+
+.landing-feature-card.is-active .landing-feature-card-accent {
+  transform: scaleX(1);
+}
+
+.landing-feature-card.is-active .landing-feature-icon {
+  transform: scale(1.06);
+}
+
+.landing-feature-card.is-active .landing-feature-icon svg {
+  transform: translateY(-1px);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .landing-feature-card:hover {
     border-color: var(--ring);
@@ -188,10 +220,6 @@
 
   .landing-feature-card:hover .landing-feature-icon svg {
     transform: translateY(-1px);
-  }
-
-  .landing-feature-icon svg {
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
