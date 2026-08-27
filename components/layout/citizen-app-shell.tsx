@@ -59,12 +59,34 @@ export function CitizenAppShell({
         label="Citizen navigation"
         showFrom="md"
       >
-        <div className="flex h-16 items-center border-b border-border/60 px-4">
-          <AppLogo href="/citizen/dashboard" />
-        </div>
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
-          <SidebarNav items={citizenNavItems} badges={notificationBadges} />
-        </div>
+        {(collapsed) => (
+          <>
+            <div
+              className={cn(
+                "flex h-16 items-center border-b border-border/60",
+                collapsed ? "justify-center px-2" : "px-4"
+              )}
+            >
+              <AppLogo
+                href="/citizen/dashboard"
+                showWordmark={!collapsed}
+                className={collapsed ? "justify-center" : undefined}
+              />
+            </div>
+            <div
+              className={cn(
+                "flex flex-1 flex-col overflow-y-auto",
+                collapsed ? "gap-2 p-2" : "gap-4 p-4"
+              )}
+            >
+              <SidebarNav
+                items={citizenNavItems}
+                badges={notificationBadges}
+                collapsed={collapsed}
+              />
+            </div>
+          </>
+        )}
       </CollapsibleSidebar>
 
       <ClientPortal>
@@ -134,7 +156,7 @@ export function CitizenAppShell({
             </div>
             <div className="hidden min-w-0 items-center gap-3 md:flex">
               <MobileIconButton
-                label={sidebarOpen ? "Close side menu" : "Open side menu"}
+                label={sidebarOpen ? "Show icons only" : "Show full side menu"}
                 aria-expanded={sidebarOpen}
                 aria-controls="citizen-sidebar"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -145,9 +167,6 @@ export function CitizenAppShell({
                   <PanelLeft className="size-5" />
                 )}
               </MobileIconButton>
-              {!sidebarOpen ? (
-                <AppLogo href="/citizen/dashboard" showWordmark={false} />
-              ) : null}
               <p className="truncate text-sm text-muted-foreground">
                 {fullName ? `Welcome back, ${fullName.split(" ")[0]}` : "Citizen portal"}
               </p>

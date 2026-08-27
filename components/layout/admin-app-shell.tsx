@@ -38,20 +38,42 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
         label="Administration"
         showFrom="lg"
       >
-        <div className="flex h-16 items-center border-b border-border/60 px-4">
-          <AppLogo href="/admin/dashboard" />
-        </div>
-        <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-4">
-          <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Administration
-          </p>
-          <SidebarNav items={adminNavItems} />
-        </div>
-        <div className="border-t border-border/60 p-4">
-          <Badge variant="secondary" className="w-full justify-center py-1">
-            Administrator
-          </Badge>
-        </div>
+        {(collapsed) => (
+          <>
+            <div
+              className={cn(
+                "flex h-16 items-center border-b border-border/60",
+                collapsed ? "justify-center px-2" : "px-4"
+              )}
+            >
+              <AppLogo
+                href="/admin/dashboard"
+                showWordmark={!collapsed}
+                className={collapsed ? "justify-center" : undefined}
+              />
+            </div>
+            <div
+              className={cn(
+                "flex flex-1 flex-col overflow-y-auto",
+                collapsed ? "gap-2 p-2" : "gap-2 p-4"
+              )}
+            >
+              {collapsed ? null : (
+                <p className="px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                  Administration
+                </p>
+              )}
+              <SidebarNav items={adminNavItems} collapsed={collapsed} />
+            </div>
+            {collapsed ? null : (
+              <div className="border-t border-border/60 p-4">
+                <Badge variant="secondary" className="w-full justify-center py-1">
+                  Administrator
+                </Badge>
+              </div>
+            )}
+          </>
+        )}
       </CollapsibleSidebar>
 
       <ClientPortal>
@@ -104,7 +126,7 @@ export function AdminAppShell({ children, userMenu }: AdminAppShellProps) {
                 {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
               </MobileIconButton>
               <MobileIconButton
-                label={sidebarOpen ? "Close side menu" : "Open side menu"}
+                label={sidebarOpen ? "Show icons only" : "Show full side menu"}
                 className="hidden lg:inline-flex"
                 aria-expanded={sidebarOpen}
                 aria-controls="admin-sidebar"
