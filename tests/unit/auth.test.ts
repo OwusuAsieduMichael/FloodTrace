@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 
 import { getPostAuthRedirect, isAuthPath, isPublicPath } from "@/lib/auth/redirects";
+import { authContinuePath, isAuthHandoffPath } from "@/lib/auth/handoff";
 import {
   EMAIL_RESEND_COOLDOWN_SECONDS,
   formatCooldown,
@@ -44,8 +45,14 @@ test("login, map, and health routes are public", () => {
   expect(isPublicPath("/map")).toBe(true);
   expect(isPublicPath("/auth/login")).toBe(true);
   expect(isPublicPath("/api/health")).toBe(true);
+  expect(isPublicPath("/auth/continue")).toBe(true);
   expect(isPublicPath("/citizen/dashboard")).toBe(false);
   expect(isAuthPath("/auth/callback")).toBe(true);
+  expect(isAuthPath("/authority/dashboard")).toBe(false);
+  expect(isAuthHandoffPath("/auth/continue")).toBe(true);
+  expect(authContinuePath("/authority/dashboard")).toBe(
+    "/auth/continue?next=%2Fauthority%2Fdashboard"
+  );
 });
 
 test("open redirects are rejected", () => {
@@ -74,6 +81,7 @@ test("signed-in authorities are not bounced between login and the dashboard", ()
 
   expect(getProxyRedirect("/auth/login", true, approved)).toBe("/authority/dashboard");
   expect(getProxyRedirect("/authority/dashboard", true, approved)).toBeNull();
+  expect(getProxyRedirect("/authority/map", true, approved)).toBeNull();
   expect(getProxyRedirect("/authority/pending", true, approved)).toBe(
     "/authority/dashboard"
   );
@@ -87,10 +95,26 @@ test("signed-in authorities are not bounced between login and the dashboard", ()
   expect(getPortalAccessRedirect("authority", false, null)).toBe("/auth/login");
 });
 
-test("a session without a profile does not loop on login", () => {
+test("a session without a profile waits on the continue handoff", () => {
   expect(getProxyRedirect("/auth/login", true, null)).toBeNull();
-  expect(getProxyRedirect("/authority/dashboard", true, null)).toBe("/");
-  expect(getPortalAccessRedirect("authority", true, null)).toBe("/");
+  expect(getProxyRedirect("/auth/continue", true, null)).toBeNull();
+  expect(getProxyRedirect("/authority/dashboard", true, null)).toBe(
+    "/auth/continue"
+  );
+  expect(getPortalAccessRedirect("authority", true, null)).toBe(
+    "/auth/continue"
+  );
+});
+
+test("the continue handoff sends a ready authority into operations", () => {
+  const approved = { role: "authority" as const, authority_status: "approved" as const };
+
+  expect(getProxyRedirect("/auth/continue", true, approved)).toBe(
+    "/authority/dashboard"
+  );
+  expect(
+    getProxyRedirect("/auth/continue", true, approved, "/authority/map")
+  ).toBe("/authority/map");
 });
 
 test("confirmation emails wait a full minute before another send", () => {

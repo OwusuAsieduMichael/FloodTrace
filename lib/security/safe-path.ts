@@ -1,5 +1,5 @@
 import type { AuthProfile } from "@/lib/auth/redirects";
-import { getPostAuthRedirect } from "@/lib/auth/redirects";
+import { getPostAuthRedirect, isAuthPath } from "@/lib/auth/redirects";
 
 /** Relative app paths only. Blocks protocol-relative and off-site redirects. */
 export function isSafeInternalPath(value: string | null | undefined): value is string {
@@ -33,7 +33,7 @@ export function safePostLoginPath(
     return fallback;
   }
 
-  if (requested.startsWith("/auth")) {
+  if (isAuthPath(requested)) {
     return fallback;
   }
 

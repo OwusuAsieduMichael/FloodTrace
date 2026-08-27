@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { isSafeInternalPath, safePostLoginPath } from "@/lib/security/safe-path";
+import { authContinuePath } from "@/lib/auth/handoff";
+import { safePostLoginPath } from "@/lib/security/safe-path";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -39,9 +40,7 @@ export async function GET(request: Request) {
 
   const destination = profile
     ? safePostLoginPath(next, profile)
-    : isSafeInternalPath(next)
-      ? next
-      : "/";
+    : authContinuePath(next);
 
   return NextResponse.redirect(`${origin}${destination}`);
 }

@@ -31,6 +31,7 @@ export const PUBLIC_PATHS = [
   "/auth/signup",
   "/auth/forgot-password",
   "/auth/reset-password",
+  "/auth/continue",
 ] as const;
 
 export function isPublicPath(pathname: string): boolean {
@@ -39,10 +40,12 @@ export function isPublicPath(pathname: string): boolean {
   }
 
   return (
-    pathname.startsWith("/api/health") || pathname.startsWith("/auth/callback")
+    pathname.startsWith("/api/health") ||
+    pathname.startsWith("/auth/callback") ||
+    pathname.startsWith("/auth/continue")
   );
 }
 
 export function isAuthPath(pathname: string): boolean {
-  return pathname.startsWith("/auth");
+  return pathname === "/auth" || pathname.startsWith("/auth/");
 }

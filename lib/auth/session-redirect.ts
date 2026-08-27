@@ -1,8 +1,6 @@
-import {
-  getPostAuthRedirect,
-  isAuthPath,
-  type AuthProfile,
-} from "@/lib/auth/redirects";
+import { getPostAuthRedirect, isAuthPath, type AuthProfile } from "@/lib/auth/redirects";
+import { AUTH_CONTINUE_PATH, isAuthHandoffPath } from "@/lib/auth/handoff";
+import { safePostLoginPath } from "@/lib/security/safe-path";
 import type { UserRole } from "@/types";
 
 export function isProtectedPath(pathname: string) {
@@ -37,11 +35,9 @@ function redirectUnlessCurrent(pathname: string, destination: string): string | 
 export function getProxyRedirect(
   pathname: string,
   hasUser: boolean,
-  profile: AuthProfile | null
+  profile: AuthProfile | null,
+  requestedNext?: string | null
 ): string | null {
-  const isCallback = pathname.startsWith("/auth/callback");
-  const isResetPassword = pathname.startsWith("/auth/reset-password");
-
   if (!hasUser) {
     if (isProtectedPath(pathname)) {
       return "/auth/login";
@@ -50,16 +46,26 @@ export function getProxyRedirect(
     return null;
   }
 
-  if (isCallback || isResetPassword) {
+  if (isAuthHandoffPath(pathname) && !pathname.startsWith(AUTH_CONTINUE_PATH)) {
     return null;
   }
 
+  if (pathname.startsWith(AUTH_CONTINUE_PATH)) {
+    if (!profile) {
+      return null;
+    }
+
+    return redirectUnlessCurrent(
+      pathname,
+      safePostLoginPath(requestedNext, profile)
+    );
+  }
+
   if (!profile) {
-    // Signed in, but the profile row could not be loaded. Sending this
-    // request to /auth/login loops: the proxy sees a session and bounces
-    // back, while layouts used to bounce to login.
+    // Signed in, but the profile row is not readable yet. The continue page
+    // retries instead of bouncing to `/` or looping on `/auth/login`.
     if (isProtectedPath(pathname)) {
-      return redirectUnlessCurrent(pathname, "/");
+      return AUTH_CONTINUE_PATH;
     }
 
     return null;
@@ -129,7 +135,7 @@ export function getPortalAccessRedirect(
   }
 
   if (!profile) {
-    return "/";
+    return AUTH_CONTINUE_PATH;
   }
 
   if (profile.role !== expectedRole) {

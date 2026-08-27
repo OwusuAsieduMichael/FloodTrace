@@ -1,17 +1,14 @@
 import { getPostAuthRedirect } from "@/lib/auth/redirects";
-import { getCurrentProfile, getCurrentUser } from "@/lib/auth/session";
 import { UserMenu } from "@/components/layout/user-menu";
+import type { Profile } from "@/types";
 
-export async function AppUserMenu() {
-  const [user, profile] = await Promise.all([
-    getCurrentUser(),
-    getCurrentProfile(),
-  ]);
-
-  if (!user || !profile) {
-    return null;
-  }
-
+export function AppUserMenu({
+  profile,
+  email,
+}: {
+  profile: Profile;
+  email: string;
+}) {
   const roleLabels = {
     citizen: "Citizen",
     authority:
@@ -26,7 +23,7 @@ export async function AppUserMenu() {
   return (
     <UserMenu
       fullName={profile.full_name}
-      email={user.email ?? ""}
+      email={email}
       dashboardHref={getPostAuthRedirect(profile)}
       roleLabel={roleLabels[profile.role]}
     />

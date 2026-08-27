@@ -1,14 +1,14 @@
 import { AppUserMenu } from "@/components/layout/app-user-menu";
 import { AuthorityAppShell } from "@/components/layout/authority-app-shell";
 import { NotificationProvider } from "@/components/providers/notification-provider";
-import { requirePortalProfile } from "@/lib/auth/session";
+import { requirePortalSession } from "@/lib/auth/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function AuthorityLayout({
   children,
 }: LayoutProps<"/authority">) {
-  const profile = await requirePortalProfile("authority");
+  const { profile, email } = await requirePortalSession("authority");
 
   const isOperational = profile.authority_status === "approved";
   const roleLabel =
@@ -31,7 +31,7 @@ export default async function AuthorityLayout({
         roleLabel={roleLabel}
         homeHref={homeHref}
         limited={!isOperational}
-        userMenu={<AppUserMenu />}
+        userMenu={<AppUserMenu profile={profile} email={email} />}
       >
         {children}
       </AuthorityAppShell>

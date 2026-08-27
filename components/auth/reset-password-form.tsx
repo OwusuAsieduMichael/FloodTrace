@@ -8,8 +8,8 @@ import { PasswordInput } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { authContinuePath } from "@/lib/auth/handoff";
 import { navigateAfterAuth } from "@/lib/auth/navigate-after-auth";
-import { getPostAuthRedirect } from "@/lib/auth/redirects";
 import { createClient } from "@/lib/supabase/client";
 
 export function ResetPasswordForm() {
@@ -50,26 +50,8 @@ export function ResetPasswordForm() {
       return;
     }
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role, authority_status")
-        .eq("id", user.id)
-        .single();
-
-      if (profile) {
-        toast.success("Password updated.");
-        navigateAfterAuth(getPostAuthRedirect(profile));
-        return;
-      }
-    }
-
-    toast.success("Password updated. You can sign in now.");
-    navigateAfterAuth("/auth/login");
+    toast.success("Password updated.");
+    await navigateAfterAuth(authContinuePath());
   }
 
   if (hasSession === null) {

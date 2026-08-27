@@ -13,8 +13,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { authContinuePath } from "@/lib/auth/handoff";
 import { navigateAfterAuth } from "@/lib/auth/navigate-after-auth";
-import { getPostAuthRedirect } from "@/lib/auth/redirects";
 import { createClient } from "@/lib/supabase/client";
 import type { UserRole } from "@/types";
 
@@ -102,20 +102,8 @@ export function SignupWizard() {
     }
 
     if (data.session) {
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("role, authority_status")
-        .eq("id", data.user!.id)
-        .single();
-
-      if (profileError || !profile) {
-        toast.error("Account created, but your profile could not be loaded.");
-        setIsLoading(false);
-        return;
-      }
-
       toast.success("Account created successfully.");
-      navigateAfterAuth(getPostAuthRedirect(profile));
+      await navigateAfterAuth(authContinuePath());
       return;
     }
 

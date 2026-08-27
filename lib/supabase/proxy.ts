@@ -1,11 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { AUTH_CONTINUE_PATH } from "@/lib/auth/handoff";
 import type { AuthProfile } from "@/lib/auth/redirects";
 import {
   getProxyRedirect,
   isProtectedPath,
 } from "@/lib/auth/session-redirect";
+import { supabaseCookieOptions } from "@/lib/supabase/cookie-options";
 
 function copySessionCookies(from: NextResponse, to: NextResponse) {
   from.cookies.getAll().forEach(({ name, value }) => {
@@ -69,6 +71,7 @@ export async function updateSession(request: NextRequest) {
     let sessionResponse = supabaseResponse;
 
     const supabase = createServerClient(url, anonKey, {
+      cookieOptions: supabaseCookieOptions(),
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -111,17 +114,19 @@ export async function updateSession(request: NextRequest) {
       pathname,
       Boolean(user),
       (profile as AuthProfile | null) ?? null,
+      request.nextUrl.searchParams.get("next"),
     );
 
     if (destination) {
-      return redirectTo(
-        request,
-        sessionResponse,
-        destination,
-        destination === "/auth/login" && !user
-          ? { redirect: pathname }
-          : undefined,
-      );
+      let search: Record<string, string> | undefined;
+
+      if (destination === "/auth/login" && !user) {
+        search = { redirect: pathname };
+      } else if (destination === AUTH_CONTINUE_PATH && isProtectedPath(pathname)) {
+        search = { next: pathname };
+      }
+
+      return redirectTo(request, sessionResponse, destination, search);
     }
 
     return applyPrivateCacheHeaders(sessionResponse);

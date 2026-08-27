@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 
 export default function AuthorityError({
   error,
-  retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  retry: () => void;
+  reset: () => void;
 }) {
   useEffect(() => {
     console.error("Authority workspace failed:", error);
@@ -24,7 +24,7 @@ export default function AuthorityError({
         The workspace is still signed in. Try again, or open another operations
         page from the menu.
       </p>
-      <Button type="button" onClick={() => retry()}>
+      <Button type="button" onClick={() => reset()}>
         Try again
       </Button>
     </div>

@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { BarChart3, ClipboardCheck, MapPinned, Truck } from "lucide-react";
 
+import AuthorityLoading from "../loading";
 import { AttentionQueue } from "@/components/authority/attention-queue";
 import { AuthorityKpiCards } from "@/components/authority/kpi-cards";
 import { IncidentTable } from "@/components/authority/incident-table";
@@ -30,7 +32,15 @@ const EMPTY_STATS: AuthorityIncidentStats = {
   supportingReports: 0,
 };
 
-export default async function AuthorityDashboardPage() {
+export default function AuthorityDashboardPage() {
+  return (
+    <Suspense fallback={<AuthorityLoading />}>
+      <AuthorityDashboardContent />
+    </Suspense>
+  );
+}
+
+async function AuthorityDashboardContent() {
   let stats: AuthorityIncidentStats = EMPTY_STATS;
   let attention: AuthorityIncidentListItem[] = [];
   let latest: AuthorityIncidentListItem[] = [];

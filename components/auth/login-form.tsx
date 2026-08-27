@@ -13,8 +13,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatCooldown } from "@/lib/auth/email-cooldown";
+import { authContinuePath } from "@/lib/auth/handoff";
 import { navigateAfterAuth } from "@/lib/auth/navigate-after-auth";
-import { safePostLoginPath } from "@/lib/security/safe-path";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
@@ -32,7 +32,7 @@ export function LoginForm() {
     setIsLoading(true);
 
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -53,20 +53,8 @@ export function LoginForm() {
       return;
     }
 
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("role, authority_status")
-      .eq("id", data.user.id)
-      .single();
-
-    if (profileError || !profile) {
-      toast.error("Signed in, but your profile could not be loaded.");
-      setIsLoading(false);
-      return;
-    }
-
     toast.success("Welcome back.");
-    navigateAfterAuth(safePostLoginPath(redirectTo, profile));
+    await navigateAfterAuth(authContinuePath(redirectTo));
   }
 
   async function handleResendConfirmation() {

@@ -50,7 +50,10 @@ export async function getCurrentProfile(): Promise<Profile | null> {
   return data as Profile;
 }
 
-export async function requirePortalProfile(role: UserRole): Promise<Profile> {
+export async function requirePortalSession(role: UserRole): Promise<{
+  profile: Profile;
+  email: string;
+}> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -78,5 +81,10 @@ export async function requirePortalProfile(role: UserRole): Promise<Profile> {
     redirect(nextPath);
   }
 
-  return profile as Profile;
+  return { profile: profile as Profile, email: user.email ?? "" };
+}
+
+export async function requirePortalProfile(role: UserRole): Promise<Profile> {
+  const { profile } = await requirePortalSession(role);
+  return profile;
 }
