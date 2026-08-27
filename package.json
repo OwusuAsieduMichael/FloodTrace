@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "db:push": "node scripts/apply-migrations.mjs"
+    "db:push": "node scripts/apply-migrations.mjs",
+    "db:seed-officers": "node scripts/seed-demo-officers.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
