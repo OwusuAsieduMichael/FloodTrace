@@ -3,17 +3,11 @@ import Link from "next/link";
 import { ArrowRight, Radio } from "lucide-react";
 
 import { FeaturesSection } from "@/components/landing/features-section";
+import { LifecycleSection } from "@/components/landing/lifecycle-section";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const steps = [
-  { label: "Submitted", description: "Citizen captures evidence" },
-  { label: "Verified", description: "Authority confirms incident" },
-  { label: "Assigned", description: "Response team dispatched" },
-  { label: "Resolved", description: "Before & after documented" },
-];
 
 export default function HomePage() {
   return (
@@ -72,36 +66,7 @@ export default function HomePage() {
 
         <FeaturesSection />
 
-        {/* Workflow */}
-        <section id="how-it-works" className="py-14 sm:py-24">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                Transparent incident lifecycle
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                Every report follows a structured workflow with a full audit
-                trail. Nothing is marked verified without authority action.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {steps.map((step, index) => (
-                <div
-                  key={step.label}
-                  className="relative rounded-xl border border-border bg-muted/30 p-5 text-center"
-                >
-                  <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    Step {index + 1}
-                  </span>
-                  <p className="mt-2 font-semibold">{step.label}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {step.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <LifecycleSection />
 
         {/* CTA */}
         <section className="border-t border-border bg-muted/30 py-16 sm:py-20">

@@ -195,13 +195,232 @@
   }
 }
 
+@keyframes landing-lifecycle-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.landing-lifecycle-viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+
+.landing-lifecycle-track {
+  display: flex;
+  width: max-content;
+  animation: landing-lifecycle-marquee 12s linear infinite;
+  will-change: transform;
+}
+
+.landing-lifecycle-track.is-paused {
+  animation-play-state: paused;
+}
+
+.landing-lifecycle-group {
+  display: flex;
+  margin: 0;
+  padding: 0.35rem 0;
+  list-style: none;
+}
+
+.landing-lifecycle-item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.85rem;
+  padding-right: 0.85rem;
+}
+
+.landing-lifecycle-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  padding: 1.25rem 1.35rem;
+  text-align: center;
+  animation: landing-lifecycle-aura 3.6s ease-in-out infinite;
+  animation-delay: var(--orbit-delay, 0s);
+}
+
+.landing-lifecycle-item .landing-lifecycle-card {
+  width: 17.5rem;
+  flex-shrink: 0;
+}
+
+.landing-lifecycle-card-body {
+  position: relative;
+  z-index: 2;
+}
+
+.landing-lifecycle-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  color: var(--primary);
+}
+
+.landing-lifecycle-frame-path,
+.landing-lifecycle-frame-tail {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.landing-lifecycle-frame-path {
+  stroke-dasharray: 92 908;
+  opacity: 0.8;
+  animation: landing-lifecycle-dash 4s linear infinite;
+  animation-delay: var(--orbit-delay, 0s);
+}
+
+.landing-lifecycle-frame-tail {
+  stroke-dasharray: 26 974;
+  opacity: 0.28;
+  animation: landing-lifecycle-dash 4s linear infinite;
+  animation-delay: calc(var(--orbit-delay, 0s) + 0.16s);
+}
+
+.landing-lifecycle-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.landing-lifecycle-step-dot {
+  position: relative;
+  display: block;
+  width: 0.4rem;
+  height: 0.4rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.landing-lifecycle-step-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--primary);
+  animation: landing-lifecycle-ping 2.1s ease-out infinite;
+  animation-delay: var(--orbit-delay, 0s);
+}
+
+.landing-lifecycle-connector {
+  display: flex;
+  width: 1.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+  animation: landing-lifecycle-flow 1.7s ease-in-out infinite;
+  animation-delay: var(--orbit-delay, 0s);
+}
+
+@keyframes landing-lifecycle-dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+@keyframes landing-lifecycle-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes landing-lifecycle-flow {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    opacity: 0.85;
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+@keyframes landing-lifecycle-aura {
+  0%,
+  100% {
+    box-shadow: 0 8px 22px -20px rgb(15 40 70 / 0.12);
+  }
+
+  50% {
+    box-shadow: 0 12px 28px -16px rgb(15 40 70 / 0.28);
+  }
+}
+
+.landing-lifecycle-track.is-paused .landing-lifecycle-card,
+.landing-lifecycle-track.is-paused .landing-lifecycle-frame-path,
+.landing-lifecycle-track.is-paused .landing-lifecycle-frame-tail,
+.landing-lifecycle-track.is-paused .landing-lifecycle-step-ping,
+.landing-lifecycle-track.is-paused .landing-lifecycle-connector {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .landing-lifecycle-viewport:hover .landing-lifecycle-track,
+  .landing-lifecycle-viewport:hover .landing-lifecycle-card,
+  .landing-lifecycle-viewport:hover .landing-lifecycle-frame-path,
+  .landing-lifecycle-viewport:hover .landing-lifecycle-frame-tail,
+  .landing-lifecycle-viewport:hover .landing-lifecycle-step-ping,
+  .landing-lifecycle-viewport:hover .landing-lifecycle-connector {
+    animation-play-state: paused;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-reveal-pending,
   .landing-reveal-in,
   .landing-feature-card,
   .landing-feature-card-accent,
   .landing-feature-icon,
-  .landing-feature-icon svg {
+  .landing-feature-icon svg,
+  .landing-lifecycle-track,
+  .landing-lifecycle-card,
+  .landing-lifecycle-frame-path,
+  .landing-lifecycle-frame-tail,
+  .landing-lifecycle-step-ping,
+  .landing-lifecycle-connector {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
